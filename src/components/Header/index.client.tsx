@@ -3,6 +3,7 @@
 import { CMSLink } from '@/components/Link'
 import { Cart } from '@/components/Cart'
 import { OpenCartButton } from '@/components/Cart/OpenCart'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import Link from 'next/link'
 import React, { Suspense, useEffect, useRef, useState } from 'react'
 
@@ -10,6 +11,8 @@ import { MobileMenu } from './MobileMenu'
 import type { Header } from 'src/payload-types'
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/utilities/cn'
+
+import { SearchModal } from '@/components/SearchModal'
 
 type Props = {
   header: Header
@@ -21,6 +24,7 @@ export function HeaderClient({ header }: Props) {
   const router = useRouter()
   const searchInputRef = useRef<HTMLInputElement>(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   // Dynamically formatted title from Payload CMS
   const rawTitle = header.siteTitle || 'Cerveau Analytique'
@@ -38,7 +42,7 @@ export function HeaderClient({ header }: Props) {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault()
-        searchInputRef.current?.focus()
+        setIsSearchOpen(true)
       }
     }
     window.addEventListener('keydown', handleKeyDown)
@@ -47,13 +51,11 @@ export function HeaderClient({ header }: Props) {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (searchQuery.trim()) {
-      router.push(`/shop?q=${encodeURIComponent(searchQuery.trim())}`)
-    }
+    setIsSearchOpen(true)
   }
 
   return (
-    <nav>
+    <nav className="site-header">
       {/* Mobile navigation menu */}
       <div className="block md:hidden mr-4">
         <Suspense fallback={null}>
@@ -104,7 +106,7 @@ export function HeaderClient({ header }: Props) {
             <Link
               href="/api"
               className={cn('nav-link', {
-                'text-white bg-white/10': pathname.includes('/api'),
+                'text-white bg-white/10': pathname === '/api',
               })}
             >
               API
@@ -134,12 +136,14 @@ export function HeaderClient({ header }: Props) {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          onClick={() => setIsSearchOpen(true)}
           placeholder={searchPlaceholder}
+          readOnly
         />
         <span className="nav-search-kbd">⌘K</span>
       </form>
 
-      {/* Right action items: login link, start link, and Cart */}
+      {/* Right action items: login link, start link, Cart, and theme toggle */}
       <div className="nav-right">
         <Link href={loginURL} className="btn-login hidden sm:inline-flex">
           {loginLabel}
@@ -150,7 +154,14 @@ export function HeaderClient({ header }: Props) {
         <Suspense fallback={<OpenCartButton />}>
           <Cart />
         </Suspense>
+        <ThemeToggle />
       </div>
+
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        initialQuery={searchQuery}
+      />
     </nav>
   )
 }
