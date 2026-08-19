@@ -3,6 +3,7 @@
 import { CMSLink } from '@/components/Link'
 import { Cart } from '@/components/Cart'
 import { OpenCartButton } from '@/components/Cart/OpenCart'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import Link from 'next/link'
 import React, { Suspense, useEffect, useRef, useState } from 'react'
 
@@ -102,9 +103,9 @@ export function HeaderClient({ header }: Props) {
               Research
             </Link>
             <Link
-              href="/api"
+              href="/api-access"
               className={cn('nav-link', {
-                'text-white bg-white/10': pathname.includes('/api'),
+                'text-white bg-white/10': pathname.includes('/api-access'),
               })}
             >
               API
@@ -139,7 +140,7 @@ export function HeaderClient({ header }: Props) {
         <span className="nav-search-kbd">⌘K</span>
       </form>
 
-      {/* Right action items: login link, start link, and Cart */}
+      {/* Right action items: login link, start link, Cart, and theme toggle */}
       <div className="nav-right">
         <Link href={loginURL} className="btn-login hidden sm:inline-flex">
           {loginLabel}
@@ -150,6 +151,7 @@ export function HeaderClient({ header }: Props) {
         <Suspense fallback={<OpenCartButton />}>
           <Cart />
         </Suspense>
+        <ThemeToggle />
       </div>
     </nav>
   )
