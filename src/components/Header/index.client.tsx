@@ -13,7 +13,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/utilities/cn'
 
 import { useAuth } from '@/providers/Auth'
-import { User as UserIcon, LogOut } from 'lucide-react'
+import { User as UserIcon, LogOut, Bell, Store } from 'lucide-react'
 import { formatUserDisplayName } from '@/utilities/formatUserDisplayName'
 
 import { SearchModal } from '@/components/SearchModal'
@@ -146,6 +146,25 @@ export function HeaderClient({ header }: Props) {
 
       {/* Right action items */}
       <div className="nav-right">
+        {/* Marketplace Store Icon Button */}
+        <Link
+          href="/marketplace"
+          title="Marketplace & Enterprise Models"
+          className="relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-800 text-neutral-400 hover:text-white transition-colors"
+        >
+          <Store className="h-4 w-4" />
+        </Link>
+
+        {/* Notification Bell Icon Button */}
+        <Link
+          href="/notifications"
+          title="Notifications & System Alerts"
+          className="relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-800 text-neutral-400 hover:text-white transition-colors"
+        >
+          <Bell className="h-4 w-4" />
+          <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-red-500" />
+        </Link>
+
         {/* Mobile text-only links for Chat, Login/Account, & Log out */}
         <div className="flex md:hidden items-center gap-2 mr-1">
           <Link
@@ -164,17 +183,17 @@ export function HeaderClient({ header }: Props) {
           {user && (
             <button
               onClick={() => logout()}
-              className="text-xs font-semibold text-neutral-400 hover:text-red-400 transition-colors"
+              className="text-xs font-semibold text-neutral-400 hover:text-red-400 transition-colors ml-1"
             >
               Log out
             </button>
           )}
         </div>
 
-        {/* Desktop-only Login/Account & Log out & Start Labs buttons */}
+        {/* Desktop-only User Badge (u***@ca.com) & Log out close together */}
         {user ? (
-          <>
-            <Link href="/account" className="btn-login hidden md:inline-flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-1.5">
+            <Link href="/account" className="btn-login inline-flex items-center gap-2">
               {userAvatar ? (
                 <img src={userAvatar} alt={username} className="h-5 w-5 rounded-full object-cover" />
               ) : (
@@ -186,18 +205,19 @@ export function HeaderClient({ header }: Props) {
             </Link>
             <button
               onClick={() => logout()}
-              className="btn-login hidden md:inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-red-400 border-neutral-800 hover:border-red-500/30 transition-colors"
+              className="btn-login inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-red-400 border-neutral-800 hover:border-red-500/30 transition-colors"
               title="Log out"
             >
               <LogOut className="h-3.5 w-3.5" />
               <span>Log out</span>
             </button>
-          </>
+          </div>
         ) : (
           <Link href={loginURL} className="btn-login hidden md:inline-flex">
             {loginLabel}
           </Link>
         )}
+
         <Link href={startURL} className="btn-start hidden md:inline-flex">
           {startLabel}
         </Link>
