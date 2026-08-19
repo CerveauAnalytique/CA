@@ -653,6 +653,19 @@ footer {
   .nav-search { display: none; }
   .footer-top { grid-template-columns: 1fr 1fr; }
 }
+@media (max-width: 768px) {
+  nav.site-header {
+    padding: 0 12px;
+  }
+  .nav-logo {
+    margin-right: 8px;
+    font-size: 15px;
+  }
+  .nav-right {
+    gap: 6px;
+    margin-left: auto;
+  }
+}
 @media (max-width: 600px) {
   .footer-top { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; align-items: flex-start; }

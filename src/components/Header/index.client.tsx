@@ -152,6 +152,18 @@ export function HeaderClient({ header }: Props) {
 
       {/* Right action items: login/user link, start labs link, Cart, and theme toggle */}
       <div className="nav-right">
+        {/* Mobile Search Trigger Button */}
+        <button
+          onClick={() => setIsSearchOpen(true)}
+          className="md:hidden relative flex h-9 w-9 items-center justify-center rounded-md border border-neutral-800 text-neutral-400 hover:text-white transition-colors"
+          aria-label="Search"
+        >
+          <svg width="14" height="14" viewBox="0 0 13 13" fill="none">
+            <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" strokeWidth="1.3" />
+            <path d="M8.5 8.5l3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+          </svg>
+        </button>
+
         {user ? (
           <Link href="/account" className="btn-login hidden sm:inline-flex items-center gap-2">
             {userAvatar ? (

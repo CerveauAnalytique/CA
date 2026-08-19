@@ -1,104 +1,157 @@
-import type { Footer } from '@/payload-types'
-import { FooterMenu } from '@/components/Footer/menu'
-import { getCachedGlobal } from '@/utilities/getGlobals'
-import Link from 'next/link'
-import React, { Suspense } from 'react'
+'use client'
 
-export async function Footer() {
-  const footer: Footer = await getCachedGlobal('footer', 1)()
-  const menu = footer.navItems || []
+import React, { useState } from 'react'
+import Link from 'next/link'
+import { ArrowRight, ArrowUpRight, Check } from 'lucide-react'
+
+export function Footer() {
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [subscribed, setSubscribed] = useState(false)
+
+  const handleNewsletter = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email) return
+    setLoading(true)
+    setTimeout(() => {
+      setSubscribed(true)
+      setEmail('')
+      setLoading(false)
+      setTimeout(() => setSubscribed(false), 4000)
+    }, 600)
+  }
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
-    <footer>
-      <div className="footer-top">
-        {/* Brand col */}
-        <div className="footer-brand">
-          <Link href="/" className="footer-brand-logo block">
-            Cerveau Analytique
-          </Link>
-          <div className="footer-brand-desc">
-            The analytical intelligence layer for teams building the future.
+    <footer className="relative w-full border-t border-neutral-800 bg-neutral-950 text-neutral-100 font-sans overflow-hidden">
+      <div className="max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-12 relative z-10">
+        {/* Left Column (Newsletter & Statement) */}
+        <div className="col-span-1 border-b lg:border-b-0 lg:col-span-4 p-8 lg:p-12 lg:border-r border-neutral-800 relative flex flex-col justify-between lg:min-h-[540px] bg-neutral-950">
+          <div>
+            <div className="absolute -top-2 -right-[5px] text-neutral-700 text-lg hidden lg:block font-light">+</div>
+            <div className="absolute -bottom-2 -right-[5px] text-neutral-700 text-lg hidden lg:block font-light">+</div>
+            
+            <h2 className="text-[2.6rem] font-black tracking-tighter mb-4 leading-[1.05] text-white">
+              Let&apos;s Build<br />Together
+            </h2>
+            <p className="text-neutral-400 text-[13.5px] leading-relaxed mb-8 max-w-[300px] font-normal">
+              Join our global network of developers, researchers, and enterprises deploying real-time analytical intelligence.
+            </p>
+
+            <form onSubmit={handleNewsletter} className="relative max-w-[320px] mb-12 shadow-sm rounded-full bg-neutral-900 border border-neutral-800">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={loading}
+                placeholder="Enter email address*"
+                className="w-full py-3.5 pl-5 pr-14 border-0 rounded-full outline-none focus:ring-1 focus:ring-neutral-600 bg-transparent text-sm text-white placeholder-neutral-500 disabled:opacity-50"
+              />
+              <button
+                type="submit"
+                disabled={loading}
+                className="absolute right-[4px] top-[4px] w-[38px] h-[38px] bg-white text-black rounded-full flex items-center justify-center hover:bg-neutral-200 transition disabled:opacity-50"
+                aria-label="Subscribe to newsletter"
+              >
+                {subscribed ? <Check size={16} className="text-black font-bold" /> : <ArrowRight size={16} />}
+              </button>
+            </form>
+            {subscribed && (
+              <p className="text-xs text-emerald-400 font-medium -mt-8 mb-6">
+                ✓ Thank you for subscribing to Cerveau Analytique.
+              </p>
+            )}
           </div>
-          <div className="footer-socials">
-            {/* X / Twitter */}
-            <a href="https://x.com" target="_blank" rel="noreferrer" className="footer-social" title="X">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path d="M1 1.5l4.5 5.5L1 11.5h1.2l3.9-4.1 3.1 4.1H12L7.3 5.7 11.5 1.5h-1.2L6.7 5.3 3.8 1.5H1z" fill="currentColor"/>
-              </svg>
-            </a>
-            {/* GitHub */}
-            <a href="https://github.com" target="_blank" rel="noreferrer" className="footer-social" title="GitHub">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path fillRule="evenodd" clipRule="evenodd" d="M6.5 0a6.5 6.5 0 0 0-2.055 12.668c.325.06.444-.141.444-.313 0-.154-.006-.563-.009-1.107-1.807.393-2.189-.872-2.189-.872-.296-.751-.722-0.951-.722-.951-.59-.403.045-.395.045-.395.652.046.995.67.995.67.579.992 1.52.706 1.89.539.059-.42.226-.706.411-.868-1.442-.164-2.957-.721-2.957-3.21 0-.709.253-1.288.669-1.742-.067-.165-.29-.824.064-1.717 0 0 .546-.175 1.788.667a6.22 6.22 0 0 1 1.629-.22c.553.003 1.109.075 1.629.22 1.241-.842 1.786-.667 1.786-.667.355.893.132 1.552.065 1.717.417.454.668 1.033.668 1.742 0 2.496-1.517 3.044-2.962 3.205.233.2.44.598.44 1.205 0 .87-.008 1.571-.008 1.785 0 .174.117.377.447.313A6.5 6.5 0 0 0 6.5 0z" fill="currentColor"/>
-              </svg>
-            </a>
-            {/* LinkedIn */}
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="footer-social" title="LinkedIn">
-              <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <rect x="1" y="1" width="11" height="11" rx="2" stroke="currentColor" strokeWidth="1.1"/>
-                <path d="M3.5 5.5v4M3.5 3.5v.5M5.5 9.5V7a1.5 1.5 0 0 1 3 0v2.5M5.5 5.5v4" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
-              </svg>
-            </a>
+
+          <div className="text-xs text-neutral-500 font-mono">
+            System Operational • Node v18+ • Global Edge
           </div>
         </div>
 
-        {/* Product & Store Column */}
-        <div>
-          <div className="footer-col-title">Product & Store</div>
-          <div className="footer-col-links">
-            <Link href="/shop" className="footer-col-link">Products Shop</Link>
-            <Link href="/checkout" className="footer-col-link">View Cart & Checkout</Link>
-            <Link href="/research" className="footer-col-link">Research Engine</Link>
-            <Link href="/api" className="footer-col-link">API Access</Link>
-            <Link href="/account" className="footer-col-link">My Account</Link>
-          </div>
-        </div>
-
-        {/* Developers Column */}
-        <div>
-          <div className="footer-col-title">Developers</div>
-          <div className="footer-col-links">
-            <Link href="/docs" className="footer-col-link">Documentation</Link>
-            <Link href="/docs/api" className="footer-col-link">API Reference</Link>
-            <Link href="/sdks" className="footer-col-link">SDKs</Link>
-            <Link href="/status" className="footer-col-link">System Status</Link>
-            <Link href="/community" className="footer-col-link">Community</Link>
-          </div>
-        </div>
-
-        {/* Company & Payload CMS Nav Items Column */}
-        <div>
-          <div className="footer-col-title">Company</div>
-          {menu.length > 0 ? (
-            <Suspense fallback={null}>
-              <FooterMenu menu={menu} />
-            </Suspense>
-          ) : (
-            <div className="footer-col-links">
-              <Link href="/about" className="footer-col-link">About Us</Link>
-              <Link href="/blog" className="footer-col-link">Blog & Insights</Link>
-              <Link href="/careers" className="footer-col-link">Careers</Link>
-              <Link href="/press" className="footer-col-link">Press</Link>
-              <Link href="/contact" className="footer-col-link">Contact</Link>
+        {/* Right Grid (Link Columns + Watermark) */}
+        <div className="col-span-1 lg:col-span-8 relative flex flex-col bg-neutral-950">
+          <div className="grid grid-cols-2 md:grid-cols-4 border-b border-neutral-800 relative z-10">
+            {/* Products Column */}
+            <div className="relative p-6 md:p-8 border-b md:border-b-0 border-r border-neutral-800 flex flex-col">
+              <div className="absolute -top-[12px] -right-[6px] text-neutral-700 text-xl hidden md:block font-light">+</div>
+              <div className="absolute -bottom-[12px] -right-[6px] text-neutral-700 text-xl hidden md:block font-light">+</div>
+              <h4 className="text-[11px] text-neutral-500 mb-6 font-bold uppercase tracking-widest">Products</h4>
+              <ul className="space-y-3 text-[13px] font-medium text-neutral-400">
+                <li><Link href="/shop" className="hover:text-white transition">Products Shop</Link></li>
+                <li><Link href="/research" className="hover:text-white transition">Neural Engine</Link></li>
+                <li><Link href="/api" className="hover:text-white transition">API Access</Link></li>
+                <li><Link href="/dashboard" className="hover:text-white transition">Analytics Workspace</Link></li>
+              </ul>
             </div>
-          )}
+
+            {/* Platform Column */}
+            <div className="relative p-6 md:p-8 border-b md:border-b-0 border-r border-neutral-800 flex flex-col">
+              <div className="absolute -top-[12px] -right-[6px] text-neutral-700 text-xl hidden md:block font-light">+</div>
+              <div className="absolute -bottom-[12px] -right-[6px] text-neutral-700 text-xl hidden md:block font-light">+</div>
+              <h4 className="text-[11px] text-neutral-500 mb-6 font-bold uppercase tracking-widest">Platform</h4>
+              <ul className="space-y-3 text-[13px] font-medium text-neutral-400">
+                <li><Link href="/docs/carbon" className="hover:text-white transition">Carbon API</Link></li>
+                <li><Link href="/docs/search" className="hover:text-white transition">Search API</Link></li>
+                <li><Link href="/docs/predict" className="hover:text-white transition">Predictive API</Link></li>
+                <li><Link href="/sdks" className="hover:text-white transition">SDKs & Libraries</Link></li>
+              </ul>
+            </div>
+
+            {/* Resources Column */}
+            <div className="relative p-6 md:p-8 border-b md:border-b-0 border-r border-neutral-800 flex flex-col">
+              <div className="absolute -top-[12px] -right-[6px] text-neutral-700 text-xl hidden md:block font-light">+</div>
+              <div className="absolute -bottom-[12px] -right-[6px] text-neutral-700 text-xl hidden md:block font-light">+</div>
+              <h4 className="text-[11px] text-neutral-500 mb-6 font-bold uppercase tracking-widest">Resources</h4>
+              <ul className="space-y-3 text-[13px] font-medium text-neutral-400">
+                <li><Link href="/docs" className="hover:text-white transition">Documentation</Link></li>
+                <li><Link href="/docs/quickstart" className="hover:text-white transition">Quickstart</Link></li>
+                <li><Link href="/community" className="hover:text-white transition">Community</Link></li>
+                <li><Link href="/status" className="hover:text-white transition">System Status</Link></li>
+              </ul>
+            </div>
+
+            {/* Company Column */}
+            <div className="relative p-6 md:p-8 flex flex-col">
+              <h4 className="text-[11px] text-neutral-500 mb-6 font-bold uppercase tracking-widest">Company</h4>
+              <ul className="space-y-3 text-[13px] font-medium text-neutral-400">
+                <li><Link href="/about" className="hover:text-white transition">About Us</Link></li>
+                <li><Link href="/careers" className="hover:text-white transition">Careers</Link></li>
+                <li><Link href="/privacy" className="hover:text-white transition">Privacy Policy</Link></li>
+                <li><Link href="/terms" className="hover:text-white transition">Terms of Service</Link></li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Watermark Zone */}
+          <div className="relative flex-grow min-h-[220px] lg:min-h-[300px] flex items-center justify-center overflow-hidden">
+            <div className="text-[14vw] lg:text-[9.5vw] font-black text-neutral-800/40 select-none tracking-tighter whitespace-nowrap pointer-events-none transform translate-y-3">
+              cerveau.ai
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="footer-bottom">
-        <span className="footer-copy">© 2026 Cerveau Analytique, Inc. All rights reserved.</span>
-
-        <div className="footer-status">
-          <div className="status-dot"></div>
-          All systems operational
+      {/* Bottom Copyright Bar */}
+      <div className="max-w-[1500px] mx-auto flex flex-col xl:flex-row justify-between items-center py-6 px-8 text-[11px] font-semibold text-neutral-500 relative z-20 border-t border-neutral-900 uppercase tracking-widest">
+        <div className="mb-4 xl:mb-0 text-center xl:text-left">
+          © 2026 Cerveau Analytique, Inc. / All Rights Reserved
         </div>
-
-        <div className="footer-bottom-links">
-          <Link href="/privacy" className="footer-bottom-link">Privacy Policy</Link>
-          <Link href="/terms" className="footer-bottom-link">Terms of Service</Link>
-          <Link href="/security" className="footer-bottom-link">Security</Link>
-          <Link href="/cookies" className="footer-bottom-link">Cookies</Link>
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+          <Link href="/privacy" className="hover:text-white transition">Privacy Policy</Link>
+          <Link href="/terms" className="hover:text-white transition">Terms of Service</Link>
+          <Link href="/security" className="hover:text-white transition">Security</Link>
+          <Link href="/cookies" className="hover:text-white transition">Cookie Policy</Link>
         </div>
+        <button
+          className="hidden xl:flex items-center hover:text-white border-l border-neutral-800 pl-6 ml-6 transition"
+          onClick={scrollToTop}
+        >
+          Top <ArrowUpRight className="ml-1" size={13} strokeWidth={2.5} />
+        </button>
       </div>
     </footer>
   )
