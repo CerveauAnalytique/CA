@@ -32,7 +32,7 @@ export function HeaderClient({ header }: Props) {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
   const username = formatUserDisplayName(user)
-  const userAvatar = (user as any)?.avatar?.url || (user as any)?.image?.url
+  const userAvatar = (user as any)?.avatar?.url || (user as any)?.avatar || (user as any)?.image?.url
 
   // Dynamically formatted title from Payload CMS
   const rawTitle = header.siteTitle || 'Cerveau Analytique'

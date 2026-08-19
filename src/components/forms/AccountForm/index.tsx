@@ -2,7 +2,6 @@
 
 import { FormError } from '@/components/forms/FormError'
 import { FormItem } from '@/components/forms/FormItem'
-import { Message } from '@/components/Message'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -12,23 +11,27 @@ import { useRouter } from 'next/navigation'
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { Camera, User as UserIcon } from 'lucide-react'
 
 type FormData = {
   email: string
   name: User['name']
-  password: string
-  passwordConfirm: string
+  avatar?: string
+  password?: string
+  passwordConfirm?: string
 }
 
 export const AccountForm: React.FC = () => {
   const { setUser, user } = useAuth()
   const [changePassword, setChangePassword] = useState(false)
+  const [avatarPreview, setAvatarPreview] = useState<string>('')
 
   const {
     formState: { errors, isLoading, isSubmitting, isDirty },
     handleSubmit,
     register,
     reset,
+    setValue,
     watch,
   } = useForm<FormData>()
 
@@ -37,36 +40,70 @@ export const AccountForm: React.FC = () => {
 
   const router = useRouter()
 
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('Image size must be less than 5MB')
+        return
+      }
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const result = reader.result as string
+        setAvatarPreview(result)
+        setValue('avatar', result, { shouldDirty: true })
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
   const onSubmit = useCallback(
     async (data: FormData) => {
       if (user) {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${user.id}`, {
-          // Make sure to include cookies with fetch
-          body: JSON.stringify(data),
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          method: 'PATCH',
-        })
+        try {
+          const payloadData: Record<string, any> = {
+            name: data.name,
+            email: data.email,
+          }
 
-        if (response.ok) {
-          const json = await response.json()
-          setUser(json.doc)
-          toast.success('Successfully updated account.')
-          setChangePassword(false)
-          reset({
-            name: json.doc.name,
-            email: json.doc.email,
-            password: '',
-            passwordConfirm: '',
+          if (data.avatar) {
+            payloadData.avatar = data.avatar
+          }
+
+          if (changePassword && data.password) {
+            payloadData.password = data.password
+          }
+
+          const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${user.id}`, {
+            body: JSON.stringify(payloadData),
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            method: 'PATCH',
           })
-        } else {
-          toast.error('There was a problem updating your account.')
+
+          if (response.ok) {
+            const json = await response.json()
+            setUser(json.doc)
+            toast.success('Successfully updated account & avatar!')
+            setChangePassword(false)
+            reset({
+              name: json.doc.name,
+              email: json.doc.email,
+              avatar: json.doc.avatar,
+              password: '',
+              passwordConfirm: '',
+            })
+          } else {
+            toast.error('There was a problem updating your account.')
+          }
+        } catch (err) {
+          toast.error('Error updating account settings.')
         }
       }
     },
-    [user, setUser, reset],
+    [user, setUser, reset, changePassword],
   )
 
   useEffect(() => {
@@ -78,37 +115,78 @@ export const AccountForm: React.FC = () => {
       )
     }
 
-    // Once user is loaded, reset form to have default values
     if (user) {
+      const existingAvatar = (user as any)?.avatar?.url || (user as any)?.avatar || ''
+      setAvatarPreview(existingAvatar)
       reset({
-        name: user.name,
-        email: user.email,
+        name: user.name || '',
+        email: user.email || '',
+        avatar: existingAvatar,
         password: '',
         passwordConfirm: '',
       })
     }
-  }, [user, router, reset, changePassword])
+  }, [user, router, reset])
 
   return (
-    <form className="max-w-xl" onSubmit={handleSubmit(onSubmit)}>
+    <form className="max-w-xl space-y-6" onSubmit={handleSubmit(onSubmit)}>
+      {/* Profile Picture Upload Section */}
+      <div className="flex items-center gap-6 p-4 rounded-xl border border-neutral-800 bg-neutral-900/50 mb-6">
+        <div className="relative group flex-shrink-0">
+          <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-neutral-700 bg-neutral-800 flex items-center justify-center">
+            {avatarPreview ? (
+              <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
+            ) : (
+              <UserIcon className="w-10 h-10 text-neutral-400" />
+            )}
+          </div>
+          <label
+            htmlFor="avatar-upload"
+            className="absolute inset-0 bg-black/60 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-opacity"
+          >
+            <Camera className="w-6 h-6 text-white" />
+          </label>
+          <input
+            id="avatar-upload"
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+            className="hidden"
+          />
+        </div>
+
+        <div>
+          <h3 className="text-sm font-semibold text-white">Profile Photo</h3>
+          <p className="text-xs text-neutral-400 mt-1">
+            Upload your avatar photo. It will appear across your account and top navbar.
+          </p>
+          <label
+            htmlFor="avatar-upload"
+            className="inline-block mt-2 text-xs font-medium text-blue-400 hover:text-blue-300 cursor-pointer underline"
+          >
+            Choose new image
+          </label>
+        </div>
+      </div>
+
       {!changePassword ? (
         <Fragment>
-          <div className="prose dark:prose-invert mb-8">
-            <p className="">
-              {'Change your account details below, or '}
+          <div className="prose dark:prose-invert mb-6">
+            <p className="text-sm text-neutral-400">
+              Update your account details below. Your name will appear in the top navbar instead of masked email. Or{' '}
               <Button
-                className="px-0 text-inherit underline hover:cursor-pointer"
+                className="px-0 text-white underline hover:cursor-pointer"
                 onClick={() => setChangePassword(!changePassword)}
                 type="button"
                 variant="link"
               >
                 click here
-              </Button>
-              {' to change your password.'}
+              </Button>{' '}
+              to change your password.
             </p>
           </div>
 
-          <div className="flex flex-col gap-8 mb-8">
+          <div className="flex flex-col gap-6">
             <FormItem>
               <Label htmlFor="email" className="mb-2">
                 Email Address
@@ -123,10 +201,11 @@ export const AccountForm: React.FC = () => {
 
             <FormItem>
               <Label htmlFor="name" className="mb-2">
-                Name
+                Display Name / Full Name
               </Label>
               <Input
                 id="name"
+                placeholder="e.g. Jack Line"
                 {...register('name', { required: 'Please provide a name.' })}
                 type="text"
               />
@@ -136,11 +215,11 @@ export const AccountForm: React.FC = () => {
         </Fragment>
       ) : (
         <Fragment>
-          <div className="prose dark:prose-invert mb-8">
-            <p>
-              {'Change your password below, or '}
+          <div className="prose dark:prose-invert mb-6">
+            <p className="text-sm text-neutral-400">
+              Change your password below, or{' '}
               <Button
-                className="px-0 text-inherit underline hover:cursor-pointer"
+                className="px-0 text-white underline hover:cursor-pointer"
                 onClick={() => setChangePassword(!changePassword)}
                 type="button"
                 variant="link"
@@ -151,7 +230,7 @@ export const AccountForm: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex flex-col gap-8 mb-8">
+          <div className="flex flex-col gap-6">
             <FormItem>
               <Label htmlFor="password" className="mb-2">
                 New password
@@ -181,13 +260,16 @@ export const AccountForm: React.FC = () => {
           </div>
         </Fragment>
       )}
-      <Button disabled={isLoading || isSubmitting || !isDirty} type="submit" variant="default">
-        {isLoading || isSubmitting
-          ? 'Processing'
-          : changePassword
-            ? 'Change Password'
-            : 'Update Account'}
-      </Button>
+
+      <div className="pt-2">
+        <Button disabled={isLoading || isSubmitting || !isDirty} type="submit" variant="default">
+          {isLoading || isSubmitting
+            ? 'Processing...'
+            : changePassword
+              ? 'Change Password'
+              : 'Save Account Settings'}
+        </Button>
+      </div>
     </form>
   )
 }
