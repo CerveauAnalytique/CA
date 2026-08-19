@@ -12,7 +12,7 @@ export default async function HomePage() {
   try {
     const payload = await getPayload({ config: configPromise })
     const result = await payload.find({
-      collection: 'posts',
+      collection: 'posts' as any,
       limit: 10,
       sort: '-publishedAt',
     })
