@@ -43,8 +43,8 @@ export function HeaderClient({ header }: Props) {
   const searchPlaceholder = header.searchPlaceholder || 'Search docs, research, products…'
   const loginLabel = header.loginLabel || 'Log in'
   const loginURL = header.loginURL || '/login'
-  const startLabel = 'Start labs'
-  const startURL = '/dashboard'
+  const startLabel = 'Start chat'
+  const startURL = '/chat-neuriy'
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

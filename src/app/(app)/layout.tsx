@@ -36,7 +36,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <body>
         <div className="grain" />
         <Providers>
-          <AdminBar />
           <LivePreviewListener />
 
           <Header />
