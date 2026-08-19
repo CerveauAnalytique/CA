@@ -49,7 +49,7 @@ export async function Footer() {
             <Link href="/shop" className="footer-col-link">Products Shop</Link>
             <Link href="/checkout" className="footer-col-link">View Cart & Checkout</Link>
             <Link href="/research" className="footer-col-link">Research Engine</Link>
-            <Link href="/api-access" className="footer-col-link">API Access</Link>
+            <Link href="/api" className="footer-col-link">API Access</Link>
             <Link href="/account" className="footer-col-link">My Account</Link>
           </div>
         </div>

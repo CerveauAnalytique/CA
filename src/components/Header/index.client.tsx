@@ -103,9 +103,9 @@ export function HeaderClient({ header }: Props) {
               Research
             </Link>
             <Link
-              href="/api-access"
+              href="/api"
               className={cn('nav-link', {
-                'text-white bg-white/10': pathname.includes('/api-access'),
+                'text-white bg-white/10': pathname === '/api',
               })}
             >
               API
