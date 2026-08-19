@@ -63,13 +63,6 @@ export function HeaderClient({ header }: Props) {
 
   return (
     <nav className="site-header">
-      {/* Mobile navigation menu */}
-      <div className="block md:hidden mr-4">
-        <Suspense fallback={null}>
-          <MobileMenu menu={menu} />
-        </Suspense>
-      </div>
-
       {/* Brand Title connected to Payload CMS siteTitle field */}
       <Link href="/" className="nav-logo">
         {firstTitlePart} {secondTitlePart ? <span>{secondTitlePart}</span> : null}
@@ -150,22 +143,27 @@ export function HeaderClient({ header }: Props) {
         <span className="nav-search-kbd">⌘K</span>
       </form>
 
-      {/* Right action items: login/user link, start labs link, Cart, and theme toggle */}
+      {/* Right action items */}
       <div className="nav-right">
-        {/* Mobile Search Trigger Button */}
-        <button
-          onClick={() => setIsSearchOpen(true)}
-          className="md:hidden relative flex h-9 w-9 items-center justify-center rounded-md border border-neutral-800 text-neutral-400 hover:text-white transition-colors"
-          aria-label="Search"
-        >
-          <svg width="14" height="14" viewBox="0 0 13 13" fill="none">
-            <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" strokeWidth="1.3" />
-            <path d="M8.5 8.5l3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-          </svg>
-        </button>
+        {/* Mobile text-only links for Chat & Login */}
+        <div className="flex md:hidden items-center gap-2 mr-1">
+          <Link
+            href="/chat-neuriy"
+            className="text-xs font-semibold text-neutral-300 hover:text-white transition-colors"
+          >
+            Chat
+          </Link>
+          <Link
+            href={user ? '/account' : loginURL}
+            className="text-xs font-semibold text-neutral-300 hover:text-white transition-colors"
+          >
+            {user ? username : 'Login'}
+          </Link>
+        </div>
 
+        {/* Desktop-only Login & Start Labs buttons */}
         {user ? (
-          <Link href="/account" className="btn-login hidden sm:inline-flex items-center gap-2">
+          <Link href="/account" className="btn-login hidden md:inline-flex items-center gap-2">
             {userAvatar ? (
               <img src={userAvatar} alt={username} className="h-5 w-5 rounded-full object-cover" />
             ) : (
@@ -176,17 +174,40 @@ export function HeaderClient({ header }: Props) {
             <span>{username}</span>
           </Link>
         ) : (
-          <Link href={loginURL} className="btn-login hidden sm:inline-flex">
+          <Link href={loginURL} className="btn-login hidden md:inline-flex">
             {loginLabel}
           </Link>
         )}
-        <Link href={startURL} className="btn-start hidden sm:inline-flex">
+        <Link href={startURL} className="btn-start hidden md:inline-flex">
           {startLabel}
         </Link>
+
+        {/* Mobile Search Trigger Button */}
+        <button
+          onClick={() => setIsSearchOpen(true)}
+          className="md:hidden relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-800 text-neutral-400 hover:text-white transition-colors"
+          aria-label="Search"
+        >
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+            <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" strokeWidth="1.3" />
+            <path d="M8.5 8.5l3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+          </svg>
+        </button>
+
         <Suspense fallback={<OpenCartButton />}>
           <Cart />
         </Suspense>
-        <ThemeToggle />
+
+        {/* Right-aligned Mobile Sidebar Drawer Button */}
+        <div className="block md:hidden">
+          <Suspense fallback={null}>
+            <MobileMenu menu={menu} />
+          </Suspense>
+        </div>
+
+        <div className="hidden md:block">
+          <ThemeToggle />
+        </div>
       </div>
 
       <SearchModal
