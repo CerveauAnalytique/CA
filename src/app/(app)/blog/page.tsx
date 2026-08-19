@@ -1,78 +1,126 @@
-import type { Metadata } from 'next'
-import Link from 'next/link'
 import React from 'react'
+import Link from 'next/link'
+import { getPayload } from 'payload'
+import configPromise from '@payload-config'
+import type { Metadata } from 'next'
+import { SAMPLE_POSTS, seedPostsIfEmpty } from '@/utilities/seedPosts'
+import { ArrowUpRight, Filter } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: 'Blog & Insights — Cerveau Analytique',
-  description: 'Perspectives on AI, analytics, and building intelligent products.',
+interface PageProps {
+  searchParams: Promise<{
+    category?: string
+  }>
 }
 
-const posts = [
-  {
-    slug: 'data-flywheel-effect',
-    category: 'INSIGHTS',
-    title: 'The Data Flywheel Effect: Why More Users Makes Your AI Smarter',
-    excerpt: 'How network effects in machine learning create compounding competitive advantages for data-driven businesses.',
-    date: 'Aug 12, 2026',
-    author: 'Marie Dupont',
-  },
-  {
-    slug: 'real-time-rag',
-    category: 'ENGINEERING',
-    title: 'Building Real-Time RAG Pipelines at Scale',
-    excerpt: 'A deep dive into our architecture for serving retrieval-augmented generation with sub-100ms p99 latency.',
-    date: 'Aug 1, 2026',
-    author: 'Kenji Watanabe',
-  },
-  {
-    slug: 'vector-db-comparison',
-    category: 'RESEARCH',
-    title: 'Vector Database Showdown: 2026 Edition',
-    excerpt: 'We benchmarked six leading vector databases on recall, throughput, and cost at the 100M-vector scale.',
-    date: 'Jul 22, 2026',
-    author: 'Amara Osei',
-  },
-  {
-    slug: 'llm-fine-tuning-guide',
-    category: 'GUIDES',
-    title: 'Fine-Tuning LLMs for Domain-Specific Analytics Tasks',
-    excerpt: 'A practical guide to domain adaptation, dataset curation, and evaluation harnesses for analytics workloads.',
-    date: 'Jul 8, 2026',
-    author: 'Sophie Laurent',
-  },
-]
+export default async function BlogIndexPage({ searchParams }: PageProps) {
+  const resolvedSearchParams = await searchParams
+  const categoryFilter = resolvedSearchParams.category || ''
 
-const catColor: Record<string, string> = {
-  INSIGHTS: 'research-tag--company',
-  ENGINEERING: 'research-tag--product',
-  RESEARCH: 'research-tag--research',
-  GUIDES: 'research-tag--safety',
-}
+  let posts: any[] = []
 
-export default function BlogPage() {
+  try {
+    const payload = await getPayload({ config: configPromise })
+    await seedPostsIfEmpty(payload)
+
+    const query: any = {}
+    if (categoryFilter) {
+      query.category = { equals: categoryFilter }
+    }
+
+    const result = await payload.find({
+      collection: 'posts' as any,
+      where: query,
+      limit: 20,
+      sort: '-publishedAt',
+    })
+
+    if (result && result.docs && result.docs.length > 0) {
+      posts = result.docs
+    }
+  } catch (err) {
+    // Fallback
+  }
+
+  if (posts.length === 0) {
+    posts = SAMPLE_POSTS.filter((p) =>
+      categoryFilter ? p.category.toLowerCase() === categoryFilter.toLowerCase() : true,
+    )
+  }
+
+  const categories = ['All', 'Stories', 'Business', 'Explore', 'Developers']
+
   return (
-    <div className="static-page">
-      <div className="static-page-hero">
-        <div className="static-container">
-          <p className="static-eyebrow">Blog & Insights</p>
-          <h1 className="static-title">Thinking out loud</h1>
-          <p className="static-subtitle">
-            Engineering deep-dives, product announcements, and perspectives from the Cerveau team.
+    <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 py-12 transition-colors">
+      <div className="max-w-[1400px] mx-auto px-6 space-y-10">
+        <div className="space-y-4 max-w-2xl">
+          <h1 className="text-4xl md:text-6xl font-black tracking-tighter">
+            Cerveau <span className="text-neutral-400">Stories & Blog</span>
+          </h1>
+          <p className="text-base md:text-lg text-neutral-600 dark:text-neutral-400">
+            Insights, engineering breakthroughs, and customer stories from the team building analytical intelligence.
           </p>
         </div>
-      </div>
 
-      <div className="static-container">
-        <div className="blog-list">
+        {/* Category Filter Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-neutral-200 dark:border-neutral-800">
+          <Filter size={16} className="text-neutral-400 mr-2 shrink-0" />
+          {categories.map((cat) => {
+            const isActive =
+              cat === 'All' ? !categoryFilter : categoryFilter.toLowerCase() === cat.toLowerCase()
+            const href = cat === 'All' ? '/blog' : `/blog?category=${cat}`
+            return (
+              <Link
+                key={cat}
+                href={href}
+                className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+                  isActive
+                    ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm'
+                    : 'bg-neutral-100 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-neutral-800'
+                }`}
+              >
+                {cat}
+              </Link>
+            )
+          })}
+        </div>
+
+        {/* Blog Posts Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {posts.map((post) => (
-            <Link key={post.slug} href={`/blog/${post.slug}`} className="blog-card">
-              <span className={`research-tag ${catColor[post.category] ?? ''}`}>{post.category}</span>
-              <h2 className="blog-card-title">{post.title}</h2>
-              <p className="blog-card-excerpt">{post.excerpt}</p>
-              <div className="blog-card-meta">
-                <span>{post.author}</span>
-                <span className="research-dot" />
-                <span>{post.date}</span>
+            <Link
+              key={post.id || post.slug}
+              href={`/blog/${post.slug}`}
+              className="group flex flex-col space-y-3 cursor-pointer"
+            >
+              <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-neutral-900 border border-neutral-200 dark:border-neutral-800 shadow-sm">
+                <img
+                  src={
+                    post.coverImageUrl ||
+                    post.coverImage?.url ||
+                    'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=800'
+                  }
+                  alt={post.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                {post.blogId && (
+                  <span className="absolute top-3 left-3 bg-black/70 backdrop-blur-md text-white text-[10px] font-mono px-2.5 py-1 rounded-md uppercase tracking-wider">
+                    {post.blogId}
+                  </span>
+                )}
+              </div>
+              <h3 className="text-lg font-bold leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                {post.title}
+              </h3>
+              {post.excerpt && (
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2 leading-relaxed">
+                  {post.excerpt}
+                </p>
+              )}
+              <div className="text-xs font-semibold text-neutral-400 pt-1 flex items-center justify-between">
+                <span>{post.category || 'Stories'}</span>
+                <span className="flex items-center text-blue-500">
+                  Read article <ArrowUpRight size={13} className="ml-0.5" />
+                </span>
               </div>
             </Link>
           ))}
@@ -80,4 +128,9 @@ export default function BlogPage() {
       </div>
     </div>
   )
+}
+
+export const metadata: Metadata = {
+  title: 'Blog & Stories — Cerveau Analytique',
+  description: 'Explore latest stories, business case studies, and engineering blogs.',
 }
