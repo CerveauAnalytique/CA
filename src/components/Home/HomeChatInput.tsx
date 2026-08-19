@@ -47,7 +47,7 @@ export function HomeChatInput() {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto animate-fade-in relative z-20">
+    <div className="w-full max-w-2xl mx-auto md:mx-0 animate-fade-in relative z-20">
       <input
         type="file"
         ref={fileInputRef}
