@@ -12,6 +12,9 @@ import type { Header } from 'src/payload-types'
 import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/utilities/cn'
 
+import { useAuth } from '@/providers/Auth'
+import { User as UserIcon } from 'lucide-react'
+
 import { SearchModal } from '@/components/SearchModal'
 
 type Props = {
@@ -19,12 +22,16 @@ type Props = {
 }
 
 export function HeaderClient({ header }: Props) {
+  const { user } = useAuth()
   const menu = header.navItems || []
   const pathname = usePathname()
   const router = useRouter()
   const searchInputRef = useRef<HTMLInputElement>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+
+  const username = (user as any)?.name || user?.email?.split('@')[0] || 'Account'
+  const userAvatar = (user as any)?.avatar?.url || (user as any)?.image?.url
 
   // Dynamically formatted title from Payload CMS
   const rawTitle = header.siteTitle || 'Cerveau Analytique'
@@ -35,8 +42,8 @@ export function HeaderClient({ header }: Props) {
   const searchPlaceholder = header.searchPlaceholder || 'Search docs, research, products…'
   const loginLabel = header.loginLabel || 'Log in'
   const loginURL = header.loginURL || '/login'
-  const startLabel = header.startLabel || 'Get started'
-  const startURL = header.startURL || '/create-account'
+  const startLabel = 'Start labs'
+  const startURL = '/dashboard'
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -143,11 +150,24 @@ export function HeaderClient({ header }: Props) {
         <span className="nav-search-kbd">⌘K</span>
       </form>
 
-      {/* Right action items: login link, start link, Cart, and theme toggle */}
+      {/* Right action items: login/user link, start labs link, Cart, and theme toggle */}
       <div className="nav-right">
-        <Link href={loginURL} className="btn-login hidden sm:inline-flex">
-          {loginLabel}
-        </Link>
+        {user ? (
+          <Link href="/account" className="btn-login hidden sm:inline-flex items-center gap-2">
+            {userAvatar ? (
+              <img src={userAvatar} alt={username} className="h-5 w-5 rounded-full object-cover" />
+            ) : (
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-neutral-800 border border-neutral-700 text-neutral-300 text-[10px] font-semibold">
+                <UserIcon className="h-3 w-3" />
+              </span>
+            )}
+            <span>{username}</span>
+          </Link>
+        ) : (
+          <Link href={loginURL} className="btn-login hidden sm:inline-flex">
+            {loginLabel}
+          </Link>
+        )}
         <Link href={startURL} className="btn-start hidden sm:inline-flex">
           {startLabel}
         </Link>
