@@ -18,12 +18,15 @@ import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
+import { formatUserDisplayName } from '@/utilities/formatUserDisplayName'
+
 interface Props {
   menu: Header['navItems']
 }
 
 export function MobileMenu({ menu }: Props) {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
+  const username = formatUserDisplayName(user)
 
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -102,7 +105,9 @@ export function MobileMenu({ menu }: Props) {
 
         {user ? (
           <div className="mt-6 pt-4 border-t border-neutral-800">
-            <h2 className="text-sm font-semibold mb-3 text-neutral-400 uppercase tracking-wider">Account</h2>
+            <div className="text-sm font-semibold mb-3 text-white flex items-center justify-between">
+              <span className="truncate">{username}</span>
+            </div>
             <ul className="flex flex-col gap-2 text-sm">
               <li>
                 <Link href="/account" onClick={closeMobileMenu} className="hover:text-white">
@@ -115,8 +120,15 @@ export function MobileMenu({ menu }: Props) {
                 </Link>
               </li>
               <li className="mt-4">
-                <Button asChild variant="outline" className="w-full">
-                  <Link href="/logout" onClick={closeMobileMenu}>Log out</Link>
+                <Button
+                  variant="outline"
+                  className="w-full text-red-400 hover:text-red-300 border-neutral-800 hover:bg-neutral-900"
+                  onClick={() => {
+                    closeMobileMenu()
+                    logout()
+                  }}
+                >
+                  Log out
                 </Button>
               </li>
             </ul>

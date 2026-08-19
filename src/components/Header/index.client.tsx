@@ -13,7 +13,8 @@ import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/utilities/cn'
 
 import { useAuth } from '@/providers/Auth'
-import { User as UserIcon } from 'lucide-react'
+import { User as UserIcon, LogOut } from 'lucide-react'
+import { formatUserDisplayName } from '@/utilities/formatUserDisplayName'
 
 import { SearchModal } from '@/components/SearchModal'
 
@@ -22,7 +23,7 @@ type Props = {
 }
 
 export function HeaderClient({ header }: Props) {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const menu = header.navItems || []
   const pathname = usePathname()
   const router = useRouter()
@@ -30,7 +31,7 @@ export function HeaderClient({ header }: Props) {
   const [searchQuery, setSearchQuery] = useState('')
   const [isSearchOpen, setIsSearchOpen] = useState(false)
 
-  const username = (user as any)?.name || user?.email?.split('@')[0] || 'Account'
+  const username = formatUserDisplayName(user)
   const userAvatar = (user as any)?.avatar?.url || (user as any)?.image?.url
 
   // Dynamically formatted title from Payload CMS
@@ -145,7 +146,7 @@ export function HeaderClient({ header }: Props) {
 
       {/* Right action items */}
       <div className="nav-right">
-        {/* Mobile text-only links for Chat & Login */}
+        {/* Mobile text-only links for Chat, Login/Account, & Log out */}
         <div className="flex md:hidden items-center gap-2 mr-1">
           <Link
             href="/chat-neuriy"
@@ -155,24 +156,43 @@ export function HeaderClient({ header }: Props) {
           </Link>
           <Link
             href={user ? '/account' : loginURL}
-            className="text-xs font-semibold text-neutral-300 hover:text-white transition-colors"
+            className="text-xs font-semibold text-neutral-300 hover:text-white transition-colors truncate max-w-[120px]"
+            title={username}
           >
             {user ? username : 'Login'}
           </Link>
+          {user && (
+            <button
+              onClick={() => logout()}
+              className="text-xs font-semibold text-neutral-400 hover:text-red-400 transition-colors"
+            >
+              Log out
+            </button>
+          )}
         </div>
 
-        {/* Desktop-only Login & Start Labs buttons */}
+        {/* Desktop-only Login/Account & Log out & Start Labs buttons */}
         {user ? (
-          <Link href="/account" className="btn-login hidden md:inline-flex items-center gap-2">
-            {userAvatar ? (
-              <img src={userAvatar} alt={username} className="h-5 w-5 rounded-full object-cover" />
-            ) : (
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-neutral-800 border border-neutral-700 text-neutral-300 text-[10px] font-semibold">
-                <UserIcon className="h-3 w-3" />
-              </span>
-            )}
-            <span>{username}</span>
-          </Link>
+          <>
+            <Link href="/account" className="btn-login hidden md:inline-flex items-center gap-2">
+              {userAvatar ? (
+                <img src={userAvatar} alt={username} className="h-5 w-5 rounded-full object-cover" />
+              ) : (
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-neutral-800 border border-neutral-700 text-neutral-300 text-[10px] font-semibold">
+                  <UserIcon className="h-3 w-3" />
+                </span>
+              )}
+              <span>{username}</span>
+            </Link>
+            <button
+              onClick={() => logout()}
+              className="btn-login hidden md:inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-red-400 border-neutral-800 hover:border-red-500/30 transition-colors"
+              title="Log out"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              <span>Log out</span>
+            </button>
+          </>
         ) : (
           <Link href={loginURL} className="btn-login hidden md:inline-flex">
             {loginLabel}
