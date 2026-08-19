@@ -35,8 +35,8 @@ export const AccountForm: React.FC = () => {
     watch,
   } = useForm<FormData>()
 
-  const password = useRef({})
-  password.current = watch('password', '')
+  const password = useRef<string>('')
+  password.current = watch('password', '') || ''
 
   const router = useRouter()
 
