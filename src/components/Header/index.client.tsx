@@ -154,7 +154,7 @@ export function HeaderClient({ header }: Props) {
         <Link
           href="/marketplace"
           title="Marketplace & Enterprise Models"
-          className="relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-800 text-neutral-400 hover:text-white transition-colors"
+          className="relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-200 dark:border-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:border-neutral-300 transition-colors"
         >
           <Store className="h-4 w-4" />
         </Link>
@@ -163,7 +163,7 @@ export function HeaderClient({ header }: Props) {
         <Link
           href="/notifications"
           title="Notifications & System Alerts"
-          className="relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-800 text-neutral-400 hover:text-white transition-colors"
+          className="relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-200 dark:border-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:border-neutral-300 transition-colors"
         >
           <Bell className="h-4 w-4" />
           <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-red-500" />
@@ -229,7 +229,7 @@ export function HeaderClient({ header }: Props) {
         {/* Mobile Search Trigger Button */}
         <button
           onClick={() => setIsSearchOpen(true)}
-          className="md:hidden relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-800 text-neutral-400 hover:text-white transition-colors"
+          className="md:hidden relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-200 dark:border-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:border-neutral-300 transition-colors"
           aria-label="Search"
         >
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
