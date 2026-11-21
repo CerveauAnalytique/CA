@@ -89,6 +89,14 @@ export function HeaderClient({ header }: Props) {
           <>
             <ExploreMenu />
             <Link
+              href="/pricing"
+              className={cn('nav-link', {
+                'text-white bg-white/10': pathname.includes('/pricing'),
+              })}
+            >
+              {t('Pricing')}
+            </Link>
+            <Link
               href="/research"
               className={cn('nav-link', {
                 'text-white bg-white/10': pathname.includes('/research'),

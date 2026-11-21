@@ -32,6 +32,7 @@ const LINKS = [
   { href: '/shop', label: tr('Shop') },
   { href: '/models', label: tr('AI Models') },
   { href: '/datasets', label: tr('Datasets') },
+  { href: '/pricing', label: tr('Pricing') },
   { href: '/research', label: tr('Research') },
   { href: '/api', label: tr('API') },
   { href: '/docs', label: tr('Docs') },

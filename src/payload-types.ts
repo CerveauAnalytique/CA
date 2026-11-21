@@ -194,6 +194,10 @@ export interface User {
   id: number;
   name?: string | null;
   /**
+   * The pack of this customer. Only admins can change it.
+   */
+  plan?: ('free' | 'hobby' | 'company') | null;
+  /**
    * Chosen at sign-up. The site opens in this language when the customer logs in.
    */
   language?: ('en' | 'nl' | 'de' | 'fr' | 'es' | 'pl' | 'ar') | null;
@@ -1324,6 +1328,7 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  plan?: T;
   language?: T;
   roles?: T;
   orders?: T;

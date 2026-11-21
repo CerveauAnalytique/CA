@@ -20,7 +20,7 @@ export const Users: CollectionConfig = {
   },
   admin: {
     group: 'Users',
-    defaultColumns: ['name', 'email', 'language', 'roles'],
+    defaultColumns: ['name', 'email', 'plan', 'language', 'roles'],
     useAsTitle: 'name',
   },
   auth: {
@@ -31,6 +31,23 @@ export const Users: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+    },
+    {
+      name: 'plan',
+      type: 'select',
+      label: 'Pack',
+      defaultValue: 'free',
+      access: {
+        create: adminOnlyFieldAccess,
+        read: ({ req: { user }, doc }) => Boolean(user && (checkRole(['admin'], user) || user.id === doc?.id)),
+        update: adminOnlyFieldAccess,
+      },
+      options: [
+        { label: 'Free', value: 'free' },
+        { label: 'Hobby', value: 'hobby' },
+        { label: 'Company', value: 'company' },
+      ],
+      admin: { position: 'sidebar', description: 'The pack of this customer. Only admins can change it.' },
     },
     {
       name: 'language',

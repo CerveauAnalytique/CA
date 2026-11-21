@@ -12,6 +12,7 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
       { label: tr('Neural Engine'), href: '/research' },
       { label: tr('API Access'), href: '/api' },
       { label: tr('Analytics Workspace'), href: '/dashboard' },
+      { label: tr('Pricing'), href: '/pricing' },
     ],
   },
   {
