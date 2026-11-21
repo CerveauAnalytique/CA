@@ -23,6 +23,7 @@ type Props = {
 }
 
 import { Ca7Logo } from '@/components/Logo/Ca7Logo'
+import { ExploreMenu } from './ExploreMenu'
 
 export function HeaderClient({ header }: Props) {
   const { user, logout } = useAuth()
@@ -84,30 +85,7 @@ export function HeaderClient({ header }: Props) {
           ))
         ) : (
           <>
-            <Link
-              href="/shop"
-              className={cn('nav-link', {
-                'text-white bg-white/10': pathname.includes('/shop'),
-              })}
-            >
-              Shop
-            </Link>
-            <Link
-              href="/models"
-              className={cn('nav-link', {
-                'text-white bg-white/10': pathname.includes('/models'),
-              })}
-            >
-              AI Models
-            </Link>
-            <Link
-              href="/datasets"
-              className={cn('nav-link', {
-                'text-white bg-white/10': pathname.includes('/datasets'),
-              })}
-            >
-              Datasets
-            </Link>
+            <ExploreMenu />
             <Link
               href="/research"
               className={cn('nav-link', {
