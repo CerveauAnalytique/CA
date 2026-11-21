@@ -30,7 +30,7 @@ export default function TermsPage() {
         <h2>6. Governing Law</h2>
         <p>These terms are governed by the laws of the State of Delaware, United States, without regard to conflict of law provisions.</p>
         <h2>7. Contact</h2>
-        <p>Questions about these terms? Contact us at <a href="mailto:legal@cerveauanalytique.com" className="inline-link">legal@cerveauanalytique.com</a>.</p>
+        <p>Questions about these terms? Contact us at <a href="mailto:legal@ca7.io" className="inline-link">legal@ca7.io</a>.</p>
       </div>
     </div>
   )

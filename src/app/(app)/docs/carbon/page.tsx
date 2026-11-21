@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import React from 'react'
 import { DocsLayout } from '@/components/DocsLayout'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 
 export const metadata: Metadata = { title: 'Carbon API — Cerveau Analytique Docs' }
 
@@ -48,7 +48,7 @@ export default function CarbonDocsPage() {
       </ol>
 
       <h2 id="endpoint">Endpoint reference</h2>
-      <pre className="docs-code-block"><code>POST https://api.cerveauanalytique.com/v1/carbon/calculate</code></pre>
+      <pre className="docs-code-block"><code>POST https://api.ca7.io/v1/carbon/calculate</code></pre>
 
       <h2 id="parameters">Parameters</h2>
       <table className="docs-table">

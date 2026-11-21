@@ -6,6 +6,7 @@ import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/
 import { ecommercePlugin } from '@payloadcms/plugin-ecommerce'
 
 import { stripeAdapter } from '@payloadcms/plugin-ecommerce/payments/stripe'
+import { mollieAdapter } from '@/payments/mollie'
 
 import { Page, Product } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -121,6 +122,10 @@ export const plugins: Plugin[] = [
           secretKey: process.env.STRIPE_SECRET_KEY!,
           publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
           webhookSecret: process.env.STRIPE_WEBHOOKS_SIGNING_SECRET!,
+        }),
+        mollieAdapter({
+          apiKey: process.env.MOLLIE_API_KEY || '',
+          siteUrl: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
         }),
       ],
     },

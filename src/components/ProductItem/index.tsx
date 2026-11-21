@@ -4,7 +4,7 @@ import { Price } from '@/components/Price'
 import { Button } from '@/components/ui/button'
 import { Media as MediaType, Order, Product, Variant } from '@/payload-types'
 import { formatDateTime } from '@/utilities/formatDateTime'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 
 type Props = {
   product: Product

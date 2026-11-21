@@ -7,7 +7,7 @@ import { ProductDescription } from '@/components/product/ProductDescription'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import { notFound } from 'next/navigation'
 import React, { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
@@ -119,7 +119,7 @@ export default async function ProductPage({ params }: Args) {
       />
       <div className="container pt-8 pb-8">
         <Button asChild variant="ghost" className="mb-4">
-          <Link href="/shop">
+          <Link href="/products">
             <ChevronLeftIcon />
             All products
           </Link>

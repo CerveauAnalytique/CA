@@ -10,7 +10,7 @@ import { useAuth } from '@/providers/Auth'
 import { useTheme } from '@/providers/Theme'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import { useRouter } from 'next/navigation'
 import React, { Suspense, useCallback, useEffect, useState } from 'react'
 
@@ -88,6 +88,11 @@ export const CheckoutPage: React.FC = () => {
         })) as Record<string, unknown>
 
         if (paymentData) {
+          // Mollie: send the shopper to Mollie's hosted payment page
+          if (typeof paymentData['checkoutUrl'] === 'string' && paymentData['checkoutUrl']) {
+            window.location.href = paymentData['checkoutUrl'] as string
+            return
+          }
           setPaymentData(paymentData)
         }
       } catch (error) {
@@ -122,7 +127,7 @@ export const CheckoutPage: React.FC = () => {
     return (
       <div className="prose dark:prose-invert py-12 w-full items-center">
         <p>Your cart is empty.</p>
-        <Link href="/search">Continue shopping?</Link>
+        <Link href="/products">Continue shopping?</Link>
       </div>
     )
   }
@@ -270,16 +275,31 @@ export const CheckoutPage: React.FC = () => {
         )}
 
         {!paymentData && (
-          <Button
-            className="self-start"
-            disabled={!canGoToPayment}
-            onClick={(e) => {
-              e.preventDefault()
-              void initiatePaymentIntent('stripe')
-            }}
-          >
-            Go to payment
-          </Button>
+          <div className="flex flex-wrap gap-3">
+            <Button
+              className="self-start"
+              disabled={!canGoToPayment}
+              onClick={(e) => {
+                e.preventDefault()
+                void initiatePaymentIntent('stripe')
+              }}
+            >
+              Pay by card
+            </Button>
+            {process.env.NEXT_PUBLIC_MOLLIE_ENABLED === 'true' && (
+              <Button
+                className="self-start"
+                variant="outline"
+                disabled={!canGoToPayment}
+                onClick={(e) => {
+                  e.preventDefault()
+                  void initiatePaymentIntent('mollie')
+                }}
+              >
+                iDEAL / Bancontact / more
+              </Button>
+            )}
+          </div>
         )}
 
         {!paymentData?.['clientSecret'] && error && (

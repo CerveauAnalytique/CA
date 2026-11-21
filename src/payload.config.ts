@@ -23,6 +23,10 @@ import { Users } from '@/collections/Users'
 import { Footer } from '@/globals/Footer'
 import { Header } from '@/globals/Header'
 import { plugins } from './plugins'
+import { AiModels } from './collections/AiModels'
+import { Datasets } from './collections/Datasets'
+import { migrations } from './migrations'
+import { seedCatalogIfEmpty } from './utilities/seedCatalog'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -36,11 +40,22 @@ export default buildConfig({
       // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
       beforeDashboard: ['@/components/BeforeDashboard#BeforeDashboard'],
+      header: ['@/components/AdminBrand#AdminHeader'],
+      afterNav: ['@/components/AdminBrand#AdminFooter'],
+      graphics: {
+        Logo: '@/components/AdminBrand#AdminLogo',
+        Icon: '@/components/AdminBrand#AdminIcon',
+      },
     },
     user: Users.slug,
   },
-  collections: [Users, Pages, Categories, Media, Posts],
+  collections: [Users, Pages, Categories, Media, Posts, AiModels, Datasets],
+  onInit: async (payload) => {
+    await seedCatalogIfEmpty(payload)
+  },
   db: postgresAdapter({
+    // runs the migrations in src/migrations when the site starts in production
+    prodMigrations: process.env.PAYLOAD_SKIP_MIGRATIONS === '1' ? undefined : migrations,
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
@@ -81,7 +96,7 @@ export default buildConfig({
     },
   }),
   email: nodemailerAdapter({
-    defaultFromAddress: process.env.SMTP_FROM_ADDRESS || 'info@payloadcms.com',
+    defaultFromAddress: process.env.SMTP_FROM_ADDRESS || 'info@ca7.io',
     defaultFromName: process.env.SMTP_FROM_NAME || 'Payload',
     ...(process.env.SMTP_HOST
       ? {

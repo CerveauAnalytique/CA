@@ -1,13 +1,13 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import { Globe, ChevronLeft, ChevronRight, RotateCcw, Search, Terminal } from 'lucide-react'
 
 export function WorkspaceHero() {
   return (
-    <section className="relative w-full py-20 md:py-32 bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 transition-colors overflow-hidden">
-      <div className="max-w-[1500px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 items-center">
+    <section className="relative w-full py-20 md:py-32 bg-white dark:bg-neutral-950 transition-colors overflow-hidden">
+      <div className="max-w-[1280px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 items-center">
         {/* Left Side: Browser Workspace Mockup */}
         <div className="relative group order-2 md:order-1">
           <div className="w-full bg-neutral-50 dark:bg-neutral-900 rounded-3xl shadow-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
@@ -26,7 +26,7 @@ export function WorkspaceHero() {
               <div className="flex-1 bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl px-3.5 py-1.5 flex items-center space-x-2.5 text-xs text-neutral-500 shadow-sm">
                 <Globe size={14} className="text-blue-500" />
                 <span className="flex-1 truncate font-mono text-[11px]">
-                  cerveau.ai/builder/neural-workspace
+                  ca7.io/builder/neural-workspace
                 </span>
               </div>
             </div>
@@ -79,7 +79,7 @@ export function WorkspaceHero() {
             <span className="inline-block px-4 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-full tracking-widest uppercase">
               Web Intelligence
             </span>
-            <h2 className="text-5xl md:text-[76px] font-black tracking-tighter text-neutral-900 dark:text-white leading-[0.95]">
+            <h2 className="text-5xl md:text-[76px] font-light tracking-tight text-neutral-900 dark:text-white leading-[0.95]">
               Browser <br />
               <span className="text-neutral-400 dark:text-neutral-500">Workspace</span>
             </h2>

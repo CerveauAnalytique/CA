@@ -7,7 +7,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuth } from '@/providers/Auth'
-import Link from 'next/link'
+import Link, { setLanguageCookie, useLocale, useT } from '@/i18n/client'
+import { LANGUAGES, LOCALES, isLocale, localizePath } from '@/i18n/config'
+import { tr, translate } from '@/i18n/translate'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -16,11 +18,14 @@ type FormData = {
   email: string
   password: string
   passwordConfirm: string
+  language: string
 }
 
 export const CreateAccountForm: React.FC = () => {
   const searchParams = useSearchParams()
   const allParams = searchParams.toString() ? `?${searchParams.toString()}` : ''
+  const t = useT()
+  const locale = useLocale()
   const { login } = useAuth()
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -31,7 +36,7 @@ export const CreateAccountForm: React.FC = () => {
     handleSubmit,
     register,
     watch,
-  } = useForm<FormData>()
+  } = useForm<FormData>({ defaultValues: { language: locale } })
 
   const password = useRef({})
   password.current = watch('password', '')
@@ -47,7 +52,7 @@ export const CreateAccountForm: React.FC = () => {
       })
 
       if (!response.ok) {
-        const message = response.statusText || 'There was an error creating the account.'
+        const message = response.statusText || t('There was an error creating the account.')
         setError(message)
         return
       }
@@ -61,23 +66,26 @@ export const CreateAccountForm: React.FC = () => {
       try {
         await login(data)
         clearTimeout(timer)
-        if (redirect) router.push(redirect)
-        else router.push(`/account?success=${encodeURIComponent('Account created successfully')}`)
+        const target = redirect || `/account?success=${encodeURIComponent(translate(isLocale(data.language) ? data.language : locale, tr('Account created successfully')))}`
+        // the language chosen here is saved on the account and used from now on
+        if (isLocale(data.language) && data.language !== locale) {
+          setLanguageCookie(data.language)
+          window.location.assign(localizePath(target, data.language))
+          return
+        }
+        router.push(target)
       } catch (_) {
         clearTimeout(timer)
-        setError('There was an error with the credentials provided. Please try again.')
+        setError(t('There was an error with the credentials provided. Please try again.'))
       }
     },
-    [login, router, searchParams],
+    [login, router, searchParams, locale, t],
   )
 
   return (
     <form className="max-w-lg py-4" onSubmit={handleSubmit(onSubmit)}>
       <div className="prose dark:prose-invert mb-6">
-        <p>
-          {`This is where new customers can signup and create a new account. To manage all users, `}
-          <Link href="/admin/collections/users">login to the admin dashboard</Link>.
-        </p>
+        <p>{t('Create an account to save your orders and your language.')}</p>
       </div>
 
       <Message error={error} />
@@ -85,11 +93,11 @@ export const CreateAccountForm: React.FC = () => {
       <div className="flex flex-col gap-8 mb-8">
         <FormItem>
           <Label htmlFor="email" className="mb-2">
-            Email Address
+            {t('Email address')}
           </Label>
           <Input
             id="email"
-            {...register('email', { required: 'Email is required.' })}
+            {...register('email', { required: t('Email is required.') })}
             type="email"
           />
           {errors.email && <FormError message={errors.email.message} />}
@@ -97,11 +105,11 @@ export const CreateAccountForm: React.FC = () => {
 
         <FormItem>
           <Label htmlFor="password" className="mb-2">
-            New password
+            {t('New password')}
           </Label>
           <Input
             id="password"
-            {...register('password', { required: 'Password is required.' })}
+            {...register('password', { required: t('Password is required.') })}
             type="password"
           />
           {errors.password && <FormError message={errors.password.message} />}
@@ -109,27 +117,44 @@ export const CreateAccountForm: React.FC = () => {
 
         <FormItem>
           <Label htmlFor="passwordConfirm" className="mb-2">
-            Confirm Password
+            {t('Confirm password')}
           </Label>
           <Input
             id="passwordConfirm"
             {...register('passwordConfirm', {
-              required: 'Please confirm your password.',
-              validate: (value) => value === password.current || 'The passwords do not match',
+              required: t('Please confirm your password.'),
+              validate: (value) => value === password.current || t('The passwords do not match'),
             })}
             type="password"
           />
           {errors.passwordConfirm && <FormError message={errors.passwordConfirm.message} />}
         </FormItem>
+
+        <FormItem>
+          <Label htmlFor="language" className="mb-2">
+            {t('Language')}
+          </Label>
+          <select
+            id="language"
+            {...register('language')}
+            className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+          >
+            {LOCALES.map((l) => (
+              <option key={l} value={l}>
+                {LANGUAGES[l].flag} {LANGUAGES[l].name}
+              </option>
+            ))}
+          </select>
+        </FormItem>
       </div>
       <Button disabled={loading} type="submit" variant="default">
-        {loading ? 'Processing' : 'Create Account'}
+        {loading ? t('Processing') : t('Create account')}
       </Button>
 
       <div className="prose dark:prose-invert mt-8">
         <p>
-          {'Already have an account? '}
-          <Link href={`/login${allParams}`}>Login</Link>
+          {t('Already have an account?')}{' '}
+          <Link href={`/login${allParams}`}>{t('Log in')}</Link>
         </p>
       </div>
     </form>

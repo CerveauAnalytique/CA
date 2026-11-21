@@ -77,6 +77,8 @@ export interface Config {
     categories: Category;
     media: Media;
     posts: Post;
+    'ai-models': AiModel;
+    datasets: Dataset;
     forms: Form;
     'form-submissions': FormSubmission;
     addresses: Address;
@@ -111,6 +113,8 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    'ai-models': AiModelsSelect<false> | AiModelsSelect<true>;
+    datasets: DatasetsSelect<false> | DatasetsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
@@ -189,6 +193,14 @@ export interface UserAuthOperations {
 export interface User {
   id: number;
   name?: string | null;
+  /**
+   * The pack of this customer. Only admins can change it.
+   */
+  plan?: ('free' | 'hobby' | 'company') | null;
+  /**
+   * Chosen at sign-up. The site opens in this language when the customer logs in.
+   */
+  language?: ('en' | 'nl' | 'de' | 'fr' | 'es' | 'pl' | 'ar') | null;
   roles?: ('admin' | 'customer')[] | null;
   orders?: {
     docs?: (number | Order)[];
@@ -207,6 +219,9 @@ export interface User {
   };
   updatedAt: string;
   createdAt: string;
+  enableAPIKey?: boolean | null;
+  apiKey?: string | null;
+  apiKeyIndex?: string | null;
   email: string;
   resetPasswordToken?: string | null;
   resetPasswordExpiration?: string | null;
@@ -901,10 +916,13 @@ export interface Transaction {
         id?: string | null;
       }[]
     | null;
-  paymentMethod?: 'stripe' | null;
+  paymentMethod?: ('stripe' | 'mollie') | null;
   stripe?: {
     customerID?: string | null;
     paymentIntentID?: string | null;
+  };
+  mollie?: {
+    paymentID?: string | null;
   };
   billingAddress?: {
     title?: string | null;
@@ -1054,6 +1072,107 @@ export interface Post {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-models".
+ */
+export interface AiModel {
+  id: number;
+  name: string;
+  /**
+   * Generated from the name when empty.
+   */
+  slug?: string | null;
+  publisher?: string | null;
+  published?: boolean | null;
+  summary: string;
+  task?:
+    | (
+        | 'text-generation'
+        | 'data-analysis'
+        | 'classification'
+        | 'regression'
+        | 'vision'
+        | 'anomaly-detection'
+        | 'forecasting'
+        | 'other'
+      )
+    | null;
+  framework?: ('ollama' | 'pytorch' | 'tensorflow' | 'sklearn' | 'xgboost' | 'onnx' | 'other') | null;
+  /**
+   * For example qwen2.5:7b
+   */
+  baseModel?: string | null;
+  version?: string | null;
+  stage?: ('development' | 'staging' | 'production' | 'archived') | null;
+  license?: string | null;
+  sizeBytes?: number | null;
+  downloads?: number | null;
+  tags?: string[] | null;
+  metrics?:
+    | {
+        name: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Shown as a code block on the model page.
+   */
+  installCommand?: string | null;
+  /**
+   * Link to the weights or the source.
+   */
+  downloadUrl?: string | null;
+  /**
+   * Markdown model card.
+   */
+  modelCard?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "datasets".
+ */
+export interface Dataset {
+  id: number;
+  name: string;
+  /**
+   * Generated from the name when empty.
+   */
+  slug?: string | null;
+  publisher?: string | null;
+  published?: boolean | null;
+  summary: string;
+  source?: ('cameras' | 'sensors' | 'logs' | 'business' | 'other') | null;
+  format?: ('csv' | 'parquet' | 'jsonl' | 'json' | 'images' | 'other') | null;
+  version?: string | null;
+  license?: string | null;
+  rowCount?: number | null;
+  columnCount?: number | null;
+  sizeBytes?: number | null;
+  downloads?: number | null;
+  tags?: string[] | null;
+  schemaColumns?:
+    | {
+        column: string;
+        type: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Link to the data files.
+   */
+  downloadUrl?: string | null;
+  /**
+   * Markdown description.
+   */
+  datasetCard?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
@@ -1112,6 +1231,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'ai-models';
+        value: number | AiModel;
+      } | null)
+    | ({
+        relationTo: 'datasets';
+        value: number | Dataset;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1201,12 +1328,17 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  plan?: T;
+  language?: T;
   roles?: T;
   orders?: T;
   cart?: T;
   addresses?: T;
   updatedAt?: T;
   createdAt?: T;
+  enableAPIKey?: T;
+  apiKey?: T;
+  apiKeyIndex?: T;
   email?: T;
   resetPasswordToken?: T;
   resetPasswordExpiration?: T;
@@ -1439,6 +1571,70 @@ export interface PostsSelect<T extends boolean = true> {
   excerpt?: T;
   content?: T;
   publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-models_select".
+ */
+export interface AiModelsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  publisher?: T;
+  published?: T;
+  summary?: T;
+  task?: T;
+  framework?: T;
+  baseModel?: T;
+  version?: T;
+  stage?: T;
+  license?: T;
+  sizeBytes?: T;
+  downloads?: T;
+  tags?: T;
+  metrics?:
+    | T
+    | {
+        name?: T;
+        value?: T;
+        id?: T;
+      };
+  installCommand?: T;
+  downloadUrl?: T;
+  modelCard?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "datasets_select".
+ */
+export interface DatasetsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  publisher?: T;
+  published?: T;
+  summary?: T;
+  source?: T;
+  format?: T;
+  version?: T;
+  license?: T;
+  rowCount?: T;
+  columnCount?: T;
+  sizeBytes?: T;
+  downloads?: T;
+  tags?: T;
+  schemaColumns?:
+    | T
+    | {
+        column?: T;
+        type?: T;
+        description?: T;
+        id?: T;
+      };
+  downloadUrl?: T;
+  datasetCard?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1774,6 +1970,11 @@ export interface TransactionsSelect<T extends boolean = true> {
     | {
         customerID?: T;
         paymentIntentID?: T;
+      };
+  mollie?:
+    | T
+    | {
+        paymentID?: T;
       };
   billingAddress?:
     | T

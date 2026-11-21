@@ -40,8 +40,8 @@ export default function SecurityPage() {
           <h2 className="about-section-title">Responsible Disclosure</h2>
           <p className="about-body">
             If you believe you have found a security vulnerability, please report it to{' '}
-            <a href="mailto:security@cerveauanalytique.com" className="inline-link">
-              security@cerveauanalytique.com
+            <a href="mailto:security@ca7.io" className="inline-link">
+              security@ca7.io
             </a>
             . We will acknowledge your report within 24 hours and keep you informed as we work to
             resolve it. We ask that you give us a reasonable time to address the issue before public

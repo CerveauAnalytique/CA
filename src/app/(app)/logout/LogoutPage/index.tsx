@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from '@/providers/Auth'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import React, { Fragment, useEffect, useState } from 'react'
 
 export const LogoutPage: React.FC = (props) => {
@@ -31,7 +31,7 @@ export const LogoutPage: React.FC = (props) => {
             What would you like to do next?
             <Fragment>
               {' '}
-              <Link href="/search">Click here</Link>
+              <Link href="/products">Click here</Link>
               {` to shop.`}
             </Fragment>
             {` To log back in, `}

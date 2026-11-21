@@ -3,9 +3,10 @@
 import { LoadingSpinner } from '@/components/LoadingSpinner'
 import { useCart, usePayments } from '@payloadcms/plugin-ecommerce/client/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export const ConfirmOrder: React.FC = () => {
+  const [failed, setFailed] = useState<string | null>(null)
   const { confirmOrder } = usePayments()
   const { cart } = useCart()
 
@@ -20,16 +21,18 @@ export const ConfirmOrder: React.FC = () => {
     }
 
     const paymentIntentID = searchParams.get('payment_intent')
+    const molliePaymentID = searchParams.get('paymentId')
+    const isMollie = searchParams.get('provider') === 'mollie' && Boolean(molliePaymentID)
     const email = searchParams.get('email')
 
-    if (paymentIntentID) {
+    if (paymentIntentID || isMollie) {
       if (!isConfirming.current) {
         isConfirming.current = true
 
-        confirmOrder('stripe', {
-          additionalData: {
-            paymentIntentID,
-          },
+        confirmOrder(isMollie ? 'mollie' : 'stripe', {
+          additionalData: isMollie
+            ? { paymentID: molliePaymentID, ...(email ? { customerEmail: email } : {}) }
+            : { paymentIntentID },
         }).then((result) => {
           if (result && typeof result === 'object' && 'orderID' in result && result.orderID) {
             const accessToken = 'accessToken' in result ? (result.accessToken as string) : ''
@@ -44,7 +47,11 @@ export const ConfirmOrder: React.FC = () => {
 
             const queryString = queryParams.toString()
             router.push(`/orders/${result.orderID}${queryString ? `?${queryString}` : ''}`)
+          } else {
+            setFailed('We could not confirm your payment yet.')
           }
+        }).catch((err: unknown) => {
+          setFailed(err instanceof Error ? 'Your payment was not completed.' : 'Something went wrong.')
         })
       }
     } else {
@@ -55,9 +62,18 @@ export const ConfirmOrder: React.FC = () => {
 
   return (
     <div className="text-center w-full flex flex-col items-center justify-start gap-4">
-      <h1 className="text-2xl">Confirming Order</h1>
-
-      <LoadingSpinner className="w-12 h-6" />
+      {failed ? (
+        <>
+          <h1 className="text-2xl">Payment not completed</h1>
+          <p className="text-neutral-500">{failed} You have not been charged for an unfinished payment.</p>
+          <a href="/checkout" className="underline">Back to checkout</a>
+        </>
+      ) : (
+        <>
+          <h1 className="text-2xl">Confirming Order</h1>
+          <LoadingSpinner className="w-12 h-6" />
+        </>
+      )}
     </div>
   )
 }

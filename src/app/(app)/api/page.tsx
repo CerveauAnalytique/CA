@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import React from 'react'
 
 export const metadata: Metadata = {
@@ -52,7 +52,7 @@ const CAPABILITIES = [
   },
 ]
 
-const QUICK_EXAMPLE = `curl https://api.cerveauanalytique.com/v1/carbon/calculate \\
+const QUICK_EXAMPLE = `curl https://api.ca7.io/v1/carbon/calculate \\
   -H "Authorization: Bearer sk-ca-YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{

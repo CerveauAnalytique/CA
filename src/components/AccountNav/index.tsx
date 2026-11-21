@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import clsx from 'clsx'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import { usePathname } from 'next/navigation'
 
 type Props = {

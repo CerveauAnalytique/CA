@@ -30,11 +30,18 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chromium',
+        // optional: use an already installed browser, e.g. PW_CHROMIUM=/opt/pw-browsers/chromium
+        ...(process.env.PW_CHROMIUM ? { launchOptions: { executablePath: process.env.PW_CHROMIUM } } : {}),
+      },
     },
   ],
   webServer: {
     command: 'pnpm dev',
+    // the admin panel is hidden behind a private link; the tests log in directly
+    env: { ADMIN_GATE: 'off' },
     reuseExistingServer: true,
     url: 'http://localhost:3000',
   },

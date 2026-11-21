@@ -6,6 +6,9 @@ import { Header } from '@/components/Header'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { ensureStartsWith } from '@/utilities/ensureStartsWith'
 import { Providers } from '@/providers'
+import { getLocale } from '@/i18n/server'
+import { LANGUAGES } from '@/i18n/config'
+import { I18nProvider } from '@/i18n/client'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
@@ -21,10 +24,12 @@ const instrumentSerif = Instrument_Serif({
 })
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
+  const locale = await getLocale()
   return (
     <html
       className={[GeistSans.variable, GeistMono.variable, instrumentSerif.variable].filter(Boolean).join(' ')}
-      lang="en"
+      lang={locale}
+      dir={LANGUAGES[locale].dir}
       suppressHydrationWarning
       data-theme="dark"
     >
@@ -35,6 +40,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       </head>
       <body>
         <div className="grain" />
+        <I18nProvider locale={locale}>
         <Providers>
           <LivePreviewListener />
 
@@ -42,6 +48,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <main className="pt-[56px]">{children}</main>
           <Footer />
         </Providers>
+        </I18nProvider>
       </body>
     </html>
   )

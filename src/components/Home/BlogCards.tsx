@@ -1,5 +1,5 @@
 import React from 'react'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import { ArrowUpRight } from 'lucide-react'
 
 export interface BlogPostItem {
@@ -87,8 +87,8 @@ export function BlogCards({ stories, business }: BlogCardsProps) {
   const displayBusiness = business && business.length > 0 ? business : []
 
   return (
-    <section className="w-full py-12 md:py-20 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans border-b border-neutral-200 dark:border-neutral-800 transition-colors">
-      <div className="max-w-[1400px] mx-auto px-6 space-y-16">
+    <section className="w-full py-12 md:py-20 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans transition-colors">
+      <div className="max-w-[1280px] mx-auto px-6 space-y-16">
         {/* Section 1: Explore More */}
         <div className="space-y-6">
           <h3 className="text-xl font-bold tracking-tight">Explore more</h3>
@@ -117,7 +117,7 @@ export function BlogCards({ stories, business }: BlogCardsProps) {
               href="/blog?category=Stories"
               className="text-xs font-semibold text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition flex items-center"
             >
-              View all <ArrowUpRight size={13} className="ml-0.5" />
+              View all <ArrowUpRight size={13} className="ms-0.5" />
             </Link>
           </div>
 
@@ -179,7 +179,7 @@ export function BlogCards({ stories, business }: BlogCardsProps) {
               href="/blog?category=Business"
               className="text-xs font-semibold text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition flex items-center"
             >
-              View all <ArrowUpRight size={13} className="ml-0.5" />
+              View all <ArrowUpRight size={13} className="ms-0.5" />
             </Link>
           </div>
 
