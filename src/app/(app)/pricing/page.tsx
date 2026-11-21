@@ -32,20 +32,20 @@ export default async function PricingPage() {
             key={p.id}
             className={`relative flex flex-col rounded-3xl p-6 ${
               p.highlight
-                ? 'bg-neutral-900 text-white dark:bg-neutral-800 dark:ring-1 dark:ring-white/25'
+                ? 'bg-blue-50 text-neutral-900 ring-1 ring-blue-200 dark:bg-blue-950/40 dark:text-white dark:ring-blue-500/40'
                 : 'bg-neutral-50 text-neutral-900 dark:bg-neutral-900 dark:text-white'
             }`}
           >
             {p.highlight && (
-              <span className="absolute end-6 top-6 rounded-full bg-white px-3 py-1 text-[11px] font-medium text-neutral-900">
+              <span className="absolute end-6 top-6 rounded-full bg-blue-600 px-3 py-1 text-[11px] font-medium text-white">
                 {t('Most popular')}
               </span>
             )}
-            <span className={`inline-flex self-start rounded-2xl p-2 ${p.highlight ? 'bg-white' : ''}`}>
+            <span className={`inline-flex self-start rounded-2xl p-2 `}>
               <DotIcon name={p.icon} size={72} />
             </span>
             <h2 className="mt-4 text-[22px] font-semibold tracking-tight">{t(p.name)}</h2>
-            <p className={`mt-1 text-[13px] ${p.highlight ? 'text-neutral-300' : 'text-neutral-500 dark:text-neutral-400'}`}>
+            <p className={`mt-1 text-[13px] ${'text-neutral-500 dark:text-neutral-400'}`}>
               {t(p.tagline)}
             </p>
 
@@ -53,19 +53,19 @@ export default async function PricingPage() {
               {p.from && <span className="text-[13px] text-neutral-500 dark:text-neutral-400">{t('from')}</span>}
               <span className="text-[40px] font-light leading-none tracking-tight">€{p.price.toLocaleString('en-US')}</span>
               {p.price > 0 && (
-                <span className={`text-[13px] ${p.highlight ? 'text-neutral-300' : 'text-neutral-500 dark:text-neutral-400'}`}>
+                <span className={`text-[13px] ${'text-neutral-500 dark:text-neutral-400'}`}>
                   {t('per month')}
                 </span>
               )}
             </p>
-            <p className={`mt-1 h-5 text-[12px] ${p.highlight ? 'text-neutral-400' : 'text-neutral-400'}`}>
+            <p className={`mt-1 h-5 text-[12px] ${'text-neutral-400'}`}>
               {p.vat === 'excl' ? t('excl. VAT') : p.vat === 'incl' ? t('incl. VAT') : ''}
             </p>
 
             <Link
               href={p.href}
               className={`mt-5 flex h-12 items-center justify-center rounded-full text-[14px] font-medium ${
-                p.highlight ? 'bg-white text-neutral-900' : 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900'
+                p.highlight ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900'
               }`}
             >
               {t(p.cta)}
@@ -75,7 +75,7 @@ export default async function PricingPage() {
               {p.features.map((f) => (
                 <li key={f} className="flex items-start gap-2.5">
                   <Check size={16} className="mt-0.5 shrink-0 text-[#1a3df0]" />
-                  <span className={p.highlight ? 'text-neutral-200' : 'text-neutral-700 dark:text-neutral-300'}>{t(f)}</span>
+                  <span className={'text-neutral-700 dark:text-neutral-300'}>{t(f)}</span>
                 </li>
               ))}
             </ul>
