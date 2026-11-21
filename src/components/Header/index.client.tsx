@@ -146,7 +146,7 @@ export function HeaderClient({ header }: Props) {
         <Link
           href="/marketplace"
           title="Marketplace & Enterprise Models"
-          className="relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-200 dark:border-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:border-neutral-300 transition-colors"
+          className="relative hidden h-8 w-8 items-center justify-center rounded-md border border-neutral-200 dark:border-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:border-neutral-300 transition-colors md:flex"
         >
           <Store className="h-4 w-4" />
         </Link>
@@ -155,36 +155,11 @@ export function HeaderClient({ header }: Props) {
         <Link
           href="/notifications"
           title="Notifications & System Alerts"
-          className="relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-200 dark:border-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:border-neutral-300 transition-colors"
+          className="relative hidden h-8 w-8 items-center justify-center rounded-md border border-neutral-200 dark:border-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:border-neutral-300 transition-colors md:flex"
         >
           <Bell className="h-4 w-4" />
           <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-red-500" />
         </Link>
-
-        {/* Mobile text-only links for Chat, Login/Account, & Log out */}
-        <div className="flex md:hidden items-center gap-2 mr-1">
-          <Link
-            href="/chat-ca7"
-            className="text-xs font-semibold text-neutral-300 hover:text-white transition-colors"
-          >
-            Chat
-          </Link>
-          <Link
-            href={user ? '/account' : loginURL}
-            className="text-xs font-semibold text-neutral-300 hover:text-white transition-colors truncate max-w-[120px]"
-            title={username}
-          >
-            {user ? username : 'Login'}
-          </Link>
-          {user && (
-            <button
-              onClick={() => logout()}
-              className="text-xs font-semibold text-neutral-400 hover:text-red-400 transition-colors ml-1"
-            >
-              Log out
-            </button>
-          )}
-        </div>
 
         {/* Desktop-only User Badge (u***@ca.com) & Log out close together */}
         {user ? (

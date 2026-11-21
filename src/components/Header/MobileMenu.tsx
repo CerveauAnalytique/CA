@@ -3,17 +3,10 @@
 import type { Header } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
-import { Button } from '@/components/ui/button'
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { useAuth } from '@/providers/Auth'
-import { MenuIcon } from 'lucide-react'
+import { ArrowUpRight, MenuIcon, XIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -24,6 +17,14 @@ interface Props {
   menu: Header['navItems']
 }
 
+const LINKS = [
+  { href: '/shop', label: 'Shop' },
+  { href: '/research', label: 'Research' },
+  { href: '/api', label: 'API' },
+  { href: '/docs', label: 'Docs' },
+  { href: '/marketplace', label: 'Marketplace' },
+]
+
 export function MobileMenu({ menu }: Props) {
   const { user, logout } = useAuth()
   const username = formatUserDisplayName(user)
@@ -32,117 +33,107 @@ export function MobileMenu({ menu }: Props) {
   const searchParams = useSearchParams()
   const [isOpen, setIsOpen] = useState(false)
 
-  const closeMobileMenu = () => setIsOpen(false)
+  const close = () => setIsOpen(false)
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 768) {
-        setIsOpen(false)
-      }
+    const onResize = () => {
+      if (window.innerWidth > 768) setIsOpen(false)
     }
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [isOpen])
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
 
   useEffect(() => {
     setIsOpen(false)
   }, [pathname, searchParams])
 
+  const linkClass =
+    'flex items-center justify-between py-3.5 text-[26px] font-light tracking-tight text-neutral-900 dark:text-white'
+
   return (
     <Sheet onOpenChange={setIsOpen} open={isOpen}>
-      <SheetTrigger className="relative flex h-11 w-11 items-center justify-center rounded-md border border-neutral-200 text-black transition-colors dark:border-neutral-700 dark:bg-black dark:text-white">
-        <MenuIcon className="h-4" />
+      <SheetTrigger
+        aria-label={isOpen ? 'Close menu' : 'Open menu'}
+        className="relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-200 text-neutral-700 transition-colors dark:border-neutral-800 dark:text-white"
+      >
+        {isOpen ? <XIcon className="h-4 w-4" /> : <MenuIcon className="h-4 w-4" />}
       </SheetTrigger>
 
-      <SheetContent side="left" className="px-5">
-        <SheetHeader className="px-0 pt-4 pb-2">
-          <SheetTitle className="text-lg font-serif">CA7</SheetTitle>
-          <SheetDescription />
-        </SheetHeader>
+      <SheetContent
+        side="right"
+        className="w-full gap-0 border-0 bg-white px-6 pb-8 pt-4 sm:max-w-none dark:bg-neutral-950 [&>button]:hidden"
+      >
+        <SheetTitle className="sr-only">Menu</SheetTitle>
+        <SheetDescription className="sr-only">Site navigation</SheetDescription>
 
-        <div className="py-4 border-t border-neutral-800">
-          <ul className="flex w-full flex-col gap-3 font-medium text-sm">
-            {menu?.length ? (
-              menu.map((item) => (
-                <li key={item.id}>
-                  <CMSLink {...item.link} appearance="link" />
-                </li>
-              ))
-            ) : (
-              <>
-                <li>
-                  <Link href="/shop" onClick={closeMobileMenu} className="hover:text-white transition">
-                    Shop
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/research" onClick={closeMobileMenu} className="hover:text-white transition">
-                    Research
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/api" onClick={closeMobileMenu} className="hover:text-white transition">
-                    API
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/docs" onClick={closeMobileMenu} className="hover:text-white transition">
-                    Docs
-                  </Link>
-                </li>
-              </>
-            )}
+        <nav className="flex-1 overflow-y-auto">
+          <ul>
+            {menu?.length
+              ? menu.map((item) => (
+                  <li key={item.id} className={linkClass}>
+                    <CMSLink {...item.link} appearance="link" />
+                  </li>
+                ))
+              : LINKS.map((l) => (
+                  <li key={l.href}>
+                    <Link href={l.href} onClick={close} className={linkClass}>
+                      {l.label}
+                      <ArrowUpRight size={20} className="text-neutral-300" />
+                    </Link>
+                  </li>
+                ))}
           </ul>
-        </div>
+        </nav>
 
-        <div className="mt-4 pt-4 border-t border-neutral-800">
-          <Button asChild className="w-full font-medium" variant="default">
-            <Link href="/chat-ca7" onClick={closeMobileMenu}>
-              Start chat →
-            </Link>
-          </Button>
-        </div>
+        <div className="space-y-3 pt-4">
+          <Link
+            href="/chat-ca7"
+            onClick={close}
+            className="flex h-12 w-full items-center justify-center rounded-full bg-neutral-900 text-[15px] font-medium text-white dark:bg-white dark:text-neutral-900"
+          >
+            Start chat
+          </Link>
 
-        {user ? (
-          <div className="mt-6 pt-4 border-t border-neutral-800">
-            <div className="text-sm font-semibold mb-3 text-white flex items-center justify-between">
-              <span className="truncate">{username}</span>
-            </div>
-            <ul className="flex flex-col gap-2 text-sm">
-              <li>
-                <Link href="/account" onClick={closeMobileMenu} className="hover:text-white">
-                  Manage Account
+          {user ? (
+            <div className="rounded-2xl bg-neutral-100 p-4 dark:bg-neutral-900">
+              <p className="truncate text-sm font-semibold">{username}</p>
+              <div className="mt-3 flex flex-wrap gap-2 text-[13px]">
+                <Link href="/dashboard" onClick={close} className="rounded-full bg-white px-3 py-1.5 dark:bg-neutral-800">
+                  Dashboard
                 </Link>
-              </li>
-              <li>
-                <Link href="/orders" onClick={closeMobileMenu} className="hover:text-white">
+                <Link href="/account" onClick={close} className="rounded-full bg-white px-3 py-1.5 dark:bg-neutral-800">
+                  Account
+                </Link>
+                <Link href="/orders" onClick={close} className="rounded-full bg-white px-3 py-1.5 dark:bg-neutral-800">
                   Orders
                 </Link>
-              </li>
-              <li className="mt-4">
-                <Button
-                  variant="outline"
-                  className="w-full text-red-400 hover:text-red-300 border-neutral-800 hover:bg-neutral-900"
+                <button
+                  type="button"
                   onClick={() => {
-                    closeMobileMenu()
+                    close()
                     logout()
                   }}
+                  className="rounded-full bg-white px-3 py-1.5 text-red-600 dark:bg-neutral-800"
                 >
                   Log out
-                </Button>
-              </li>
-            </ul>
-          </div>
-        ) : (
-          <div className="mt-6 pt-4 border-t border-neutral-800">
-            <h2 className="text-sm font-semibold mb-3 text-neutral-400 uppercase tracking-wider">Account</h2>
-            <div className="flex flex-col gap-2">
-              <Button asChild className="w-full" variant="outline">
-                <Link href="/login" onClick={closeMobileMenu}>Log in</Link>
-              </Button>
+                </button>
+              </div>
             </div>
+          ) : (
+            <Link
+              href="/login"
+              onClick={close}
+              className="flex h-12 w-full items-center justify-center rounded-full bg-neutral-100 text-[15px] font-medium dark:bg-neutral-900"
+            >
+              Log in
+            </Link>
+          )}
+
+          <div className="flex items-center justify-between pt-1 text-[13px] text-neutral-500">
+            <span>Appearance</span>
+            <ThemeToggle />
           </div>
-        )}
+        </div>
       </SheetContent>
     </Sheet>
   )

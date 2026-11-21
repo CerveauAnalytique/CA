@@ -117,10 +117,7 @@ export function ChatCa7() {
 
   return (
     <div className="mx-auto flex w-full max-w-[1280px] flex-col px-6" style={{ minHeight: 'calc(100vh - 56px)' }}>
-      <div className="flex items-center justify-between py-4">
-        <span className="flex items-center gap-2 text-sm font-semibold">
-          <BrainIcon className="h-6 w-6" /> CA7
-        </span>
+      <div className="flex h-14 items-center justify-end">
         {!empty && (
           <button
             type="button"

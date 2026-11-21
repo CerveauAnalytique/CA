@@ -19,7 +19,7 @@ export function OpenCartButton({
       {...rest}
     >
       <ShoppingCart className="h-4 w-4" />
-      <span>Cart</span>
+      <span className="max-md:hidden">Cart</span>
 
       {quantity ? (
         <span className="ml-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-semibold text-black">
