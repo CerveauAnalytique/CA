@@ -17,7 +17,7 @@ export default function HomePage() {
 }
 
 export const metadata: Metadata = {
-  title: 'Cerveau Analytique — Create your own digital brain',
+  title: 'CA7 — Create your own digital brain for your IoT',
   description:
     'The AI tool that saves, analyzes and shares data from smart cameras, sensors and more. Build your own digital brain — with an API and apps marketplace for everyone.',
 }

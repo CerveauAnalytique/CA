@@ -4,10 +4,11 @@ import React, { useEffect, useState } from 'react'
 import { HomeChatInput } from './HomeChatInput'
 import { DotCameraCanvas } from './DotCameraCanvas'
 
-const WORDS = ['smart cameras', 'sensors', 'all your data', 'everyone']
+const WORDS = ['your IoT', 'smart cameras', 'your sensors', 'all your data']
 
 function useTyping(words: string[]) {
-  const [text, setText] = useState('')
+  // Start with the first word fully shown so the headline reads correctly from the first paint.
+  const [text, setText] = useState(words[0] ?? '')
   const [i, setI] = useState(0)
   const [deleting, setDeleting] = useState(false)
 
