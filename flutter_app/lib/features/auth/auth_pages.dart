@@ -242,3 +242,52 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
               ]),
       );
 }
+
+/// Where the e-mail link of "forgot password" lands (?token=...): sets the new password.
+class ResetPasswordPage extends ConsumerStatefulWidget {
+  const ResetPasswordPage({super.key});
+  @override
+  ConsumerState<ResetPasswordPage> createState() => _ResetPasswordPageState();
+}
+
+class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
+  final _pw = TextEditingController(), _pw2 = TextEditingController();
+  bool _busy = false, _done = false;
+  String? _error;
+
+  Future<void> _submit() async {
+    final token = GoRouterState.of(context).uri.queryParameters['token'];
+    if (token == null || token.isEmpty) return setState(() => _error = context.t('This link is not valid.'));
+    if (_pw.text.length < 8) return setState(() => _error = context.t('Use at least 8 characters.'));
+    if (_pw.text != _pw2.text) return setState(() => _error = context.t('The passwords do not match'));
+    setState(() { _busy = true; _error = null; });
+    try {
+      await ref.read(apiClientProvider).post('/api/users/reset-password', body: {'token': token, 'password': _pw.text});
+      setState(() => _done = true);
+    } catch (e) {
+      setState(() => _error = '$e');
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => _frame(
+        context,
+        context.t('Reset password'),
+        context.t('Choose a new password for your account.'),
+        _done
+            ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                _Message(context.t('Your password is changed. You can log in now.'), ok: true),
+                Lnk(to: '/login', child: Center(child: CaButton(context.t('Log in'), link: true))),
+              ])
+            : Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                if (_error != null) _Message(_error!),
+                CaField(controller: _pw, label: context.t('New password'), obscure: true),
+                const SizedBox(height: 20),
+                CaField(controller: _pw2, label: context.t('Confirm password'), obscure: true, onSubmitted: (_) => _submit()),
+                const SizedBox(height: 24),
+                CaButton(_busy ? context.t('Processing') : context.t('Reset password'), onPressed: _submit, busy: _busy, expand: true),
+              ]),
+      );
+}

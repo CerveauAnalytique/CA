@@ -29,6 +29,14 @@ export const Users: CollectionConfig = {
   auth: {
     tokenExpiration: 1209600,
     useAPIKey: true,
+    forgotPassword: {
+      // the page that sets the new password is part of the Flutter app
+      generateEmailHTML: (args) => {
+        const app = (process.env.CA7_APP_URL || process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8080').replace(/\/$/, '')
+        const url = `${app}/reset-password?token=${args?.token}`
+        return `<p>You asked to reset your password. Open this link to choose a new one:</p><p><a href="${url}">${url}</a></p><p>If you did not ask for this, you can ignore this email.</p>`
+      },
+    },
   },
   fields: [
     {

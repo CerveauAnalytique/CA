@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'configuration/env.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../core/i18n/i18n.dart';
@@ -11,6 +14,7 @@ import '../features/content/cms.dart';
 import '../features/shop/checkout_pages.dart';
 import '../features/support/support_pages.dart';
 import '../features/shop/shop_pages.dart';
+import '../features/dashboard/admin_pages.dart';
 import '../features/dashboard/dashboard_pages.dart';
 import '../features/dashboard/dashboard_shell.dart';
 import '../features/home/home_page.dart';
@@ -42,6 +46,15 @@ GoRouter createRouter(WidgetRef ref) {
     refreshListenable: auth,
     redirect: (context, state) {
       final segs = state.uri.pathSegments;
+      // ca7.io, ca7.nl and ca7.be only show the chat; every other page lives on the cloud domain
+      if (kIsWeb && Env.chatHosts.contains(Uri.base.host.replaceFirst('www.', ''))) {
+        final rest0 = segs.isNotEmpty && isLang(segs.first) ? segs.skip(1).join('/') : segs.join('/');
+        if (rest0.isEmpty) return '/${i18n.lang}/chat-ca7';
+        if (rest0 != 'chat-ca7') {
+          launchUrl(Uri.parse('https://${Env.cloudHost}${state.uri.path}'), webOnlyWindowName: '_self');
+          return null;
+        }
+      }
       final q = state.uri.hasQuery ? '?${state.uri.query}' : '';
       if (segs.isEmpty || !isLang(segs.first)) return '/${i18n.lang}${state.uri.path == '/' ? '' : state.uri.path}$q';
       final lang = segs.first;
@@ -64,6 +77,7 @@ GoRouter createRouter(WidgetRef ref) {
               r('login', (_) => const LoginPage()),
               r('create-account', (_) => const CreateAccountPage()),
               r('forgot-password', (_) => const ForgotPasswordPage()),
+              r('reset-password', (_) => const ResetPasswordPage()),
               r('chat-ca7', (_) => const ChatPage()),
               r('models', (_) => const CatalogListPage(models: true)),
               r('models/:slug', (s) => CatalogDetailPage(slug: s.pathParameters['slug']!, models: true)),
@@ -100,6 +114,8 @@ GoRouter createRouter(WidgetRef ref) {
                   r('dashboard/export', (_) => const ExportPage()),
                   r('dashboard/plan', (_) => const PlanPage()),
                   r('dashboard/platform', (_) => const PlatformPage()),
+                  r('dashboard/security', (_) => const SecurityPage()),
+                  r('dashboard/ai', (_) => const AiCenterPage()),
                 ],
               ),
               // everything else comes from the database: /about, /docs/quickstart, /privacy, CMS pages, ...

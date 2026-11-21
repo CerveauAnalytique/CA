@@ -1,8 +1,10 @@
-# Next.js to Flutter migration
+# Front end: Flutter. Backend: Next.js
+
+**Decision: the front end is Flutter; Next.js is only the backend** (API, admin panel, database). The Next.js pages and React components were removed;
+`src/proxy.ts` sends any page address to the app (`CA7_APP_URL`). The text below is the history of the migration and the list of what the app still lacks.
 
 The Next.js site is the reference. The Flutter app (`flutter_app/`) reproduces its design and logic and talks to the **same
-backend** (Payload + the `/api/ca/*` routes). Nothing of the Next.js app was removed: it still serves the pages that are not
-migrated yet, the admin panel (`/admin`) and the API.
+backend** (Payload + the `/api/ca/*` routes). The Next.js pages are removed; the backend keeps the API and `/admin`.
 
 ## Honest status
 
@@ -66,3 +68,13 @@ and compare page by page with `http://localhost:3000`. `flutter analyze` is clea
 2. The remaining CMS layout blocks and the docs sidebar.
 3. Integration tests on a device, and a visual comparison of dark mode and RTL.
 4. When everything is verified: serve the Flutter build instead of the Next.js pages and remove the replaced Next.js pages one by one.
+
+
+## After the switch (what is true now)
+
+- Deploy: backend at its own address (for example `api.ca7.io`), Flutter web build (`flutter build web --release --no-web-resources-cdn --dart-define=CA7_API=https://api.ca7.io`) on `cloud.ca7.io`, `ca7.io`, `ca7.nl`, `ca7.be`.
+  Set `CA7_APP_URL` (the app: redirects, e-mail links, Mollie return) and `CA7_APP_ORIGINS` (CORS) on the backend. ca7.io/.nl/.be show only the chat (the app does this, `Env.chatHosts`).
+- Added to the app in this step: Security dashboard and AI Control Center (admins), OpenRemote and ThingsBoard sources, personal AI consent, reset-password page (the e-mail link opens it).
+- **Still missing in the app:** Stripe card payments (Mollie works); screens for the AI shopping assistant, recommendations and offers (the backend routes exist); the CMS blocks archive, carousel, three-item grid and form.
+- **Single sign-on to ThingsBoard/OpenRemote** needs a browser login cookie on the backend address; the app logs in with a token. The OIDC routes exist, but connecting the app's login to them is not built.
+- The Next.js e2e tests were removed with the pages; the Flutter tests (`flutter test`) and the backend tests (`pnpm test:int`) remain.

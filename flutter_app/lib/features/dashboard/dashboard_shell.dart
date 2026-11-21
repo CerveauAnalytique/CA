@@ -20,6 +20,8 @@ const _tabs = [
   ('/dashboard/platform', 'Platform'),
 ];
 
+const _adminTabs = [('/dashboard/security', 'Security'), ('/dashboard/ai', 'AI Control Center')];
+
 /// Settings page frame: title + tabs (same sections as src/components/Dash/DashShell.tsx).
 class DashboardShell extends ConsumerWidget {
   const DashboardShell({super.key, required this.child});
@@ -41,7 +43,7 @@ class DashboardShell extends ConsumerWidget {
         ConstrainedBox(constraints: const BoxConstraints(maxWidth: 576), child: Text('Connect your data, see what it says, automate, and manage your API key and pack.', style: TextStyle(fontSize: 15, color: c.muted))),
         const SizedBox(height: 32),
         Wrap(spacing: 8, runSpacing: 8, children: [
-          for (final t in _tabs)
+          for (final t in [..._tabs, if (user?.isAdmin ?? false) ..._adminTabs])
             Lnk(
               to: t.$1,
               child: Container(

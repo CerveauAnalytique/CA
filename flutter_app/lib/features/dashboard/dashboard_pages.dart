@@ -126,6 +126,7 @@ class ProfilePage extends ConsumerStatefulWidget {
 class _ProfilePageState extends ConsumerState<ProfilePage> {
   late final TextEditingController _name, _username, _email, _pw, _pw2;
   late String _lang;
+  late bool _consent = ref.read(authProvider).user!.aiConsent;
   bool _busy = false;
   String? _msg;
   bool _ok = false;
@@ -177,13 +178,21 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           CaField(controller: _pw2, label: 'Repeat password', obscure: true),
           const SizedBox(height: 20),
           Row(children: [CaButton('Save', onPressed: _save, busy: _busy), const SizedBox(width: 12), if (_msg != null) Flexible(child: Text(_msg!, style: TextStyle(fontSize: 12, color: _ok ? Colors.green.shade700 : Brand.red)))]),
+          const Divider(height: 40),
+          const Text('Personal AI suggestions', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 6),
+          const Muted('Let CA7 use your own order history for suggestions and "running low?" reminders. Without this you only get general suggestions.', size: 12),
+          SwitchListTile(contentPadding: EdgeInsets.zero, title: const Text('I allow this', style: TextStyle(fontSize: 14)), value: _consent, onChanged: (v) async {
+            setState(() => _consent = v);
+            try { await ref.read(apiClientProvider).post('/api/ca/ai/consent', body: {'consent': v}); await ref.read(authProvider).refresh(); } catch (_) { if (mounted) setState(() => _consent = !v); }
+          }),
         ])),
       );
 }
 
 // ---- Data Connect --------------------------------------------------------------------------------------------
 
-const _typeLabels = {'rest': 'REST API', 'csv': 'CSV file', 'push': 'Push (IoT, MQTT bridge, scripts)', 'camera': 'Camera (desktop agent)'};
+const _typeLabels = {'rest': 'REST API', 'csv': 'CSV file', 'push': 'Push (IoT, MQTT bridge, scripts)', 'camera': 'Camera (desktop agent)', 'openremote': 'OpenRemote (Enterprise)', 'thingsboard': 'ThingsBoard (Enterprise)'};
 
 class ConnectPage extends ConsumerStatefulWidget {
   const ConnectPage({super.key});
@@ -193,6 +202,7 @@ class ConnectPage extends ConsumerStatefulWidget {
 
 class _ConnectPageState extends ConsumerState<ConnectPage> {
   final _name = TextEditingController(), _url = TextEditingController(), _path = TextEditingController(), _headers = TextEditingController();
+  final _realm = TextEditingController(text: 'master'), _clientId = TextEditingController(), _assetId = TextEditingController(), _secret = TextEditingController();
   String _type = 'rest';
   String? _msg;
   bool _busy = false, _typeFromUrl = false;
@@ -229,7 +239,7 @@ class _ConnectPageState extends ConsumerState<ConnectPage> {
       }
     }
     await _run(() async {
-      await ref.read(dashRepoProvider).createSource({'name': _name.text, 'type': _type, if (_url.text.isNotEmpty) 'url': _url.text, if (headers != null) 'headers': headers, if (_path.text.isNotEmpty) 'recordsPath': _path.text});
+      await ref.read(dashRepoProvider).createSource({'name': _name.text, 'type': _type, if (_url.text.isNotEmpty) 'url': _url.text, if (headers != null) 'headers': headers, if (_path.text.isNotEmpty) 'recordsPath': _path.text, if (_type == 'openremote' || _type == 'thingsboard') ...{if (_type == 'openremote') 'realm': _realm.text, 'clientId': _clientId.text, if (_assetId.text.isNotEmpty) 'assetId': _assetId.text, 'secret': _secret.text}});
       _name.clear(); _url.clear(); _path.clear(); _headers.clear();
       return null;
     }, 'Data source added.');
@@ -249,6 +259,16 @@ class _ConnectPageState extends ConsumerState<ConnectPage> {
         CaField(controller: _path, hint: 'Where the list is, e.g. data.items (optional)'),
         const SizedBox(height: 12),
         CaField(controller: _headers, hint: 'Headers as JSON (optional)'),
+      ],
+      if (_type == 'openremote' || _type == 'thingsboard') ...[
+        if (_type == 'openremote') ...[const SizedBox(height: 12), CaField(controller: _realm, hint: 'Realm, e.g. master')],
+        const SizedBox(height: 12),
+        CaField(controller: _clientId, hint: _type == 'openremote' ? 'Service user (client id)' : 'ThingsBoard user name'),
+        const SizedBox(height: 12),
+        CaField(controller: _secret, hint: _type == 'openremote' ? 'Client secret' : 'Password', obscure: true),
+        const SizedBox(height: 12),
+        CaField(controller: _assetId, hint: _type == 'openremote' ? 'Asset id (empty = all assets)' : 'Device id'),
+        const Padding(padding: EdgeInsets.only(top: 8), child: Muted('The address of the tool is set on the server. The password is stored encrypted and never shown again.', size: 12)),
       ],
       const SizedBox(height: 16),
       CaButton('Add source', onPressed: _create, busy: _busy),
@@ -289,7 +309,7 @@ class _SourceCard extends ConsumerWidget {
             Text('${_typeLabels[s.type] ?? s.type} · ${s.recordCount} records${s.lastSyncAt != null ? ' · last data ${s.lastSyncAt!.substring(0, 16).replaceFirst('T', ' ')}' : ''}', style: TextStyle(fontSize: 12, color: c.muted)),
           ]),
           Wrap(spacing: 8, children: [
-            if (s.type == 'rest') CaButton('Sync now', small: true, outlined: true, onPressed: busy ? null : () => run(() => repo.syncSource(s.id))),
+            if (s.type == 'rest' || s.type == 'openremote' || s.type == 'thingsboard') CaButton('Sync now', small: true, outlined: true, onPressed: busy ? null : () => run(() => repo.syncSource(s.id))),
             if (s.type == 'csv')
               CaButton('Upload CSV', small: true, outlined: true, onPressed: busy ? null : () async {
                 final file = await FilePicker.pickFile(type: FileType.custom, allowedExtensions: ['csv']);

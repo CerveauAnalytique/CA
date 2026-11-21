@@ -1,22 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { GATE_COOKIE, verifyGateCookie } from '@/lib/adminGate'
-import {
-  LOCALES,
-  DEFAULT_LOCALE,
-  LOCALE_COOKIE,
-  LOCALE_HEADER,
-  isLocale,
-  matchAcceptLanguage,
-  stripLocale,
-} from '@/i18n/config'
-import { CLOUD_HOST, hostLocale, hostOf, isChatHost } from '@/lib/hosts'
 
 /**
+ * This server is the CA7 backend: the Payload admin panel and the API. The website is the Flutter app (flutter_app/).
+ *
  * 1. /admin is hidden: it only opens after an admin used their own /{username}/ad/{token} link.
  *    Exception: while no account exists yet, /admin stays open so the first admin can be created.
- * 2. Every other page lives under a language code: /nl/shop, /ar/models, ...
- *    - /nl/shop is rewritten to /shop and the language is passed on in a request header;
- *    - /shop (no code) is redirected to the visitor's language: cookie, then device language, then English.
+ * 2. The Flutter web app (another address) may call /api/ca/* and /api/search: origins in CA7_APP_ORIGINS get CORS headers.
+ * 3. Any other page address is sent to the app (CA7_APP_URL), so old links keep working.
  */
 async function adminGate(request: NextRequest) {
   if (process.env.ADMIN_GATE === 'off') return NextResponse.next()
@@ -27,16 +18,11 @@ async function adminGate(request: NextRequest) {
   } catch {
     /* if the check fails, keep /admin closed */
   }
-  return NextResponse.rewrite(new URL('/not-found-admin', request.url), { status: 404 })
+  return new NextResponse('Not found', { status: 404 })
 }
 
-/**
- * Other front ends (the Flutter web app) call /api/ca/* from their own address. Origins in CA7_APP_ORIGINS
- * (comma separated) may do that; the answer to the browser's preflight is handled here.
- */
-function appOrigins() {
-  return (process.env.CA7_APP_ORIGINS || '').split(',').map((o) => o.trim()).filter(Boolean)
-}
+const appOrigins = () => (process.env.CA7_APP_ORIGINS || '').split(',').map((o) => o.trim()).filter(Boolean)
+
 function withCors(request: NextRequest, res: NextResponse) {
   const origin = request.headers.get('origin')
   if (origin && appOrigins().includes(origin)) {
@@ -56,55 +42,15 @@ export async function proxy(request: NextRequest) {
     return withCors(request, NextResponse.next())
   }
 
-  // ca7.io / ca7.nl / ca7.be only show the chat; everything else lives on cloud.ca7.io
-  const host = hostOf(request.headers.get('host'))
-  const onChatHost = isChatHost(host)
-  if (onChatHost) {
-    const { rest } = stripLocale(pathname)
-    if (rest !== '/' && rest !== '/chat-ca7') {
-      const proto = request.headers.get('x-forwarded-proto') || 'https'
-      return NextResponse.redirect(`${proto}://${CLOUD_HOST}${pathname}${search}`, 307)
-    }
-  }
+  if (pathname === '/admin' || pathname.startsWith('/admin/')) return adminGate(request)
 
-  if (!onChatHost && (pathname === '/admin' || pathname.startsWith('/admin/'))) return adminGate(request)
+  // the private admin link /{username}/ad/{token} and the preview routes are served here
+  if (/^\/[^/]+\/ad\/[^/]+$/.test(pathname) || pathname.startsWith('/next/')) return NextResponse.next()
 
-  const { locale, rest } = stripLocale(pathname)
-
-  if (locale) {
-    // /nl/admin is not a thing
-    if (rest === '/admin' || rest.startsWith('/admin/')) {
-      return NextResponse.redirect(new URL(`${rest}${search}`, request.url))
-    }
-    const headers = new Headers(request.headers)
-    headers.set(LOCALE_HEADER, locale)
-    const target = onChatHost && rest === '/' ? '/chat-ca7' : rest
-    const res = NextResponse.rewrite(new URL(`${target}${search}`, request.url), { request: { headers } })
-    // tell search engines about the other languages of this page
-    const origin = process.env.NEXT_PUBLIC_SERVER_URL?.replace(/\/$/, '') || request.nextUrl.origin
-    const tail = rest === '/' ? '' : rest
-    const alternates = LOCALES.map((l) => `<${origin}/${l}${tail}>; rel="alternate"; hreflang="${l}"`)
-    alternates.push(`<${origin}/${DEFAULT_LOCALE}${tail}>; rel="alternate"; hreflang="x-default"`)
-    res.headers.set('Link', alternates.join(', '))
-    if (request.cookies.get(LOCALE_COOKIE)?.value !== locale) {
-      res.cookies.set(LOCALE_COOKIE, locale, { path: '/', maxAge: 60 * 60 * 24 * 365, sameSite: 'lax' })
-    }
-    return res
-  }
-
-  // No language code: send the visitor to the right one.
-  const fromCookie = request.cookies.get(LOCALE_COOKIE)?.value
-  const domainLocale = hostLocale(host)
-  const target = isLocale(fromCookie)
-    ? fromCookie
-    : isLocale(domainLocale)
-      ? domainLocale
-      : (matchAcceptLanguage(request.headers.get('accept-language')) ?? DEFAULT_LOCALE)
-  const url = new URL(`/${target}${pathname === '/' ? '' : pathname}${search}`, request.url)
-  const res = NextResponse.redirect(url, 307)
-  res.headers.set('Vary', 'Accept-Language, Cookie')
-  return res
+  const app = (process.env.CA7_APP_URL || '').replace(/\/$/, '')
+  if (app) return NextResponse.redirect(`${app}${pathname}${search}`, 307)
+  return new NextResponse('This is the CA7 backend (API and admin panel). The website is the CA7 app.', { status: 404, headers: { 'Content-Type': 'text/plain; charset=utf-8' } })
 }
 
-// everything except Next internals, the API and files with an extension (images, svg, robots.txt, ...)
+// everything except Next internals, the API (except our own /api/ca routes) and files with an extension
 export const config = { matcher: ['/((?!_next/|api/(?!ca/|search$)|.*\\..*).*)'] }

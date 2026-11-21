@@ -1,16 +1,4 @@
-import { getServerSideURL } from '@/utilities/getURL'
-
+/** The backend (API and admin panel) is not for search engines; the website is the Flutter app. */
 export default function robots() {
-  const baseUrl = getServerSideURL()
-  return {
-    host: baseUrl,
-    rules: [
-      {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/admin', '/api/', '/*/dashboard', '/*/account', '/*/checkout', '/*/orders'],
-      },
-    ],
-    sitemap: `${baseUrl}/sitemap.xml`,
-  }
+  return { rules: [{ userAgent: '*', disallow: '/' }] }
 }

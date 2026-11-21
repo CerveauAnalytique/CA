@@ -28,12 +28,14 @@ Build next, in this order:
    `desktop/ca7-camera-agent` only measures movement).
 5. **Billing:** Mollie subscriptions, VAT, plan changes between Hobby and Pro, limits for AI models and file storage.
 
-## Flutter front end
+## Architecture: Flutter front end, Next.js backend
 
-`flutter_app/` is a Flutter migration of the Next.js front end (same design, same backend). Status, what is not migrated and the
-backend contract: `docs/FLUTTER_MIGRATION.md`. Keep the two in step: a text or rule that changes in the website must change in
-`flutter_app` too (plans in `lib/features/pricing/plans.dart`, limits in `lib/features/dashboard/limits.dart`, translations are exported
-with `flutter_app/tool_export_translations.mjs`).
+- **Front end = Flutter** (`flutter_app/`): the whole website (web, Android, iOS). All pages, texts, design and logic for visitors are there.
+- **Backend = Next.js + Payload** (`src/`): only the API (`/api/*`, `/api/ca/*`), the admin panel (`/admin`) and the database. It serves **no pages**:
+  every other address redirects to the app (`CA7_APP_URL`). Do not add pages or React components here.
+- A new feature = a backend route or collection here **and** the screens in `flutter_app/`. Plans and limits exist in both
+  (`src/lib/limits.ts` and `flutter_app/lib/features/dashboard/limits.dart`, `features/pricing/plans.dart`); translations are exported with
+  `flutter_app/tool_export_translations.mjs`. Status and remaining gaps: `docs/FLUTTER_MIGRATION.md`.
 
 ## Rules
 
@@ -41,8 +43,7 @@ with `flutter_app/tool_export_translations.mjs`).
   when you build something.
 - **Customer data is private.** Every collection and endpoint needs access control. Nothing is public by default.
 - **Secrets stay out of git.** Use environment variables; document new ones in `.env.example` and `docs/DEPLOY.md`.
-- **Every text a visitor sees goes through `t()` / `tr()`** (see `docs/I18N.md`). `pnpm test:int` fails when a translation is missing.
-  Add the text in all six translation files.
+- **Texts a visitor sees** are English in the Flutter code and translated by `src/i18n/translations/*.ts` (keyed by the English text, exported to the app). Add a translation in all six files; `pnpm test:int` checks they match.
 - **Schema changes need a migration:** `pnpm payload migrate:create <name>`, commit the files, then `pnpm generate:types`.
 - **Keep the design:** light, quiet, lots of white; blue dotted art (`public/icons`, `public/nav`, the camera and wordmark); the site
   stays inside the 1280px container; works in dark mode and right-to-left (use `ms-`/`me-`/`ps-`/`pe-`/`text-start`, not left/right).

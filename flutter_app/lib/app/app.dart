@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -19,6 +20,8 @@ class _Ca7AppState extends ConsumerState<Ca7App> {
   @override
   void initState() {
     super.initState();
+    // ca7.nl and ca7.be start in Dutch
+    if (kIsWeb && (Uri.base.host.endsWith('.nl') || Uri.base.host.endsWith('.be'))) ref.read(i18nProvider).setLang('nl');
     ref.read(authProvider).restore();
     ref.read(cartProvider).load();
   }

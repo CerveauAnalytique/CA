@@ -18,7 +18,14 @@
 | `CA7_CRON_SECRET` | Secret for `POST /api/ca/sync`, called by a scheduler |
 | `ADMIN_GATE=off` | Turns the hidden admin link off (used by the e2e tests) |
 
-## Domains
+## Front end and backend
+
+The backend (this repo's Next.js) has **no website**: it is the API and the admin panel. The website is the Flutter app: build it and host the static files
+(any web server with a fallback to `index.html`). Backend variables: `CA7_APP_URL` (address of the app) and `CA7_APP_ORIGINS` (the same, for CORS).
+
+## Domains (the old Next.js routing is replaced)
+
+The host routing described below now lives in the Flutter app (`Env.chatHosts`, `Env.cloudHost`). Point `ca7.io`, `ca7.nl`, `ca7.be` and `cloud.ca7.io` at the Flutter build.
 
 Point all four domains (and their `www.` versions) at the same app, with HTTPS certificates for each:
 

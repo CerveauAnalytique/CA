@@ -1,4 +1,4 @@
-import { sendOrderAccessEmail } from '@/components/forms/FindOrderForm/sendOrderAccessEmail'
+import { sendOrderAccessEmail } from '@/lib/orderEmail'
 import { clientKey, rateLimit } from '@/lib/rateLimit'
 
 export const dynamic = 'force-dynamic'
