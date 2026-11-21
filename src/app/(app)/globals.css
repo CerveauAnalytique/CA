@@ -369,7 +369,7 @@ nav.site-header {
 .btn-login {
   height: 32px; padding: 0 16px;
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.11);
+  border: none;
   background: transparent;
   color: var(--grey-300);
   font-size: 13px; font-weight: 400;
@@ -675,7 +675,6 @@ footer {
   .nav-right .nav-link {
     width: 32px; height: 32px; padding: 0;
     justify-content: center;
-    border: 1px solid rgba(0,0,0,0.1);
     border-radius: 6px;
   }
 }
@@ -694,7 +693,7 @@ footer {
   width: 34px;
   height: 34px;
   border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: none;
   background: transparent;
   color: var(--grey-400);
   cursor: pointer;

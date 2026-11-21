@@ -55,7 +55,7 @@ export function MobileMenu({ menu, onSearch }: Props) {
     <Sheet onOpenChange={setIsOpen} open={isOpen}>
       <SheetTrigger
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
-        className="relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-200 text-neutral-700 transition-colors dark:border-neutral-800 dark:text-white"
+        className="relative flex h-8 w-8 items-center justify-center rounded-md text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
       >
         {isOpen ? <XIcon className="h-4 w-4" /> : <MenuIcon className="h-4 w-4" />}
       </SheetTrigger>

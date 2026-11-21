@@ -146,7 +146,7 @@ export function HeaderClient({ header }: Props) {
         <Link
           href="/marketplace"
           title="Marketplace & Enterprise Models"
-          className="relative hidden h-8 w-8 items-center justify-center rounded-md border border-neutral-200 dark:border-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:border-neutral-300 transition-colors md:flex"
+          className="relative hidden h-8 w-8 items-center justify-center rounded-md text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-white transition-colors md:flex"
         >
           <Store className="h-4 w-4" />
         </Link>
@@ -155,7 +155,7 @@ export function HeaderClient({ header }: Props) {
         <Link
           href="/notifications"
           title="Notifications & System Alerts"
-          className="relative hidden h-8 w-8 items-center justify-center rounded-md border border-neutral-200 dark:border-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:border-neutral-300 transition-colors md:flex"
+          className="relative hidden h-8 w-8 items-center justify-center rounded-md text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-white transition-colors md:flex"
         >
           <Bell className="h-4 w-4" />
           <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-red-500" />
