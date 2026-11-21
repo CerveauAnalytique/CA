@@ -6,7 +6,7 @@ import { CMSLink } from '@/components/Link'
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { useAuth } from '@/providers/Auth'
-import { ArrowUpRight, MenuIcon, SearchIcon, XIcon } from 'lucide-react'
+import { ArrowUpRight, SearchIcon, XIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -18,6 +18,15 @@ interface Props {
   onSearch?: () => void
 }
 
+/** Two bold rounded bars: long on top, shorter below, both aligned to the right. */
+function MenuLinesIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+      <path d="M3 8h16M8 15h11" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 const LINKS = [
   { href: '/shop', label: 'Shop' },
   { href: '/models', label: 'AI Models' },
@@ -25,7 +34,6 @@ const LINKS = [
   { href: '/research', label: 'Research' },
   { href: '/api', label: 'API' },
   { href: '/docs', label: 'Docs' },
-  { href: '/marketplace', label: 'Marketplace' },
 ]
 
 export function MobileMenu({ menu, onSearch }: Props) {
@@ -57,9 +65,9 @@ export function MobileMenu({ menu, onSearch }: Props) {
     <Sheet onOpenChange={setIsOpen} open={isOpen}>
       <SheetTrigger
         aria-label={isOpen ? 'Close menu' : 'Open menu'}
-        className="relative flex h-8 w-8 items-center justify-center rounded-md text-neutral-700 transition-colors hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
+        className="relative flex h-9 w-9 items-center justify-center rounded-md text-neutral-900 transition-colors hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
       >
-        {isOpen ? <XIcon className="h-4 w-4" /> : <MenuIcon className="h-4 w-4" />}
+        {isOpen ? <XIcon className="h-5 w-5" /> : <MenuLinesIcon />}
       </SheetTrigger>
 
       <SheetContent
