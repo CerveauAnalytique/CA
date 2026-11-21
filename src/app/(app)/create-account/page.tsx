@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 
 import { RenderParams } from '@/components/RenderParams'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { AuthBackdrop } from '@/components/AuthBackdrop'
 import React from 'react'
 import { headers as getHeaders } from 'next/headers'
 import configPromise from '@payload-config'
@@ -22,11 +23,15 @@ export default async function CreateAccount() {
   }
 
   return (
-    <div className="container py-16">
-      <h1 className="text-xl mb-4">{t('Create account')}</h1>
-      <RenderParams />
-      <CreateAccountForm />
-    </div>
+    <AuthBackdrop>
+      <div className="container py-16">
+        <div className="mx-auto w-full max-w-[440px]">
+          <h1 className="mb-4 text-xl">{t('Create account')}</h1>
+          <RenderParams />
+          <CreateAccountForm />
+        </div>
+      </div>
+    </AuthBackdrop>
   )
 }
 

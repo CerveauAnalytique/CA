@@ -12,8 +12,9 @@ class DotIcon extends StatelessWidget {
 
 /// CA7 wordmark in blue dots (72 x 32 on the website header).
 class Ca7Logo extends StatelessWidget {
-  const Ca7Logo({super.key, this.height = 32});
+  const Ca7Logo({super.key, this.height = 32, this.white = false});
   final double height;
+  final bool white;
   @override
-  Widget build(BuildContext context) => Semantics(label: 'CA7', child: SvgPicture.asset('assets/brand/ca7-wordmark.svg', height: height));
+  Widget build(BuildContext context) => Semantics(label: 'CA7', child: SvgPicture.asset(white ? 'assets/brand/ca7-wordmark-white.svg' : 'assets/brand/ca7-wordmark.svg', height: height));
 }

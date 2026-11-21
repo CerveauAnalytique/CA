@@ -8,7 +8,7 @@ import { headers as getHeaders } from 'next/headers'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { LoginForm } from '@/components/forms/LoginForm'
-import { Ca7Logo } from '@/components/Logo/Ca7Logo'
+import { AuthBackdrop } from '@/components/AuthBackdrop'
 import { redirect } from 'next/navigation'
 
 export default async function Login() {
@@ -22,11 +22,13 @@ export default async function Login() {
   }
 
   return (
+    <AuthBackdrop>
     <div className="container">
       <div className="mx-auto my-12 w-full max-w-[400px] bg-transparent py-4">
         <RenderParams />
         <div className="mb-6 flex justify-center">
-          <Ca7Logo />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/ca7-wordmark-white.svg" alt="CA7" className="h-8 w-auto" />
         </div>
         <h1 className="text-center text-[28px] font-light tracking-tight">{t('Log in')}</h1>
         <p className="mb-8 mt-2 text-center text-[14px] text-neutral-500 dark:text-neutral-400">
@@ -35,6 +37,7 @@ export default async function Login() {
         <LoginForm />
       </div>
     </div>
+    </AuthBackdrop>
   )
 }
 

@@ -1,15 +1,20 @@
 import type { Metadata } from 'next'
 
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { AuthBackdrop } from '@/components/AuthBackdrop'
 import React from 'react'
 
 import { ForgotPasswordForm } from '@/components/forms/ForgotPasswordForm'
 
 export default async function ForgotPasswordPage() {
   return (
-    <div className="container py-16">
-      <ForgotPasswordForm />
-    </div>
+    <AuthBackdrop>
+      <div className="container py-16">
+        <div className="mx-auto w-full max-w-[440px]">
+          <ForgotPasswordForm />
+        </div>
+      </div>
+    </AuthBackdrop>
   )
 }
 
