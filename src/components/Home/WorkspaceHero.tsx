@@ -7,7 +7,7 @@ import { Globe, ChevronLeft, ChevronRight, RotateCcw, Search, Terminal } from 'l
 export function WorkspaceHero() {
   return (
     <section className="relative w-full py-20 md:py-32 bg-white dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 transition-colors overflow-hidden">
-      <div className="max-w-[1500px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 items-center">
+      <div className="max-w-[1280px] mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 items-center">
         {/* Left Side: Browser Workspace Mockup */}
         <div className="relative group order-2 md:order-1">
           <div className="w-full bg-neutral-50 dark:bg-neutral-900 rounded-3xl shadow-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">

@@ -42,7 +42,7 @@ export function Hero() {
       <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-orange-200/40 dark:bg-orange-500/10 blur-3xl z-0 pointer-events-none" />
 
       {/* Main Grid Container */}
-      <div className="relative z-20 max-w-[1400px] mx-auto px-6">
+      <div className="relative z-20 max-w-[1280px] mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start pt-2">
           {/* Left Column: Title & Chat Bar aligned left together */}
           <div className="col-span-1 md:col-span-7 space-y-4 text-center md:text-left">

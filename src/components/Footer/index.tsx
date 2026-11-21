@@ -27,7 +27,7 @@ export function Footer() {
 
   return (
     <footer className="relative w-full border-t border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans overflow-hidden transition-colors">
-      <div className="max-w-[1500px] mx-auto grid grid-cols-1 lg:grid-cols-12 relative z-10">
+      <div className="max-w-[1280px] mx-auto grid grid-cols-1 lg:grid-cols-12 relative z-10">
         {/* Left Column (Newsletter & Statement) */}
         <div className="col-span-1 border-b lg:border-b-0 lg:col-span-4 p-8 lg:p-12 lg:border-r border-neutral-200 dark:border-neutral-800 relative flex flex-col justify-between lg:min-h-[540px] bg-neutral-50 dark:bg-neutral-950">
           <div>
@@ -136,7 +136,7 @@ export function Footer() {
       </div>
 
       {/* Bottom Copyright Bar */}
-      <div className="max-w-[1500px] mx-auto flex flex-col xl:flex-row justify-between items-center py-6 px-8 text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 relative z-20 border-t border-neutral-200 dark:border-neutral-900 uppercase tracking-widest">
+      <div className="max-w-[1280px] mx-auto flex flex-col xl:flex-row justify-between items-center py-6 px-8 text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 relative z-20 border-t border-neutral-200 dark:border-neutral-900 uppercase tracking-widest">
         <div className="mb-4 xl:mb-0 text-center xl:text-left">
           © 2026 Cerveau Analytique, Inc. / All Rights Reserved
         </div>

@@ -88,7 +88,7 @@ export function BlogCards({ stories, business }: BlogCardsProps) {
 
   return (
     <section className="w-full py-12 md:py-20 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans border-b border-neutral-200 dark:border-neutral-800 transition-colors">
-      <div className="max-w-[1400px] mx-auto px-6 space-y-16">
+      <div className="max-w-[1280px] mx-auto px-6 space-y-16">
         {/* Section 1: Explore More */}
         <div className="space-y-6">
           <h3 className="text-xl font-bold tracking-tight">Explore more</h3>
