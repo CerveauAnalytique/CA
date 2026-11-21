@@ -37,15 +37,18 @@ export function DashShell({ user, counts, children }: Props) {
   const crumb = MENU.find((m) => m.href === pathname)?.label ?? 'Dashboard'
 
   return (
-    <div
-      className="min-h-[calc(100vh-56px)] px-3 py-6 md:px-10 md:py-10"
-      style={{
-        backgroundColor: '#8fb3dd',
-        backgroundImage:
-          'radial-gradient(rgba(255,255,255,.35) 1.6px, transparent 1.7px), linear-gradient(#6f9bd1 0%, #aecaea 40%, #d9c690 72%, #a68c4f 100%)',
-        backgroundSize: '6px 6px, 100% 100%',
-      }}
-    >
+    <div className="relative z-10 min-h-[calc(100vh-56px)] px-3 py-6 md:px-10 md:py-10">
+      {/* Background always fills the whole screen, however short the page is */}
+      <div
+        aria-hidden
+        className="pointer-events-none fixed inset-0 -z-10"
+        style={{
+          backgroundColor: '#8fb3dd',
+          backgroundImage:
+            'radial-gradient(rgba(255,255,255,.35) 1.6px, transparent 1.7px), linear-gradient(#6f9bd1 0%, #aecaea 40%, #d9c690 72%, #a68c4f 100%)',
+          backgroundSize: '6px 6px, 100% 100%',
+        }}
+      />
       <div className="mx-auto flex min-h-[620px] max-w-[1280px] overflow-hidden rounded-3xl border border-white/60 bg-neutral-100 text-neutral-900 shadow-2xl shadow-black/20">
         {/* Sidebar */}
         <aside className="hidden w-[250px] shrink-0 flex-col gap-4 bg-neutral-200/60 p-3 md:flex">

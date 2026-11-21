@@ -52,7 +52,7 @@ const linkClass =
 
 export function Footer() {
   return (
-    <footer className="w-full bg-neutral-100 dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 font-sans">
+    <footer className="relative z-20 w-full bg-neutral-100 dark:bg-neutral-950 border-t border-neutral-200 dark:border-neutral-800 font-sans">
       <div className="max-w-[1280px] mx-auto px-6 pt-8 pb-6">
         {/* Row 1: language / region style links */}
         <div className="flex flex-wrap gap-x-4 gap-y-2 pb-4 border-b border-neutral-300 dark:border-neutral-800">
