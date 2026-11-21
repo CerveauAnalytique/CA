@@ -35,6 +35,10 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
   redirects,
+  // the shop never needs the camera, microphone or location of a visitor: deny them (security monitoring, docs/SECURITY.md)
+  async headers() {
+    return [{ source: '/:path*', headers: [{ key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' }] }]
+  },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],

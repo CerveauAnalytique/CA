@@ -5,7 +5,7 @@ import Link from '@/i18n/client'
 import { usePathname } from 'next/navigation'
 
 type Props = {
-  user: { email: string; name?: string }
+  user: { email: string; name?: string; isAdmin?: boolean }
   children: React.ReactNode
 }
 
@@ -20,6 +20,11 @@ const TABS = [
   { href: '/dashboard/plan', label: 'Pack & billing' },
   { href: '/dashboard/platform', label: 'Platform' },
   { href: '/dashboard/export', label: 'Export & sync' },
+]
+
+const ADMIN_TABS = [
+  { href: '/dashboard/security', label: 'Security' },
+  { href: '/dashboard/ai', label: 'AI Control Center' },
 ]
 
 /** Settings-style page that lives inside the normal site layout (no separate app frame). */
@@ -38,7 +43,7 @@ export function DashShell({ user, children }: Props) {
       </p>
 
       <nav className="mt-8 flex flex-wrap gap-2" aria-label="Dashboard sections">
-        {TABS.map((t) => {
+        {[...TABS, ...(user.isAdmin ? ADMIN_TABS : [])].map((t) => {
           const active = pathname === t.href
           return (
             <Link

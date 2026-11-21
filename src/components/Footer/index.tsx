@@ -31,6 +31,7 @@ const COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
       { label: tr('Quickstart'), href: '/docs/quickstart' },
       { label: tr('Community'), href: '/community' },
       { label: tr('System Status'), href: '/status' },
+      { label: tr('Help center'), href: '/support' },
     ],
   },
   {

@@ -7,6 +7,7 @@ import { ecommercePlugin } from '@payloadcms/plugin-ecommerce'
 
 import { stripeAdapter } from '@payloadcms/plugin-ecommerce/payments/stripe'
 import { mollieAdapter } from '@/payments/mollie'
+import { securityPlugin } from '@/lib/security/plugin'
 
 import { Page, Product } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -133,4 +134,6 @@ export const plugins: Plugin[] = [
       productsCollectionOverride: ProductsCollection,
     },
   }),
+  // last, so it also sees the collections the other plugins add
+  securityPlugin,
 ]

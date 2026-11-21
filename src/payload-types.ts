@@ -83,6 +83,16 @@ export interface Config {
     'data-records': DataRecord;
     automations: Automation;
     'site-pages': SitePage;
+    'security-events': SecurityEvent;
+    'security-alerts': SecurityAlert;
+    'security-blocks': SecurityBlock;
+    'security-rules': SecurityRule;
+    'support-topics': SupportTopic;
+    'support-articles': SupportArticle;
+    'support-requests': SupportRequest;
+    'ai-decisions': AiDecision;
+    'ai-policy-rules': AiPolicyRule;
+    'ai-sponsored': AiSponsored;
     forms: Form;
     'form-submissions': FormSubmission;
     addresses: Address;
@@ -123,6 +133,16 @@ export interface Config {
     'data-records': DataRecordsSelect<false> | DataRecordsSelect<true>;
     automations: AutomationsSelect<false> | AutomationsSelect<true>;
     'site-pages': SitePagesSelect<false> | SitePagesSelect<true>;
+    'security-events': SecurityEventsSelect<false> | SecurityEventsSelect<true>;
+    'security-alerts': SecurityAlertsSelect<false> | SecurityAlertsSelect<true>;
+    'security-blocks': SecurityBlocksSelect<false> | SecurityBlocksSelect<true>;
+    'security-rules': SecurityRulesSelect<false> | SecurityRulesSelect<true>;
+    'support-topics': SupportTopicsSelect<false> | SupportTopicsSelect<true>;
+    'support-articles': SupportArticlesSelect<false> | SupportArticlesSelect<true>;
+    'support-requests': SupportRequestsSelect<false> | SupportRequestsSelect<true>;
+    'ai-decisions': AiDecisionsSelect<false> | AiDecisionsSelect<true>;
+    'ai-policy-rules': AiPolicyRulesSelect<false> | AiPolicyRulesSelect<true>;
+    'ai-sponsored': AiSponsoredSelect<false> | AiSponsoredSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
@@ -146,11 +166,13 @@ export interface Config {
     header: Header;
     footer: Footer;
     banner: Banner;
+    'ai-settings': AiSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     banner: BannerSelect<false> | BannerSelect<true>;
+    'ai-settings': AiSettingsSelect<false> | AiSettingsSelect<true>;
   };
   locale: null;
   widgets: {
@@ -221,6 +243,16 @@ export interface User {
   apiCallsMonth?: number | null;
   stripeCustomerId?: string | null;
   stripeSubscriptionId?: string | null;
+  /**
+   * A suspended account cannot log in and its sessions stop at once. Nothing is deleted.
+   */
+  suspended?: boolean | null;
+  suspendedReason?: string | null;
+  /**
+   * The customer allows the AI to use their own order history for suggestions. Off = only general suggestions.
+   */
+  aiConsent?: boolean | null;
+  aiConsentAt?: string | null;
   /**
    * Chosen at sign-up. The site opens in this language when the customer logs in.
    */
@@ -1368,6 +1400,266 @@ export interface SitePage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "security-events".
+ */
+export interface SecurityEvent {
+  id: number;
+  category: string;
+  level: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  score?: number | null;
+  userId?: string | null;
+  /**
+   * Keyed hash of the IP address (GDPR). Used to count, never shown to customers.
+   */
+  ipHash?: string | null;
+  /**
+   * Last part removed, e.g. 192.168.1.0
+   */
+  ipMasked?: string | null;
+  /**
+   * Rules that fired
+   */
+  rules?: string | null;
+  /**
+   * Masked details. Never passwords, tokens or payment data.
+   */
+  evidence?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  blocked?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "security-alerts".
+ */
+export interface SecurityAlert {
+  id: number;
+  summary: string;
+  level: 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  status?: ('open' | 'confirmed' | 'false_positive') | null;
+  event?: (number | null) | SecurityEvent;
+  userId?: string | null;
+  note?: string | null;
+  reviewedBy?: string | null;
+  notified?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "security-blocks".
+ */
+export interface SecurityBlock {
+  id: number;
+  subjectType: 'user' | 'ip';
+  subjectId: string;
+  reason: string;
+  level?: ('HIGH' | 'CRITICAL') | null;
+  until: string;
+  active?: boolean | null;
+  alert?: (number | null) | SecurityAlert;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "security-rules".
+ */
+export interface SecurityRule {
+  id: number;
+  /**
+   * The key of a built-in rule, for example brute_force.
+   */
+  key: string;
+  enabled?: boolean | null;
+  score?: number | null;
+  threshold?: number | null;
+  windowMinutes?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "support-topics".
+ */
+export interface SupportTopic {
+  id: number;
+  title: string;
+  slug: string;
+  description?: string | null;
+  /**
+   * Two letters shown in the topic tile, for example Ac.
+   */
+  badge?: string | null;
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "support-articles".
+ */
+export interface SupportArticle {
+  id: number;
+  title: string;
+  slug: string;
+  summary: string;
+  topic: number | SupportTopic;
+  blocks?:
+    | (
+        | {
+            level?: ('2' | '3') | null;
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'heading';
+          }
+        | {
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'paragraph';
+          }
+        | {
+            items?:
+              | {
+                  text: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'list';
+          }
+        | {
+            code: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'code';
+          }
+        | {
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'callout';
+          }
+        | {
+            items?:
+              | {
+                  title: string;
+                  text?: string | null;
+                  meta?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cards';
+          }
+      )[]
+    | null;
+  /**
+   * Shown under "Popular" on the help center.
+   */
+  popular?: boolean | null;
+  /**
+   * Members who said it helped.
+   */
+  helpful?: number | null;
+  published?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "support-requests".
+ */
+export interface SupportRequest {
+  id: number;
+  subject: string;
+  message: string;
+  email: string;
+  name?: string | null;
+  topic?: (number | null) | SupportTopic;
+  user?: (number | null) | User;
+  status?: ('open' | 'answered' | 'closed') | null;
+  /**
+   * Your answer. Setting the status to Answered e-mails it to the customer.
+   */
+  reply?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-decisions".
+ */
+export interface AiDecision {
+  id: number;
+  feature: 'assistant' | 'recommendations' | 'offers' | 'running_low' | 'search';
+  decision: 'allowed' | 'corrected' | 'blocked';
+  violations?: number | null;
+  userId?: string | null;
+  /**
+   * What was proposed, what the checks found. No personal data.
+   */
+  trace?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-policy-rules".
+ */
+export interface AiPolicyRule {
+  id: number;
+  /**
+   * price_match, stock_match, discount_valid, consent_required, no_medical_claims, max_discount_percent ...
+   */
+  key: string;
+  enabled?: boolean | null;
+  action?: ('block' | 'correct' | 'log') | null;
+  /**
+   * For rules with a number, such as max_discount_percent.
+   */
+  value?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-sponsored".
+ */
+export interface AiSponsored {
+  id: number;
+  label: string;
+  product: number | Product;
+  active?: boolean | null;
+  /**
+   * Multiplier on the ranking score. Always shown to the customer as "Sponsored".
+   */
+  boost?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
@@ -1450,6 +1742,46 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'site-pages';
         value: number | SitePage;
+      } | null)
+    | ({
+        relationTo: 'security-events';
+        value: number | SecurityEvent;
+      } | null)
+    | ({
+        relationTo: 'security-alerts';
+        value: number | SecurityAlert;
+      } | null)
+    | ({
+        relationTo: 'security-blocks';
+        value: number | SecurityBlock;
+      } | null)
+    | ({
+        relationTo: 'security-rules';
+        value: number | SecurityRule;
+      } | null)
+    | ({
+        relationTo: 'support-topics';
+        value: number | SupportTopic;
+      } | null)
+    | ({
+        relationTo: 'support-articles';
+        value: number | SupportArticle;
+      } | null)
+    | ({
+        relationTo: 'support-requests';
+        value: number | SupportRequest;
+      } | null)
+    | ({
+        relationTo: 'ai-decisions';
+        value: number | AiDecision;
+      } | null)
+    | ({
+        relationTo: 'ai-policy-rules';
+        value: number | AiPolicyRule;
+      } | null)
+    | ({
+        relationTo: 'ai-sponsored';
+        value: number | AiSponsored;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1545,6 +1877,10 @@ export interface UsersSelect<T extends boolean = true> {
   apiCallsMonth?: T;
   stripeCustomerId?: T;
   stripeSubscriptionId?: T;
+  suspended?: T;
+  suspendedReason?: T;
+  aiConsent?: T;
+  aiConsentAt?: T;
   language?: T;
   roles?: T;
   orders?: T;
@@ -1978,6 +2314,207 @@ export interface SitePagesSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "security-events_select".
+ */
+export interface SecurityEventsSelect<T extends boolean = true> {
+  category?: T;
+  level?: T;
+  score?: T;
+  userId?: T;
+  ipHash?: T;
+  ipMasked?: T;
+  rules?: T;
+  evidence?: T;
+  blocked?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "security-alerts_select".
+ */
+export interface SecurityAlertsSelect<T extends boolean = true> {
+  summary?: T;
+  level?: T;
+  status?: T;
+  event?: T;
+  userId?: T;
+  note?: T;
+  reviewedBy?: T;
+  notified?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "security-blocks_select".
+ */
+export interface SecurityBlocksSelect<T extends boolean = true> {
+  subjectType?: T;
+  subjectId?: T;
+  reason?: T;
+  level?: T;
+  until?: T;
+  active?: T;
+  alert?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "security-rules_select".
+ */
+export interface SecurityRulesSelect<T extends boolean = true> {
+  key?: T;
+  enabled?: T;
+  score?: T;
+  threshold?: T;
+  windowMinutes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "support-topics_select".
+ */
+export interface SupportTopicsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  description?: T;
+  badge?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "support-articles_select".
+ */
+export interface SupportArticlesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  summary?: T;
+  topic?: T;
+  blocks?:
+    | T
+    | {
+        heading?:
+          | T
+          | {
+              level?: T;
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        paragraph?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        list?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        code?:
+          | T
+          | {
+              code?: T;
+              id?: T;
+              blockName?: T;
+            };
+        callout?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cards?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    meta?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+      };
+  popular?: T;
+  helpful?: T;
+  published?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "support-requests_select".
+ */
+export interface SupportRequestsSelect<T extends boolean = true> {
+  subject?: T;
+  message?: T;
+  email?: T;
+  name?: T;
+  topic?: T;
+  user?: T;
+  status?: T;
+  reply?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-decisions_select".
+ */
+export interface AiDecisionsSelect<T extends boolean = true> {
+  feature?: T;
+  decision?: T;
+  violations?: T;
+  userId?: T;
+  trace?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-policy-rules_select".
+ */
+export interface AiPolicyRulesSelect<T extends boolean = true> {
+  key?: T;
+  enabled?: T;
+  action?: T;
+  value?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-sponsored_select".
+ */
+export interface AiSponsoredSelect<T extends boolean = true> {
+  label?: T;
+  product?: T;
+  active?: T;
+  boost?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2461,6 +2998,41 @@ export interface Banner {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-settings".
+ */
+export interface AiSetting {
+  id: number;
+  flags?: {
+    assistant?: boolean | null;
+    recommendations?: boolean | null;
+    offers?: boolean | null;
+    runningLow?: boolean | null;
+    smartSearch?: boolean | null;
+  };
+  /**
+   * The ranking model version that is used. Set it back to an older version to roll back.
+   */
+  activeVersion?: string | null;
+  /**
+   * Weights of the ranking. Add a version, switch to it above, roll back by switching back.
+   */
+  rankingVersions?:
+    | {
+        version: string;
+        popularity?: number | null;
+        coPurchase?: number | null;
+        personal?: number | null;
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  lastRecommendationJob?: string | null;
+  lastRecommendationJobStatus?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2522,6 +3094,37 @@ export interface BannerSelect<T extends boolean = true> {
   linkUrl?: T;
   color?: T;
   dismissible?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-settings_select".
+ */
+export interface AiSettingsSelect<T extends boolean = true> {
+  flags?:
+    | T
+    | {
+        assistant?: T;
+        recommendations?: T;
+        offers?: T;
+        runningLow?: T;
+        smartSearch?: T;
+      };
+  activeVersion?: T;
+  rankingVersions?:
+    | T
+    | {
+        version?: T;
+        popularity?: T;
+        coPurchase?: T;
+        personal?: T;
+        note?: T;
+        id?: T;
+      };
+  lastRecommendationJob?: T;
+  lastRecommendationJobStatus?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

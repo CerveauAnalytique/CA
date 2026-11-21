@@ -1,0 +1,23 @@
+2026-11-21T23:33:03.690Z HIGH HIGH: Brute-force logins from 10.9.8.0 -> The operation is restricted for a while, admin alerted
+2026-11-21T23:33:03.843Z HIGH HIGH: Brute-force logins from 10.9.8.0 -> The operation is restricted for a while, admin alerted
+2026-11-21T23:33:03.949Z HIGH HIGH: Brute-force logins from 10.9.8.0 -> The operation is restricted for a while, admin alerted
+2026-11-21T23:33:04.012Z HIGH HIGH: Brute-force logins from 10.9.8.0 -> The operation is restricted for a while, admin alerted
+2026-11-21T23:33:33.483Z HIGH HIGH: Brute-force logins from 198.51.100.0 -> The operation is restricted for a while, admin alerted
+2026-11-21T23:33:33.735Z CRITICAL CRITICAL: Brute-force logins; Credential stuffing (many e-mails from one network) from 192.0.2.0 -> Request blocked, the user's sessions ended, admin alerted
+2026-11-21T23:33:43.882Z HIGH HIGH: Brute-force logins from 198.51.100.0 -> The operation is restricted for a while, admin alerted
+2026-11-21T23:33:44.089Z CRITICAL CRITICAL: Brute-force logins; Credential stuffing (many e-mails from one network) from 192.0.2.0 -> Request blocked, the user's sessions ended, admin alerted
+2026-11-21T23:33:44.419Z CRITICAL CRITICAL: Privilege escalation (becoming admin, editing someone else) (user 8) from 192.0.2.0 -> Request blocked, the user's sessions ended, admin alerted
+2026-11-21T23:33:44.470Z CRITICAL CRITICAL: Price manipulation (order does not match the real prices) (user someone) from 192.0.2.0 -> Request blocked, the user's sessions ended, admin alerted
+2026-11-21T23:33:51.403Z HIGH HIGH: Brute-force logins from 198.51.100.0 -> The operation is restricted for a while, admin alerted
+2026-11-21T23:33:51.662Z CRITICAL CRITICAL: Brute-force logins; Credential stuffing (many e-mails from one network) from 192.0.2.0 -> Request blocked, the user's sessions ended, admin alerted
+2026-11-21T23:33:51.882Z CRITICAL CRITICAL: Privilege escalation (becoming admin, editing someone else) (user 12) from 192.0.2.0 -> Request blocked, the user's sessions ended, admin alerted
+2026-11-21T23:33:51.919Z CRITICAL CRITICAL: Price manipulation (order does not match the real prices) (user someone) from 192.0.2.0 -> Request blocked, the user's sessions ended, admin alerted
+2026-11-21T23:38:42.313Z HIGH HIGH: Brute-force logins from 198.51.100.0 -> The operation is restricted for a while, admin alerted
+2026-11-21T23:38:42.592Z CRITICAL CRITICAL: Brute-force logins; Credential stuffing (many e-mails from one network) from 192.0.2.0 -> Request blocked, the user's sessions ended, admin alerted
+2026-11-21T23:38:42.927Z CRITICAL CRITICAL: Privilege escalation (becoming admin, editing someone else) (user 4) from 192.0.2.0 -> Request blocked, the user's sessions ended, admin alerted
+2026-11-21T23:38:43.023Z CRITICAL CRITICAL: Price manipulation (order does not match the real prices) (user someone) from 192.0.2.0 -> Request blocked, the user's sessions ended, admin alerted
+2026-11-21T23:39:25.935Z CRITICAL CRITICAL: Privilege escalation (becoming admin, editing someone else) (user 8) from 127.0.0.0 -> Request blocked, the user's sessions ended, admin alerted
+2026-11-21T23:41:19.653Z HIGH HIGH: Brute-force logins from 198.51.100.0 -> The operation is restricted for a while, admin alerted
+2026-11-21T23:41:19.839Z CRITICAL CRITICAL: Brute-force logins; Credential stuffing (many e-mails from one network) from 192.0.2.0 -> Request blocked, the user's sessions ended, admin alerted
+2026-11-21T23:41:20.110Z CRITICAL CRITICAL: Privilege escalation (becoming admin, editing someone else) (user 10) from 192.0.2.0 -> Request blocked, the user's sessions ended, admin alerted
+2026-11-21T23:41:20.196Z CRITICAL CRITICAL: Price manipulation (order does not match the real prices) (user someone) from 192.0.2.0 -> Request blocked, the user's sessions ended, admin alerted

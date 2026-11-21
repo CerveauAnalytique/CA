@@ -94,6 +94,32 @@ export const Users: CollectionConfig = {
       admin: { position: 'sidebar', readOnly: true },
     },
     {
+      name: 'suspended',
+      type: 'checkbox',
+      defaultValue: false,
+      access: { create: adminOnlyFieldAccess, read: adminOnlyFieldAccess, update: adminOnlyFieldAccess },
+      admin: { position: 'sidebar', description: 'A suspended account cannot log in and its sessions stop at once. Nothing is deleted.' },
+    },
+    {
+      name: 'suspendedReason',
+      type: 'text',
+      access: { create: adminOnlyFieldAccess, read: adminOnlyFieldAccess, update: adminOnlyFieldAccess },
+      admin: { position: 'sidebar' },
+    },
+    {
+      name: 'aiConsent',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Personal AI features',
+      admin: { position: 'sidebar', description: 'The customer allows the AI to use their own order history for suggestions. Off = only general suggestions.' },
+    },
+    {
+      name: 'aiConsentAt',
+      type: 'date',
+      access: { create: adminOnlyFieldAccess, read: adminOnlyFieldAccess, update: adminOnlyFieldAccess },
+      admin: { position: 'sidebar', readOnly: true },
+    },
+    {
       name: 'language',
       type: 'select',
       label: 'Language',

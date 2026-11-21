@@ -20,7 +20,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <DashShell
-      user={{ email: user.email ?? '', name: (user as unknown as { name?: string }).name }}
+      user={{ email: user.email ?? '', name: (user as unknown as { name?: string }).name, isAdmin: Boolean((user as unknown as { roles?: string[] }).roles?.includes('admin')) }}
     >
       {children}
     </DashShell>

@@ -248,6 +248,7 @@ const t: Record<string, string> = {
   "your sensors": "أجهزة الاستشعار لديك",
   "{n} rows": "{n} صفًا",
   "Show": "إظهار",
-  "Hide": "إخفاء"
+  "Hide": "إخفاء",
+  "Help center": "مركز المساعدة"
 }
 export default t

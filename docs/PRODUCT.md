@@ -77,6 +77,9 @@ What exists in this repository today, and what does not:
 | Profile settings (name, username, e-mail, language, password) | Built: `/dashboard/settings` |
 | Content pages from the database (`site-pages`), smart search | Built; shown by the Flutter app. The Next.js pages still hold their own copy of the text |
 | Marketing banner above the navbar | Built: admin panel > Globals > Marketing banner (on/off, text, link, color, closable); shown on the website and in the Flutter app |
+| Support: help center, articles, requests | Built: `/support` (search, topics, helpful votes), request form that first suggests articles; all from the database (admin panel group Support); also in the Flutter app |
+| Security monitoring | Built: rules, scores, alerts, blocks, suspension, audit log, CSV; see `docs/SECURITY.md`. Tested by hand and with tests, not with real attack traffic |
+| CA7 Intelligence (AI) | Built: Compliance Engine, recommendations, offers, running low, assistant (needs the Ollama model), Control Center; see `docs/ai/`. Not built: embeddings, learned ranking, DeepSeek |
 | Pack limits and billing | **Built:** limits are enforced (`src/lib/limits.ts`: data sources, API calls per month, stored records, chat per 10 minutes, automation). Hobby and Pro by card through Stripe subscriptions (`/api/ca/billing/*`, needs `STRIPE_SECRET_KEY` and the webhook `STRIPE_WEBHOOKS_SIGNING_SECRET`). Business and Enterprise are by invoice: an admin sets `users.plan`. Not built: Mollie subscriptions, VAT handling, limits for AI models and file storage (records are the storage measure) |
 
 ## Principles

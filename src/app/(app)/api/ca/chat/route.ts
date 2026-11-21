@@ -2,6 +2,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { clientKey, rateLimit } from '@/lib/rateLimit'
 import { limitsOf } from '@/lib/limits'
+import { track } from '@/lib/security/track'
 import { analyze, summaryText } from '@/lib/intelligence'
 
 export const dynamic = 'force-dynamic'
@@ -42,6 +43,7 @@ export async function POST(request: Request) {
     ? rateLimit(`u:${user.id}`, LIMIT_USER_OVERRIDE ?? limitsOf(user).chat, WINDOW)
     : rateLimit(`ip:${clientKey(request)}`, LIMIT_ANON, WINDOW)
   if (!limited.ok) {
+    await track(request, 'rate_limited', user?.id, { route: 'chat' })
     return Response.json(
       { error: user ? 'You have reached the limit for now. Try again in a few minutes.' : 'You have reached the limit for visitors. Log in for more messages, or try again in a few minutes.' },
       { status: 429, headers: { 'Retry-After': String(limited.retryAfter) } },

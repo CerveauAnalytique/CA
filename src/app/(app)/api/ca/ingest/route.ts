@@ -2,6 +2,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { countApiCall } from '@/lib/limits'
 import { saveRecords } from '@/lib/connect'
+import { track } from '@/lib/security/track'
 
 export const dynamic = 'force-dynamic'
 const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Content-Type, X-CA7-Token', 'Access-Control-Allow-Methods': 'POST, OPTIONS' }
@@ -22,7 +23,10 @@ export async function POST(request: Request) {
   const payload = await getPayload({ config: configPromise })
   const found = await payload.find({ collection: 'data-sources', where: { ingestToken: { equals: token } }, limit: 1, depth: 0, overrideAccess: true })
   const source = found.docs[0]
-  if (!source) return Response.json({ error: 'Unknown token.' }, { status: 401, headers: CORS })
+  if (!source) {
+    await track(request, 'api_unauthorized', null, { route: 'ingest' })
+    return Response.json({ error: 'Unknown token.' }, { status: 401, headers: CORS })
+  }
   const owner = await payload.findByID({ collection: 'users', id: typeof source.owner === 'object' ? (source.owner as { id: string | number }).id : source.owner, depth: 0, overrideAccess: true })
   const call = await countApiCall(payload, owner)
   if (!call.ok) return Response.json({ error: `Your pack allows ${call.limit} API calls per month.` }, { status: 402, headers: CORS })

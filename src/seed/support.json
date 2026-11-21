@@ -1,0 +1,444 @@
+{
+ "topics": [
+  {
+   "slug": "account",
+   "title": "Account & sign-in",
+   "description": "Signing in, password, username and profile.",
+   "badge": "Ac",
+   "order": 1
+  },
+  {
+   "slug": "plans",
+   "title": "Packs & payments",
+   "description": "Free, Hobby, Pro, Business, Enterprise, and paying.",
+   "badge": "€",
+   "order": 2
+  },
+  {
+   "slug": "data",
+   "title": "Data & connectors",
+   "description": "Connecting data, API keys and automation.",
+   "badge": "Da",
+   "order": 3
+  },
+  {
+   "slug": "ai",
+   "title": "AI chat & assistant",
+   "description": "CA7 Chat, the shopping assistant and your data.",
+   "badge": "AI",
+   "order": 4
+  },
+  {
+   "slug": "shop",
+   "title": "Shop & orders",
+   "description": "Ordering, paying, finding an order, addresses.",
+   "badge": "Sh",
+   "order": 5
+  },
+  {
+   "slug": "security",
+   "title": "Security & privacy",
+   "description": "Blocked accounts, what we store, your rights.",
+   "badge": "!",
+   "order": 6
+  },
+  {
+   "slug": "technical",
+   "title": "Technical problems",
+   "description": "Pages not loading, errors and browsers.",
+   "badge": "Te",
+   "order": 7
+  }
+ ],
+ "articles": [
+  {
+   "slug": "cant-sign-in",
+   "title": "I can’t sign in",
+   "summary": "Check your email address and password, cookies and whether your account is blocked.",
+   "topicSlug": "account",
+   "popular": true,
+   "blocks": [
+    {
+     "blockType": "paragraph",
+     "text": "First check that your email address and password are correct. The password is case sensitive."
+    },
+    {
+     "blockType": "heading",
+     "level": "2",
+     "text": "Too many attempts"
+    },
+    {
+     "blockType": "paragraph",
+     "text": "After several wrong passwords the account is locked for a while to protect it. Wait a few minutes and try again, or reset your password."
+    },
+    {
+     "blockType": "heading",
+     "level": "2",
+     "text": "Account suspended or restricted"
+    },
+    {
+     "blockType": "paragraph",
+     "text": "When our security monitoring sees suspicious activity, a login can be restricted for a while, or an account can be suspended. Nothing is deleted. Contact support and we will look at it."
+    },
+    {
+     "blockType": "heading",
+     "level": "2",
+     "text": "Still not working?"
+    },
+    {
+     "blockType": "list",
+     "items": [
+      {
+       "text": "Allow cookies for this site."
+      },
+      {
+       "text": "Try another browser or a private window."
+      },
+      {
+       "text": "Reset your password."
+      }
+     ]
+    },
+    {
+     "blockType": "paragraph",
+     "text": "Then send us a request from the help center."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "reset-password",
+   "title": "Change or reset your password",
+   "summary": "Change your password in Settings, or ask us to reset it when you forgot it.",
+   "topicSlug": "account",
+   "popular": true,
+   "blocks": [
+    {
+     "blockType": "paragraph",
+     "text": "Logged in: open Dashboard > Profile, type a new password twice and press Save."
+    },
+    {
+     "blockType": "paragraph",
+     "text": "Forgot it: on the login page choose “Forgot your password?”, enter your email and follow the link in the email we send."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "edit-profile",
+   "title": "Change your username, name or language",
+   "summary": "Update your username, name, email and language under Profile.",
+   "topicSlug": "account",
+   "popular": false,
+   "blocks": [
+    {
+     "blockType": "paragraph",
+     "text": "Open Dashboard > Profile. You can change your name, username (3 to 30 letters, numbers, - or _), email, language and password."
+    },
+    {
+     "blockType": "paragraph",
+     "text": "The site opens in your language when you log in."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "delete-account",
+   "title": "Delete your account",
+   "summary": "Ask us to remove your account and its data.",
+   "topicSlug": "account",
+   "popular": true,
+   "blocks": [
+    {
+     "blockType": "paragraph",
+     "text": "Send a support request with the subject “Delete my account” from the email address of the account. We remove your account and your data, except what the law says we must keep, such as invoices."
+    },
+    {
+     "blockType": "paragraph",
+     "text": "This cannot be undone."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "packs-explained",
+   "title": "Free, Hobby, Pro, Business and Enterprise: what is the difference?",
+   "summary": "The packs differ in data sources, API calls, storage and features.",
+   "topicSlug": "plans",
+   "popular": true,
+   "blocks": [
+    {
+     "blockType": "list",
+     "items": [
+      {
+       "text": "Free: 3 data sources, 1,000 API calls a month."
+      },
+      {
+       "text": "Hobby (€20 per month incl. VAT): 10 sources, 50,000 calls."
+      },
+      {
+       "text": "Pro (from €99 per month excl. VAT): 50 sources, 500,000 calls, CA7 Chat on your data, anomaly detection."
+      },
+      {
+       "text": "Business (€500 per month excl. VAT): unlimited sources, 5 million calls, automation, team accounts."
+      },
+      {
+       "text": "Enterprise (from €1,500 per month): private environment, custom connectors, single sign-on."
+      }
+     ]
+    },
+    {
+     "blockType": "paragraph",
+     "text": "See Pricing for the full list. Your use is shown under Dashboard > Pack & billing."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "pay-for-pro",
+   "title": "Pay for Hobby or Pro",
+   "summary": "Upgrade under Pack & billing and pay safely by card.",
+   "topicSlug": "plans",
+   "popular": false,
+   "blocks": [
+    {
+     "blockType": "paragraph",
+     "text": "Open Dashboard > Pack & billing and choose Hobby or Pro. You pay on a secure Stripe page. Your pack changes as soon as the payment is confirmed."
+    },
+    {
+     "blockType": "paragraph",
+     "text": "Business and Enterprise are by invoice: contact us."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "cancel-subscription",
+   "title": "Cancel or change your subscription",
+   "summary": "Manage or cancel under Pack & billing.",
+   "topicSlug": "plans",
+   "popular": false,
+   "blocks": [
+    {
+     "blockType": "paragraph",
+     "text": "Open Dashboard > Pack & billing and choose “Manage or cancel subscription”. You keep the pack until the end of the period you paid for."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "connect-data",
+   "title": "Connect your data",
+   "summary": "REST APIs, CSV files and push data from devices.",
+   "topicSlug": "data",
+   "popular": true,
+   "blocks": [
+    {
+     "blockType": "paragraph",
+     "text": "Open Dashboard > Data Connect and add a source:"
+    },
+    {
+     "blockType": "list",
+     "items": [
+      {
+       "text": "REST API: we fetch JSON from the address you give."
+      },
+      {
+       "text": "CSV file: upload a file with column names in the first row."
+      },
+      {
+       "text": "Push: devices, MQTT bridges and scripts send records to your own address with a token."
+      },
+      {
+       "text": "Camera: the CA7 Camera Agent sends movement data."
+      }
+     ]
+    },
+    {
+     "blockType": "paragraph",
+     "text": "SQL databases and direct MQTT are not available yet."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "api-key",
+   "title": "Create an API key",
+   "summary": "Read your data with one request.",
+   "topicSlug": "data",
+   "popular": false,
+   "blocks": [
+    {
+     "blockType": "paragraph",
+     "text": "Open Dashboard > API keys and create a key. It is shown once: copy it. Use it in the header Authorization: users API-Key <key>."
+    },
+    {
+     "blockType": "paragraph",
+     "text": "Your pack limits the number of calls per month. When it is used up the API answers with an error and asks you to upgrade."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "automation",
+   "title": "Set up an automation",
+   "summary": "Get an email or webhook when a value passes a limit.",
+   "topicSlug": "data",
+   "popular": false,
+   "blocks": [
+    {
+     "blockType": "paragraph",
+     "text": "Automation is part of the Business pack. Open Dashboard > Automation, pick a source and a field, choose a condition (greater, less, equals or unusual) and where the message goes."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "ai-your-data",
+   "title": "Ask CA7 questions about your own data",
+   "summary": "CA7 Chat uses your data from the Pro pack.",
+   "topicSlug": "ai",
+   "popular": true,
+   "blocks": [
+    {
+     "blockType": "paragraph",
+     "text": "On Pro and higher, CA7 Chat receives statistics of your connected sources and answers from them. It tells you when it does not know."
+    },
+    {
+     "blockType": "paragraph",
+     "text": "CA7 can make mistakes: check important numbers."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "ai-consent",
+   "title": "Personal AI suggestions and your consent",
+   "summary": "We only use your order history for suggestions after you agree.",
+   "topicSlug": "ai",
+   "popular": false,
+   "blocks": [
+    {
+     "blockType": "paragraph",
+     "text": "Under Dashboard > Profile you can switch personal AI suggestions on or off. Off means general suggestions only."
+    },
+    {
+     "blockType": "paragraph",
+     "text": "Everything the AI wants to show about products is checked against the real prices, stock and discounts before you see it."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "find-order",
+   "title": "Find your order",
+   "summary": "Logged in or with the link from your email.",
+   "topicSlug": "shop",
+   "popular": true,
+   "blocks": [
+    {
+     "blockType": "paragraph",
+     "text": "Logged in: open Orders. No account: use Find my order, enter your email and order number, and we send you a link."
+    },
+    {
+     "blockType": "paragraph",
+     "text": "Pay with iDEAL, Bancontact or card. If a payment was not completed you are not charged."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "account-blocked",
+   "title": "Why was my account or action blocked?",
+   "summary": "Our security monitoring protects you and the shop.",
+   "topicSlug": "security",
+   "popular": true,
+   "blocks": [
+    {
+     "blockType": "paragraph",
+     "text": "CA7 checks activity against fixed rules around the clock. The rules do not need an AI service. Suspicious activity can be flagged, a login restricted for a while, or an account suspended. We never delete accounts or touch money automatically."
+    },
+    {
+     "blockType": "paragraph",
+     "text": "If you think it is a mistake, send a support request. An administrator reviews it and can lift the block."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "privacy-data",
+   "title": "What data do you keep about me?",
+   "summary": "Only what is needed; addresses are stored in a protected form.",
+   "topicSlug": "security",
+   "popular": false,
+   "blocks": [
+    {
+     "blockType": "list",
+     "items": [
+      {
+       "text": "Your account and orders."
+      },
+      {
+       "text": "For security: activity such as logins, with a hashed and shortened network address. No passwords, tokens or payment data."
+      },
+      {
+       "text": "Security events are removed after 180 days."
+      }
+     ]
+    },
+    {
+     "blockType": "paragraph",
+     "text": "You can ask for your data or its removal through a support request."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  },
+  {
+   "slug": "page-not-loading",
+   "title": "The page does not load",
+   "summary": "Check your connection and browser.",
+   "topicSlug": "technical",
+   "popular": false,
+   "blocks": [
+    {
+     "blockType": "list",
+     "items": [
+      {
+       "text": "Reload the page."
+      },
+      {
+       "text": "Try another browser or a private window."
+      },
+      {
+       "text": "Switch off extensions that block scripts."
+      },
+      {
+       "text": "Check the status page."
+      }
+     ]
+    },
+    {
+     "blockType": "paragraph",
+     "text": "If it keeps happening, send us a request with the page and the time."
+    }
+   ],
+   "helpful": 0,
+   "published": true
+  }
+ ]
+}

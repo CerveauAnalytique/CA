@@ -9,6 +9,7 @@ import '../features/catalog/catalog.dart';
 import '../features/chat/chat_page.dart';
 import '../features/content/cms.dart';
 import '../features/shop/checkout_pages.dart';
+import '../features/support/support_pages.dart';
 import '../features/shop/shop_pages.dart';
 import '../features/dashboard/dashboard_pages.dart';
 import '../features/dashboard/dashboard_shell.dart';
@@ -68,6 +69,9 @@ GoRouter createRouter(WidgetRef ref) {
               r('models/:slug', (s) => CatalogDetailPage(slug: s.pathParameters['slug']!, models: true)),
               r('datasets', (_) => const CatalogListPage(models: false)),
               r('datasets/:slug', (s) => CatalogDetailPage(slug: s.pathParameters['slug']!, models: false)),
+              r('support', (_) => const SupportPage()),
+              r('support/request', (_) => const SupportRequestPage()),
+              r('support/articles/:slug', (s) => SupportArticlePage(slug: s.pathParameters['slug']!)),
               r('blog', (_) => const BlogPage()),
               r('blog/:slug', (s) => BlogPostPage(slug: s.pathParameters['slug']!)),
               r('shop', (_) => const ShopPage()),

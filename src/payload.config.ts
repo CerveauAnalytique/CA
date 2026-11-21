@@ -30,7 +30,11 @@ import { Automations, DataRecords, DataSources } from './collections/DataSources
 import { migrations } from './migrations'
 import { seedCatalogIfEmpty } from './utilities/seedCatalog'
 import { SitePages } from './collections/SitePages'
+import { SecurityAlerts, SecurityBlocks, SecurityEvents, SecurityRules } from './collections/Security'
+import { SupportArticles, SupportRequests, SupportTopics } from './collections/Support'
+import { AiDecisions, AiPolicyRules, AiSettings, AiSponsored } from './collections/AI'
 import { seedSitePagesIfEmpty } from './utilities/seedSitePages'
+import { seedSupportIfEmpty } from './utilities/seedSupport'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -55,10 +59,11 @@ export default buildConfig({
   },
   // origins of other front ends that call this API with a token, e.g. the Flutter web app (comma separated)
   cors: process.env.CA7_APP_ORIGINS ? process.env.CA7_APP_ORIGINS.split(',').map((o) => o.trim()) : undefined,
-  collections: [Users, Pages, Categories, Media, Posts, AiModels, Datasets, DataSources, DataRecords, Automations, SitePages],
+  collections: [Users, Pages, Categories, Media, Posts, AiModels, Datasets, DataSources, DataRecords, Automations, SitePages, SecurityEvents, SecurityAlerts, SecurityBlocks, SecurityRules, SupportTopics, SupportArticles, SupportRequests, AiDecisions, AiPolicyRules, AiSponsored],
   onInit: async (payload) => {
     await seedCatalogIfEmpty(payload)
     await seedSitePagesIfEmpty(payload)
+    await seedSupportIfEmpty(payload)
   },
   db: postgresAdapter({
     // tests run on a database that was created by the migrations: do not let the dev schema push change it
@@ -121,7 +126,7 @@ export default buildConfig({
       : {}),
   }),
   endpoints: [],
-  globals: [Header, Footer, Banner],
+  globals: [Header, Footer, Banner, AiSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

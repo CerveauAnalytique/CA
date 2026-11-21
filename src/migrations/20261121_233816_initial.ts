@@ -44,6 +44,16 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_automations_action" AS ENUM('email', 'webhook');
   CREATE TYPE "public"."enum_site_pages_blocks_heading_level" AS ENUM('2', '3');
   CREATE TYPE "public"."enum_site_pages_section" AS ENUM('company', 'legal', 'product', 'docs', 'research');
+  CREATE TYPE "public"."enum_security_events_level" AS ENUM('LOW', 'MEDIUM', 'HIGH', 'CRITICAL');
+  CREATE TYPE "public"."enum_security_alerts_level" AS ENUM('MEDIUM', 'HIGH', 'CRITICAL');
+  CREATE TYPE "public"."enum_security_alerts_status" AS ENUM('open', 'confirmed', 'false_positive');
+  CREATE TYPE "public"."enum_security_blocks_subject_type" AS ENUM('user', 'ip');
+  CREATE TYPE "public"."enum_security_blocks_level" AS ENUM('HIGH', 'CRITICAL');
+  CREATE TYPE "public"."enum_support_articles_blocks_heading_level" AS ENUM('2', '3');
+  CREATE TYPE "public"."enum_support_requests_status" AS ENUM('open', 'answered', 'closed');
+  CREATE TYPE "public"."enum_ai_decisions_feature" AS ENUM('assistant', 'recommendations', 'offers', 'running_low', 'search');
+  CREATE TYPE "public"."enum_ai_decisions_decision" AS ENUM('allowed', 'corrected', 'blocked');
+  CREATE TYPE "public"."enum_ai_policy_rules_action" AS ENUM('block', 'correct', 'log');
   CREATE TYPE "public"."enum_forms_confirmation_type" AS ENUM('message', 'redirect');
   CREATE TYPE "public"."enum_addresses_country" AS ENUM('US', 'GB', 'CA', 'AU', 'AT', 'BE', 'BR', 'BG', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HK', 'HU', 'IN', 'IE', 'IT', 'JP', 'LV', 'LT', 'LU', 'MY', 'MT', 'MX', 'NL', 'NZ', 'NO', 'PL', 'PT', 'RO', 'SG', 'SK', 'SI', 'ES', 'SE', 'CH');
   CREATE TYPE "public"."enum_variants_status" AS ENUM('draft', 'published');
@@ -93,6 +103,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"api_calls_month" numeric DEFAULT 0,
   	"stripe_customer_id" varchar,
   	"stripe_subscription_id" varchar,
+  	"suspended" boolean DEFAULT false,
+  	"suspended_reason" varchar,
+  	"ai_consent" boolean DEFAULT false,
+  	"ai_consent_at" timestamp(3) with time zone,
   	"language" "enum_users_language" DEFAULT 'en',
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
@@ -650,6 +664,197 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"published" boolean DEFAULT true,
   	"eyebrow" varchar,
   	"subtitle" varchar,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "security_events" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"category" varchar NOT NULL,
+  	"level" "enum_security_events_level" DEFAULT 'LOW' NOT NULL,
+  	"score" numeric DEFAULT 0,
+  	"user_id" varchar,
+  	"ip_hash" varchar,
+  	"ip_masked" varchar,
+  	"rules" varchar,
+  	"evidence" jsonb,
+  	"blocked" boolean DEFAULT false,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "security_alerts" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"summary" varchar NOT NULL,
+  	"level" "enum_security_alerts_level" NOT NULL,
+  	"status" "enum_security_alerts_status" DEFAULT 'open',
+  	"event_id" integer,
+  	"user_id" varchar,
+  	"note" varchar,
+  	"reviewed_by" varchar,
+  	"notified" boolean DEFAULT false,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "security_blocks" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"subject_type" "enum_security_blocks_subject_type" NOT NULL,
+  	"subject_id" varchar NOT NULL,
+  	"reason" varchar NOT NULL,
+  	"level" "enum_security_blocks_level" DEFAULT 'HIGH',
+  	"until" timestamp(3) with time zone NOT NULL,
+  	"active" boolean DEFAULT true,
+  	"alert_id" integer,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "security_rules" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"key" varchar NOT NULL,
+  	"enabled" boolean DEFAULT true,
+  	"score" numeric,
+  	"threshold" numeric,
+  	"window_minutes" numeric,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "support_topics" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"title" varchar NOT NULL,
+  	"slug" varchar NOT NULL,
+  	"description" varchar,
+  	"badge" varchar,
+  	"order" numeric DEFAULT 100,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "support_articles_blocks_heading" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"level" "enum_support_articles_blocks_heading_level" DEFAULT '2',
+  	"text" varchar NOT NULL,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "support_articles_blocks_paragraph" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"text" varchar NOT NULL,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "support_articles_blocks_list_items" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"text" varchar NOT NULL
+  );
+  
+  CREATE TABLE "support_articles_blocks_list" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "support_articles_blocks_code" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"code" varchar NOT NULL,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "support_articles_blocks_callout" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"text" varchar NOT NULL,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "support_articles_blocks_cards_items" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"title" varchar NOT NULL,
+  	"text" varchar,
+  	"meta" varchar
+  );
+  
+  CREATE TABLE "support_articles_blocks_cards" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "support_articles" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"title" varchar NOT NULL,
+  	"slug" varchar NOT NULL,
+  	"summary" varchar NOT NULL,
+  	"topic_id" integer NOT NULL,
+  	"popular" boolean DEFAULT false,
+  	"helpful" numeric DEFAULT 0,
+  	"published" boolean DEFAULT true,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "support_requests" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"subject" varchar NOT NULL,
+  	"message" varchar NOT NULL,
+  	"email" varchar NOT NULL,
+  	"name" varchar,
+  	"topic_id" integer,
+  	"user_id" integer,
+  	"status" "enum_support_requests_status" DEFAULT 'open',
+  	"reply" varchar,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "ai_decisions" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"feature" "enum_ai_decisions_feature" NOT NULL,
+  	"decision" "enum_ai_decisions_decision" NOT NULL,
+  	"violations" numeric DEFAULT 0,
+  	"user_id" varchar,
+  	"trace" jsonb,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "ai_policy_rules" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"key" varchar NOT NULL,
+  	"enabled" boolean DEFAULT true,
+  	"action" "enum_ai_policy_rules_action" DEFAULT 'block',
+  	"value" numeric,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "ai_sponsored" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"label" varchar NOT NULL,
+  	"product_id" integer NOT NULL,
+  	"active" boolean DEFAULT true,
+  	"boost" numeric DEFAULT 1.5,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
@@ -1212,6 +1417,16 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"data_records_id" integer,
   	"automations_id" integer,
   	"site_pages_id" integer,
+  	"security_events_id" integer,
+  	"security_alerts_id" integer,
+  	"security_blocks_id" integer,
+  	"security_rules_id" integer,
+  	"support_topics_id" integer,
+  	"support_articles_id" integer,
+  	"support_requests_id" integer,
+  	"ai_decisions_id" integer,
+  	"ai_policy_rules_id" integer,
+  	"ai_sponsored_id" integer,
   	"forms_id" integer,
   	"form_submissions_id" integer,
   	"addresses_id" integer,
@@ -1314,6 +1529,31 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"created_at" timestamp(3) with time zone
   );
   
+  CREATE TABLE "ai_settings_ranking_versions" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"version" varchar NOT NULL,
+  	"popularity" numeric DEFAULT 1,
+  	"co_purchase" numeric DEFAULT 2,
+  	"personal" numeric DEFAULT 3,
+  	"note" varchar
+  );
+  
+  CREATE TABLE "ai_settings" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"flags_assistant" boolean DEFAULT true,
+  	"flags_recommendations" boolean DEFAULT true,
+  	"flags_offers" boolean DEFAULT true,
+  	"flags_running_low" boolean DEFAULT true,
+  	"flags_smart_search" boolean DEFAULT true,
+  	"active_version" varchar DEFAULT 'v1',
+  	"last_recommendation_job" timestamp(3) with time zone,
+  	"last_recommendation_job_status" varchar,
+  	"updated_at" timestamp(3) with time zone,
+  	"created_at" timestamp(3) with time zone
+  );
+  
   ALTER TABLE "users_roles" ADD CONSTRAINT "users_roles_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "users_sessions" ADD CONSTRAINT "users_sessions_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages_hero_links" ADD CONSTRAINT "pages_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
@@ -1373,6 +1613,20 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "site_pages_blocks_callout" ADD CONSTRAINT "site_pages_blocks_callout_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "site_pages_blocks_cards_items" ADD CONSTRAINT "site_pages_blocks_cards_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_pages_blocks_cards"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "site_pages_blocks_cards" ADD CONSTRAINT "site_pages_blocks_cards_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "security_alerts" ADD CONSTRAINT "security_alerts_event_id_security_events_id_fk" FOREIGN KEY ("event_id") REFERENCES "public"."security_events"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "security_blocks" ADD CONSTRAINT "security_blocks_alert_id_security_alerts_id_fk" FOREIGN KEY ("alert_id") REFERENCES "public"."security_alerts"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "support_articles_blocks_heading" ADD CONSTRAINT "support_articles_blocks_heading_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."support_articles"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "support_articles_blocks_paragraph" ADD CONSTRAINT "support_articles_blocks_paragraph_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."support_articles"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "support_articles_blocks_list_items" ADD CONSTRAINT "support_articles_blocks_list_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."support_articles_blocks_list"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "support_articles_blocks_list" ADD CONSTRAINT "support_articles_blocks_list_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."support_articles"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "support_articles_blocks_code" ADD CONSTRAINT "support_articles_blocks_code_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."support_articles"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "support_articles_blocks_callout" ADD CONSTRAINT "support_articles_blocks_callout_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."support_articles"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "support_articles_blocks_cards_items" ADD CONSTRAINT "support_articles_blocks_cards_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."support_articles_blocks_cards"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "support_articles_blocks_cards" ADD CONSTRAINT "support_articles_blocks_cards_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."support_articles"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "support_articles" ADD CONSTRAINT "support_articles_topic_id_support_topics_id_fk" FOREIGN KEY ("topic_id") REFERENCES "public"."support_topics"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "support_requests" ADD CONSTRAINT "support_requests_topic_id_support_topics_id_fk" FOREIGN KEY ("topic_id") REFERENCES "public"."support_topics"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "support_requests" ADD CONSTRAINT "support_requests_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "ai_sponsored" ADD CONSTRAINT "ai_sponsored_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "forms_blocks_checkbox" ADD CONSTRAINT "forms_blocks_checkbox_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "forms_blocks_country" ADD CONSTRAINT "forms_blocks_country_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "forms_blocks_email" ADD CONSTRAINT "forms_blocks_email_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
@@ -1454,6 +1708,16 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_data_records_fk" FOREIGN KEY ("data_records_id") REFERENCES "public"."data_records"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_automations_fk" FOREIGN KEY ("automations_id") REFERENCES "public"."automations"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_site_pages_fk" FOREIGN KEY ("site_pages_id") REFERENCES "public"."site_pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_security_events_fk" FOREIGN KEY ("security_events_id") REFERENCES "public"."security_events"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_security_alerts_fk" FOREIGN KEY ("security_alerts_id") REFERENCES "public"."security_alerts"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_security_blocks_fk" FOREIGN KEY ("security_blocks_id") REFERENCES "public"."security_blocks"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_security_rules_fk" FOREIGN KEY ("security_rules_id") REFERENCES "public"."security_rules"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_support_topics_fk" FOREIGN KEY ("support_topics_id") REFERENCES "public"."support_topics"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_support_articles_fk" FOREIGN KEY ("support_articles_id") REFERENCES "public"."support_articles"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_support_requests_fk" FOREIGN KEY ("support_requests_id") REFERENCES "public"."support_requests"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_ai_decisions_fk" FOREIGN KEY ("ai_decisions_id") REFERENCES "public"."ai_decisions"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_ai_policy_rules_fk" FOREIGN KEY ("ai_policy_rules_id") REFERENCES "public"."ai_policy_rules"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_ai_sponsored_fk" FOREIGN KEY ("ai_sponsored_id") REFERENCES "public"."ai_sponsored"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_forms_fk" FOREIGN KEY ("forms_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_form_submissions_fk" FOREIGN KEY ("form_submissions_id") REFERENCES "public"."form_submissions"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_addresses_fk" FOREIGN KEY ("addresses_id") REFERENCES "public"."addresses"("id") ON DELETE cascade ON UPDATE no action;
@@ -1472,6 +1736,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "footer_nav_items" ADD CONSTRAINT "footer_nav_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."footer"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "footer_rels" ADD CONSTRAINT "footer_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."footer"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "footer_rels" ADD CONSTRAINT "footer_rels_pages_fk" FOREIGN KEY ("pages_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "ai_settings_ranking_versions" ADD CONSTRAINT "ai_settings_ranking_versions_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."ai_settings"("id") ON DELETE cascade ON UPDATE no action;
   CREATE INDEX "users_roles_order_idx" ON "users_roles" USING btree ("order");
   CREATE INDEX "users_roles_parent_idx" ON "users_roles" USING btree ("parent_id");
   CREATE INDEX "users_sessions_order_idx" ON "users_sessions" USING btree ("_order");
@@ -1632,6 +1897,70 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE UNIQUE INDEX "site_pages_slug_idx" ON "site_pages" USING btree ("slug");
   CREATE INDEX "site_pages_updated_at_idx" ON "site_pages" USING btree ("updated_at");
   CREATE INDEX "site_pages_created_at_idx" ON "site_pages" USING btree ("created_at");
+  CREATE INDEX "security_events_category_idx" ON "security_events" USING btree ("category");
+  CREATE INDEX "security_events_level_idx" ON "security_events" USING btree ("level");
+  CREATE INDEX "security_events_user_id_idx" ON "security_events" USING btree ("user_id");
+  CREATE INDEX "security_events_ip_hash_idx" ON "security_events" USING btree ("ip_hash");
+  CREATE INDEX "security_events_updated_at_idx" ON "security_events" USING btree ("updated_at");
+  CREATE INDEX "security_events_created_at_idx" ON "security_events" USING btree ("created_at");
+  CREATE INDEX "security_alerts_level_idx" ON "security_alerts" USING btree ("level");
+  CREATE INDEX "security_alerts_status_idx" ON "security_alerts" USING btree ("status");
+  CREATE INDEX "security_alerts_event_idx" ON "security_alerts" USING btree ("event_id");
+  CREATE INDEX "security_alerts_updated_at_idx" ON "security_alerts" USING btree ("updated_at");
+  CREATE INDEX "security_alerts_created_at_idx" ON "security_alerts" USING btree ("created_at");
+  CREATE INDEX "security_blocks_subject_id_idx" ON "security_blocks" USING btree ("subject_id");
+  CREATE INDEX "security_blocks_until_idx" ON "security_blocks" USING btree ("until");
+  CREATE INDEX "security_blocks_active_idx" ON "security_blocks" USING btree ("active");
+  CREATE INDEX "security_blocks_alert_idx" ON "security_blocks" USING btree ("alert_id");
+  CREATE INDEX "security_blocks_updated_at_idx" ON "security_blocks" USING btree ("updated_at");
+  CREATE INDEX "security_blocks_created_at_idx" ON "security_blocks" USING btree ("created_at");
+  CREATE UNIQUE INDEX "security_rules_key_idx" ON "security_rules" USING btree ("key");
+  CREATE INDEX "security_rules_updated_at_idx" ON "security_rules" USING btree ("updated_at");
+  CREATE INDEX "security_rules_created_at_idx" ON "security_rules" USING btree ("created_at");
+  CREATE UNIQUE INDEX "support_topics_slug_idx" ON "support_topics" USING btree ("slug");
+  CREATE INDEX "support_topics_updated_at_idx" ON "support_topics" USING btree ("updated_at");
+  CREATE INDEX "support_topics_created_at_idx" ON "support_topics" USING btree ("created_at");
+  CREATE INDEX "support_articles_blocks_heading_order_idx" ON "support_articles_blocks_heading" USING btree ("_order");
+  CREATE INDEX "support_articles_blocks_heading_parent_id_idx" ON "support_articles_blocks_heading" USING btree ("_parent_id");
+  CREATE INDEX "support_articles_blocks_heading_path_idx" ON "support_articles_blocks_heading" USING btree ("_path");
+  CREATE INDEX "support_articles_blocks_paragraph_order_idx" ON "support_articles_blocks_paragraph" USING btree ("_order");
+  CREATE INDEX "support_articles_blocks_paragraph_parent_id_idx" ON "support_articles_blocks_paragraph" USING btree ("_parent_id");
+  CREATE INDEX "support_articles_blocks_paragraph_path_idx" ON "support_articles_blocks_paragraph" USING btree ("_path");
+  CREATE INDEX "support_articles_blocks_list_items_order_idx" ON "support_articles_blocks_list_items" USING btree ("_order");
+  CREATE INDEX "support_articles_blocks_list_items_parent_id_idx" ON "support_articles_blocks_list_items" USING btree ("_parent_id");
+  CREATE INDEX "support_articles_blocks_list_order_idx" ON "support_articles_blocks_list" USING btree ("_order");
+  CREATE INDEX "support_articles_blocks_list_parent_id_idx" ON "support_articles_blocks_list" USING btree ("_parent_id");
+  CREATE INDEX "support_articles_blocks_list_path_idx" ON "support_articles_blocks_list" USING btree ("_path");
+  CREATE INDEX "support_articles_blocks_code_order_idx" ON "support_articles_blocks_code" USING btree ("_order");
+  CREATE INDEX "support_articles_blocks_code_parent_id_idx" ON "support_articles_blocks_code" USING btree ("_parent_id");
+  CREATE INDEX "support_articles_blocks_code_path_idx" ON "support_articles_blocks_code" USING btree ("_path");
+  CREATE INDEX "support_articles_blocks_callout_order_idx" ON "support_articles_blocks_callout" USING btree ("_order");
+  CREATE INDEX "support_articles_blocks_callout_parent_id_idx" ON "support_articles_blocks_callout" USING btree ("_parent_id");
+  CREATE INDEX "support_articles_blocks_callout_path_idx" ON "support_articles_blocks_callout" USING btree ("_path");
+  CREATE INDEX "support_articles_blocks_cards_items_order_idx" ON "support_articles_blocks_cards_items" USING btree ("_order");
+  CREATE INDEX "support_articles_blocks_cards_items_parent_id_idx" ON "support_articles_blocks_cards_items" USING btree ("_parent_id");
+  CREATE INDEX "support_articles_blocks_cards_order_idx" ON "support_articles_blocks_cards" USING btree ("_order");
+  CREATE INDEX "support_articles_blocks_cards_parent_id_idx" ON "support_articles_blocks_cards" USING btree ("_parent_id");
+  CREATE INDEX "support_articles_blocks_cards_path_idx" ON "support_articles_blocks_cards" USING btree ("_path");
+  CREATE UNIQUE INDEX "support_articles_slug_idx" ON "support_articles" USING btree ("slug");
+  CREATE INDEX "support_articles_topic_idx" ON "support_articles" USING btree ("topic_id");
+  CREATE INDEX "support_articles_updated_at_idx" ON "support_articles" USING btree ("updated_at");
+  CREATE INDEX "support_articles_created_at_idx" ON "support_articles" USING btree ("created_at");
+  CREATE INDEX "support_requests_topic_idx" ON "support_requests" USING btree ("topic_id");
+  CREATE INDEX "support_requests_user_idx" ON "support_requests" USING btree ("user_id");
+  CREATE INDEX "support_requests_status_idx" ON "support_requests" USING btree ("status");
+  CREATE INDEX "support_requests_updated_at_idx" ON "support_requests" USING btree ("updated_at");
+  CREATE INDEX "support_requests_created_at_idx" ON "support_requests" USING btree ("created_at");
+  CREATE INDEX "ai_decisions_feature_idx" ON "ai_decisions" USING btree ("feature");
+  CREATE INDEX "ai_decisions_decision_idx" ON "ai_decisions" USING btree ("decision");
+  CREATE INDEX "ai_decisions_updated_at_idx" ON "ai_decisions" USING btree ("updated_at");
+  CREATE INDEX "ai_decisions_created_at_idx" ON "ai_decisions" USING btree ("created_at");
+  CREATE UNIQUE INDEX "ai_policy_rules_key_idx" ON "ai_policy_rules" USING btree ("key");
+  CREATE INDEX "ai_policy_rules_updated_at_idx" ON "ai_policy_rules" USING btree ("updated_at");
+  CREATE INDEX "ai_policy_rules_created_at_idx" ON "ai_policy_rules" USING btree ("created_at");
+  CREATE INDEX "ai_sponsored_product_idx" ON "ai_sponsored" USING btree ("product_id");
+  CREATE INDEX "ai_sponsored_updated_at_idx" ON "ai_sponsored" USING btree ("updated_at");
+  CREATE INDEX "ai_sponsored_created_at_idx" ON "ai_sponsored" USING btree ("created_at");
   CREATE INDEX "forms_blocks_checkbox_order_idx" ON "forms_blocks_checkbox" USING btree ("_order");
   CREATE INDEX "forms_blocks_checkbox_parent_id_idx" ON "forms_blocks_checkbox" USING btree ("_parent_id");
   CREATE INDEX "forms_blocks_checkbox_path_idx" ON "forms_blocks_checkbox" USING btree ("_path");
@@ -1818,6 +2147,16 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "payload_locked_documents_rels_data_records_id_idx" ON "payload_locked_documents_rels" USING btree ("data_records_id");
   CREATE INDEX "payload_locked_documents_rels_automations_id_idx" ON "payload_locked_documents_rels" USING btree ("automations_id");
   CREATE INDEX "payload_locked_documents_rels_site_pages_id_idx" ON "payload_locked_documents_rels" USING btree ("site_pages_id");
+  CREATE INDEX "payload_locked_documents_rels_security_events_id_idx" ON "payload_locked_documents_rels" USING btree ("security_events_id");
+  CREATE INDEX "payload_locked_documents_rels_security_alerts_id_idx" ON "payload_locked_documents_rels" USING btree ("security_alerts_id");
+  CREATE INDEX "payload_locked_documents_rels_security_blocks_id_idx" ON "payload_locked_documents_rels" USING btree ("security_blocks_id");
+  CREATE INDEX "payload_locked_documents_rels_security_rules_id_idx" ON "payload_locked_documents_rels" USING btree ("security_rules_id");
+  CREATE INDEX "payload_locked_documents_rels_support_topics_id_idx" ON "payload_locked_documents_rels" USING btree ("support_topics_id");
+  CREATE INDEX "payload_locked_documents_rels_support_articles_id_idx" ON "payload_locked_documents_rels" USING btree ("support_articles_id");
+  CREATE INDEX "payload_locked_documents_rels_support_requests_id_idx" ON "payload_locked_documents_rels" USING btree ("support_requests_id");
+  CREATE INDEX "payload_locked_documents_rels_ai_decisions_id_idx" ON "payload_locked_documents_rels" USING btree ("ai_decisions_id");
+  CREATE INDEX "payload_locked_documents_rels_ai_policy_rules_id_idx" ON "payload_locked_documents_rels" USING btree ("ai_policy_rules_id");
+  CREATE INDEX "payload_locked_documents_rels_ai_sponsored_id_idx" ON "payload_locked_documents_rels" USING btree ("ai_sponsored_id");
   CREATE INDEX "payload_locked_documents_rels_forms_id_idx" ON "payload_locked_documents_rels" USING btree ("forms_id");
   CREATE INDEX "payload_locked_documents_rels_form_submissions_id_idx" ON "payload_locked_documents_rels" USING btree ("form_submissions_id");
   CREATE INDEX "payload_locked_documents_rels_addresses_id_idx" ON "payload_locked_documents_rels" USING btree ("addresses_id");
@@ -1848,7 +2187,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "footer_rels_order_idx" ON "footer_rels" USING btree ("order");
   CREATE INDEX "footer_rels_parent_idx" ON "footer_rels" USING btree ("parent_id");
   CREATE INDEX "footer_rels_path_idx" ON "footer_rels" USING btree ("path");
-  CREATE INDEX "footer_rels_pages_id_idx" ON "footer_rels" USING btree ("pages_id");`)
+  CREATE INDEX "footer_rels_pages_id_idx" ON "footer_rels" USING btree ("pages_id");
+  CREATE INDEX "ai_settings_ranking_versions_order_idx" ON "ai_settings_ranking_versions" USING btree ("_order");
+  CREATE INDEX "ai_settings_ranking_versions_parent_id_idx" ON "ai_settings_ranking_versions" USING btree ("_parent_id");`)
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
@@ -1903,6 +2244,24 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "site_pages_blocks_cards_items" CASCADE;
   DROP TABLE "site_pages_blocks_cards" CASCADE;
   DROP TABLE "site_pages" CASCADE;
+  DROP TABLE "security_events" CASCADE;
+  DROP TABLE "security_alerts" CASCADE;
+  DROP TABLE "security_blocks" CASCADE;
+  DROP TABLE "security_rules" CASCADE;
+  DROP TABLE "support_topics" CASCADE;
+  DROP TABLE "support_articles_blocks_heading" CASCADE;
+  DROP TABLE "support_articles_blocks_paragraph" CASCADE;
+  DROP TABLE "support_articles_blocks_list_items" CASCADE;
+  DROP TABLE "support_articles_blocks_list" CASCADE;
+  DROP TABLE "support_articles_blocks_code" CASCADE;
+  DROP TABLE "support_articles_blocks_callout" CASCADE;
+  DROP TABLE "support_articles_blocks_cards_items" CASCADE;
+  DROP TABLE "support_articles_blocks_cards" CASCADE;
+  DROP TABLE "support_articles" CASCADE;
+  DROP TABLE "support_requests" CASCADE;
+  DROP TABLE "ai_decisions" CASCADE;
+  DROP TABLE "ai_policy_rules" CASCADE;
+  DROP TABLE "ai_sponsored" CASCADE;
   DROP TABLE "forms_blocks_checkbox" CASCADE;
   DROP TABLE "forms_blocks_country" CASCADE;
   DROP TABLE "forms_blocks_email" CASCADE;
@@ -1960,6 +2319,8 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "footer" CASCADE;
   DROP TABLE "footer_rels" CASCADE;
   DROP TABLE "banner" CASCADE;
+  DROP TABLE "ai_settings_ranking_versions" CASCADE;
+  DROP TABLE "ai_settings" CASCADE;
   DROP TYPE "public"."enum_users_roles";
   DROP TYPE "public"."enum_users_plan";
   DROP TYPE "public"."enum_users_language";
@@ -2002,6 +2363,16 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "public"."enum_automations_action";
   DROP TYPE "public"."enum_site_pages_blocks_heading_level";
   DROP TYPE "public"."enum_site_pages_section";
+  DROP TYPE "public"."enum_security_events_level";
+  DROP TYPE "public"."enum_security_alerts_level";
+  DROP TYPE "public"."enum_security_alerts_status";
+  DROP TYPE "public"."enum_security_blocks_subject_type";
+  DROP TYPE "public"."enum_security_blocks_level";
+  DROP TYPE "public"."enum_support_articles_blocks_heading_level";
+  DROP TYPE "public"."enum_support_requests_status";
+  DROP TYPE "public"."enum_ai_decisions_feature";
+  DROP TYPE "public"."enum_ai_decisions_decision";
+  DROP TYPE "public"."enum_ai_policy_rules_action";
   DROP TYPE "public"."enum_forms_confirmation_type";
   DROP TYPE "public"."enum_addresses_country";
   DROP TYPE "public"."enum_variants_status";

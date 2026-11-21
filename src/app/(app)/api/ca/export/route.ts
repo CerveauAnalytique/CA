@@ -2,6 +2,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { buildExport, CORS_HEADERS } from '@/lib/caData'
 import { countApiCall } from '@/lib/limits'
+import { track } from '@/lib/security/track'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,6 +20,7 @@ export async function GET(request: Request) {
   const { user } = await payload.auth({ headers: request.headers })
 
   if (!user) {
+    await track(request, 'api_unauthorized', null, { route: 'export' })
     return Response.json(
       { error: 'Unauthorized. Send `Authorization: users API-Key <key>` or log in.' },
       { status: 401, headers: CORS_HEADERS },
