@@ -37,12 +37,9 @@ export function Hero() {
     <section className="relative w-full pt-2 md:pt-4 pb-8 md:pb-12 bg-neutral-50 dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 transition-colors overflow-hidden">
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
-      {/* Desktop PC Wallpaper Background & Subtle Gradient Overlay */}
-      <div
-        className="absolute inset-0 bg-cover bg-center z-0 opacity-20 dark:opacity-40 mix-blend-luminosity pointer-events-none"
-        style={{ backgroundImage: 'url("/img/hero-bg.png")' }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-r from-neutral-50/95 via-neutral-50/80 to-transparent dark:from-neutral-950/95 dark:via-neutral-950/80 dark:to-neutral-950/40 z-10 pointer-events-none" />
+      {/* Soft clean background */}
+      <div className="absolute inset-0 z-0 pointer-events-none bg-gradient-to-b from-white via-neutral-50 to-neutral-100 dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-900" />
+      <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-orange-200/40 dark:bg-orange-500/10 blur-3xl z-0 pointer-events-none" />
 
       {/* Main Grid Container */}
       <div className="relative z-20 max-w-[1400px] mx-auto px-6">
