@@ -1,0 +1,86 @@
+import type { Metadata } from 'next'
+import Link from '@/i18n/client'
+import { getT } from '@/i18n/server'
+import { notFound } from 'next/navigation'
+import React from 'react'
+import { ArrowLeft, Download, Star } from 'lucide-react'
+import { getApp, marketAsset, marketDownloadUrl } from '@/lib/marketplace'
+
+export const dynamic = 'force-dynamic'
+
+type Props = { params: Promise<{ id: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const app = await getApp((await params).id)
+  return { title: app ? `${app.name} — Shop` : 'Shop' }
+}
+
+export default async function AppPage({ params }: Props) {
+  const t = await getT()
+  const app = await getApp((await params).id)
+  if (!app) notFound()
+
+  const icon = marketAsset(app.icon_url)
+  const approved = app.status === 'approved'
+
+  return (
+    <div className="mx-auto w-full max-w-[1280px] px-6 py-12 md:py-16">
+      <Link href="/shop" className="inline-flex items-center gap-1.5 text-[13px] text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white">
+        <ArrowLeft size={14} /> {t('Back to shop')}
+      </Link>
+
+      <div className="mt-8 grid gap-10 md:grid-cols-[1fr_320px]">
+        <div>
+          <div className="flex items-center gap-5">
+            {icon ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={icon} alt="" className="h-20 w-20 rounded-3xl bg-neutral-50 object-contain p-2 dark:bg-neutral-900" />
+            ) : (
+              <div className="h-20 w-20 rounded-3xl bg-neutral-50 dark:bg-neutral-900" />
+            )}
+            <div>
+              <h1 className="text-[clamp(28px,4vw,40px)] font-light leading-tight tracking-tight">{app.name}</h1>
+              <p className="mt-1 text-[14px] text-neutral-500 dark:text-neutral-400">
+                {app.developer} · {app.category}
+              </p>
+            </div>
+          </div>
+
+          <h2 className="mt-10 text-[14px] font-semibold">{t('About this app')}</h2>
+          <p className="mt-3 max-w-2xl whitespace-pre-wrap text-[15px] leading-relaxed text-neutral-600 dark:text-neutral-300">
+            {app.description}
+          </p>
+        </div>
+
+        <aside className="h-fit rounded-2xl bg-neutral-50 p-6 dark:bg-neutral-900">
+          <p className="text-[28px] font-light tracking-tight">{app.price}</p>
+          {approved ? (
+            <a
+              href={marketDownloadUrl(app.id)}
+              className="mt-4 flex h-12 items-center justify-center gap-2 rounded-full bg-neutral-900 text-[15px] font-medium text-white dark:bg-white dark:text-neutral-900"
+            >
+              <Download size={16} /> {t('Install')}
+            </a>
+          ) : (
+            <p className="mt-4 rounded-xl bg-white p-3 text-[13px] text-neutral-500 dark:bg-neutral-950 dark:text-neutral-400">
+              {t('This app is not available for download yet.')}
+            </p>
+          )}
+          <dl className="mt-6 space-y-3 text-[13px]">
+            {[
+              [t('Rating'), (<span key="r" className="inline-flex items-center gap-1"><Star size={13} className="fill-amber-400 text-amber-400" />{app.rating.toFixed(1)}</span>)],
+              [t('Downloads'), app.downloads.toLocaleString('en-US')],
+              [t('Version'), app.version],
+              [t('Category'), app.category],
+            ].map(([k, v]) => (
+              <div key={k as string} className="flex items-center justify-between">
+                <dt className="text-neutral-400">{k}</dt>
+                <dd className="font-medium">{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </aside>
+      </div>
+    </div>
+  )
+}
