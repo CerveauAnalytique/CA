@@ -6,12 +6,12 @@ const CARDS = [
   {
     Icon: ProtectionIcon,
     title: 'Save Your Data',
-    text: 'Store camera footage, events and files securely in the cloud, searchable in seconds.',
+    text: 'Store camera footage, sensor readings and files securely in the cloud, searchable in seconds.',
   },
   {
     Icon: AccessIcon,
     title: 'Analytique Insights',
-    text: 'Turn raw data into clear answers with AI analytics, live dashboards and smart alerts.',
+    text: 'Turn raw data from cameras and sensors into clear answers with AI analytics, live dashboards and smart alerts.',
   },
   {
     Icon: ThreatIcon,
@@ -43,7 +43,7 @@ export function FeatureCards() {
         index="01/04"
         label="Everything you need"
         title="One digital brain for your data"
-        text="Cerveau Analytique saves your data, analyzes it with AI and shares it through a simple API — all in one place, built for everyone."
+        text="Cerveau Analytique saves data from smart cameras, sensors and any other source, analyzes it with AI and shares it through a simple API — all in one place, built for everyone."
       />
 
       <div className="relative mx-auto mt-20 max-w-[1040px] px-6">

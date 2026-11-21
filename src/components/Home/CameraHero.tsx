@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { HomeChatInput } from './HomeChatInput'
 import { DotCameraCanvas } from './DotCameraCanvas'
 
-const WORDS = ['smart cameras', 'your data', 'your business', 'everyone']
+const WORDS = ['smart cameras', 'sensors', 'all your data', 'everyone']
 
 function useTyping(words: string[]) {
   const [text, setText] = useState('')
@@ -89,8 +89,8 @@ export function CameraHero() {
             <div className="flex gap-3">
               <span className="mt-[-48px] hidden h-24 w-px bg-neutral-300 md:block" />
               <p className="max-w-[210px] text-[12px] font-light leading-snug text-neutral-600">
-                Connect a camera, store every event securely and turn raw data into insights. Share
-                it through the API or publish it in the marketplace.
+                Connect cameras, sensors and any data source, store everything securely and turn it
+                into insights. Share it through the API or publish it in the marketplace.
               </p>
             </div>
           </div>
@@ -98,8 +98,8 @@ export function CameraHero() {
 
         {/* Top-right blurb */}
         <p className="relative z-10 order-3 col-span-12 hidden max-w-[230px] justify-self-end pt-10 text-[12px] font-light leading-snug text-neutral-700 md:col-span-3 md:col-start-10 md:block md:pt-16">
-          Cerveau Analytique is the AI tool that saves, analyzes and shares your data — so anyone
-          can build smart cameras and apps, no code needed.
+          Cerveau Analytique is the AI tool that saves, analyzes and shares your data — from smart
+          cameras to sensors and any other source. Anyone can use it, no code needed.
         </p>
       </div>
     </section>

@@ -6,7 +6,7 @@ const ITEMS = [
   { name: 'AI Analytique', Icon: BarChart3 },
   { name: 'Data Share API', Icon: Share2 },
   { name: 'Apps marketplace', Icon: Store },
-  { name: 'Smart cameras', Icon: Camera },
+  { name: 'Cameras & sensors', Icon: Camera },
 ]
 
 export function LogoStrip() {

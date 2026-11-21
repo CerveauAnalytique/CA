@@ -13,8 +13,8 @@ const ITEMS = [
   },
   {
     n: '2.0',
-    title: 'Connect Any Camera',
-    text: 'Turn any camera into a smart camera that detects motion, people and vehicles and sends instant alerts to your phone.',
+    title: 'Connect Cameras & Sensors',
+    text: 'Turn any camera into a smart camera, and add sensors for motion, temperature, sound and more. Get instant alerts on your phone.',
   },
   {
     n: '3.0',
@@ -47,7 +47,7 @@ export function UpdatesSection() {
         index="02/04"
         label="Build your brain"
         title="Make your own smart camera"
-        text="No code and no experts needed. Connect a camera, teach your digital brain what to look for, and add apps from the marketplace."
+        text="No code and no experts needed. Connect a camera or sensor, teach your digital brain what to look for, and add apps from the marketplace."
       />
 
       <div className="relative mx-auto mt-16 max-w-[1040px] px-6">
