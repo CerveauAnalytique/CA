@@ -30,8 +30,31 @@ async function adminGate(request: NextRequest) {
   return NextResponse.rewrite(new URL('/not-found-admin', request.url), { status: 404 })
 }
 
+/**
+ * Other front ends (the Flutter web app) call /api/ca/* from their own address. Origins in CA7_APP_ORIGINS
+ * (comma separated) may do that; the answer to the browser's preflight is handled here.
+ */
+function appOrigins() {
+  return (process.env.CA7_APP_ORIGINS || '').split(',').map((o) => o.trim()).filter(Boolean)
+}
+function withCors(request: NextRequest, res: NextResponse) {
+  const origin = request.headers.get('origin')
+  if (origin && appOrigins().includes(origin)) {
+    res.headers.set('Access-Control-Allow-Origin', origin)
+    res.headers.set('Access-Control-Allow-Headers', 'Authorization, Content-Type, X-CA7-Token')
+    res.headers.set('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS')
+    res.headers.set('Vary', 'Origin')
+  }
+  return res
+}
+
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl
+
+  if (pathname.startsWith('/api/ca/')) {
+    if (request.method === 'OPTIONS') return withCors(request, new NextResponse(null, { status: 204 }))
+    return withCors(request, NextResponse.next())
+  }
 
   // ca7.io / ca7.nl / ca7.be only show the chat; everything else lives on cloud.ca7.io
   const host = hostOf(request.headers.get('host'))
@@ -84,4 +107,4 @@ export async function proxy(request: NextRequest) {
 }
 
 // everything except Next internals, the API and files with an extension (images, svg, robots.txt, ...)
-export const config = { matcher: ['/((?!_next/|api/|.*\\..*).*)'] }
+export const config = { matcher: ['/((?!_next/|api/(?!ca/)|.*\\..*).*)'] }

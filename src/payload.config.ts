@@ -50,6 +50,8 @@ export default buildConfig({
     },
     user: Users.slug,
   },
+  // origins of other front ends that call this API with a token, e.g. the Flutter web app (comma separated)
+  cors: process.env.CA7_APP_ORIGINS ? process.env.CA7_APP_ORIGINS.split(',').map((o) => o.trim()) : undefined,
   collections: [Users, Pages, Categories, Media, Posts, AiModels, Datasets, DataSources, DataRecords, Automations],
   onInit: async (payload) => {
     await seedCatalogIfEmpty(payload)

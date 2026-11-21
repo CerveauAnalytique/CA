@@ -60,6 +60,11 @@ For AI assistants and new developers working on this repository: read [AGENTS.md
 | **Languages** | en, nl, de, fr, es, pl, ar (right-to-left), language codes in the address: [docs/I18N.md](docs/I18N.md) |
 | **Admin panel** | Hidden behind a private per-admin link: Account settings > Open admin panel |
 
+## Flutter app
+
+`flutter_app/` is the same front end in Flutter (web, Android, iOS), using this backend. It is a partial migration: see
+[docs/FLUTTER_MIGRATION.md](docs/FLUTTER_MIGRATION.md) and [flutter_app/README.md](flutter_app/README.md).
+
 ## Quick start
 
 Needs Node 22, pnpm and PostgreSQL.

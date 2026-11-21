@@ -28,6 +28,13 @@ Build next, in this order:
    `desktop/ca7-camera-agent` only measures movement).
 5. **Billing:** Mollie subscriptions, VAT, plan changes between Hobby and Pro, limits for AI models and file storage.
 
+## Flutter front end
+
+`flutter_app/` is a Flutter migration of the Next.js front end (same design, same backend). Status, what is not migrated and the
+backend contract: `docs/FLUTTER_MIGRATION.md`. Keep the two in step: a text or rule that changes in the website must change in
+`flutter_app` too (plans in `lib/features/pricing/plans.dart`, limits in `lib/features/dashboard/limits.dart`, translations are exported
+with `flutter_app/tool_export_translations.mjs`).
+
 ## Rules
 
 - **Be honest about what exists.** Never describe a feature as available if it is not built. Update the status table in `docs/PRODUCT.md`
