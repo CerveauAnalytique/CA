@@ -82,16 +82,16 @@ export function CameraHero() {
 
           <div className="mt-16 flex items-end gap-10 md:mt-0">
             <ul className="text-[13px] font-light uppercase leading-[1.45] tracking-wide text-neutral-700">
-              <li>Save data</li>
-              <li>AI Analytique</li>
-              <li>Data Share API</li>
-              <li>Apps Marketplace</li>
+              <li>AI models</li>
+              <li>Datasets</li>
+              <li>Data API</li>
+              <li>Internal support</li>
             </ul>
             <div className="flex gap-3">
               <span className="mt-[-48px] hidden h-24 w-px bg-neutral-300 md:block" />
               <p className="max-w-[210px] text-[12px] font-light leading-snug text-neutral-600">
-                Connect cameras, sensors and any data source, store everything securely and turn it
-                into insights. Share it through the API or publish it in the marketplace.
+                Connect a data source, choose an AI model and let your teams, and your support
+                desk, work with answers instead of raw data.
               </p>
             </div>
           </div>
@@ -99,8 +99,8 @@ export function CameraHero() {
 
         {/* Top-right blurb */}
         <p className="relative z-10 order-3 col-span-12 hidden max-w-[230px] justify-self-end pt-10 text-[12px] font-light leading-snug text-neutral-700 md:col-span-3 md:col-start-10 md:block md:pt-16">
-          Cerveau Analytique is the AI tool that saves, analyzes and shares your data — from smart
-          cameras to sensors and any other source. Anyone can use it, no code needed.
+          CA7 helps companies solve real problems with AI models, datasets and one API: from smart
+          cameras and sensors to internal support. No code needed.
         </p>
       </div>
     </section>

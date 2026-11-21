@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { SectionHead } from './SectionHead'
-import { LockIllustration } from './icons'
+import { DotIcon } from '@/components/Logo/DotIcon'
 
 const ITEMS = [
   {
@@ -60,7 +60,7 @@ export function UpdatesSection() {
             }}
           >
             <div className="h-[260px] w-full max-w-[380px]">
-              <LockIllustration />
+              <DotIcon name="camera" size={220} />
             </div>
           </div>
 

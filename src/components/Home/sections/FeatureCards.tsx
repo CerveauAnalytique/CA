@@ -1,20 +1,20 @@
 import React from 'react'
 import { SectionHead } from './SectionHead'
-import { AccessIcon, ProtectionIcon, ThreatIcon } from './icons'
+import { DotIcon, type DotIconName } from '@/components/Logo/DotIcon'
 
 const CARDS = [
   {
-    Icon: ProtectionIcon,
+    icon: 'database' as DotIconName,
     title: 'Save Your Data',
     text: 'Store camera footage, sensor readings, logs and files securely in the cloud, searchable in seconds.',
   },
   {
-    Icon: AccessIcon,
+    icon: 'analytics' as DotIconName,
     title: 'Analytique Insights',
     text: 'Turn raw data from cameras and sensors into clear answers with AI analytics, live dashboards and smart alerts.',
   },
   {
-    Icon: ThreatIcon,
+    icon: 'api' as DotIconName,
     title: 'Data Share API',
     text: 'Share datasets with your team, partners or apps through one secure and easy API.',
   },
@@ -42,8 +42,8 @@ export function FeatureCards() {
       <SectionHead
         index="01/04"
         label="Everything you need"
-        title="One digital brain for your data"
-        text="Cerveau Analytique saves data from smart cameras, sensors and any other source, analyzes it with AI and shares it through a simple API — all in one place, built for everyone."
+        title="One platform for your company data"
+        text="CA7 saves data from smart cameras, sensors and any other source, analyzes it with AI models and shares it through one API, so your teams solve real problems with it."
       />
 
       <div className="relative mx-auto mt-20 max-w-[1040px] px-6">
@@ -52,14 +52,14 @@ export function FeatureCards() {
           <Corner className="-right-1 -top-1" />
           <Corner className="-bottom-1 -left-1" />
           <Corner className="-bottom-1 -right-1" />
-          {CARDS.map(({ Icon, title, text }, i) => (
+          {CARDS.map(({ icon, title, text }, i) => (
             <div
               key={title}
               className={`flex flex-col items-center px-8 py-12 text-center ${
                 i < CARDS.length - 1 ? 'border-b md:border-b-0 md:border-r border-neutral-200' : ''
               }`}
             >
-              <Icon />
+              <DotIcon name={icon} size={96} />
               <h3 className="mt-8 font-mono text-[18px] font-medium text-neutral-900">{title}</h3>
               <p className="mt-3 max-w-[250px] text-[13px] leading-relaxed text-neutral-500">{text}</p>
             </div>

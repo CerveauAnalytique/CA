@@ -4,6 +4,7 @@ import { CameraHero } from '@/components/Home/CameraHero'
 import { LogoStrip } from '@/components/Home/sections/LogoStrip'
 import { FeatureCards } from '@/components/Home/sections/FeatureCards'
 import { UpdatesSection } from '@/components/Home/sections/UpdatesSection'
+import { ProblemsSection } from '@/components/Home/sections/ProblemsSection'
 
 export default function HomePage() {
   return (
@@ -12,6 +13,7 @@ export default function HomePage() {
       <LogoStrip />
       <FeatureCards />
       <UpdatesSection />
+      <ProblemsSection />
     </main>
   )
 }
@@ -19,5 +21,5 @@ export default function HomePage() {
 export const metadata: Metadata = {
   title: 'CA7 — Create your own digital brain for your IoT',
   description:
-    'The AI tool that saves, analyzes and shares data from smart cameras, sensors and more. Build your own digital brain — with an API and apps marketplace for everyone.',
+    'Solve company problems with AI models, datasets and one API: smart cameras, sensors and internal support.',
 }
