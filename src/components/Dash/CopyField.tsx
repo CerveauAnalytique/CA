@@ -6,7 +6,7 @@ import { Copy, Check } from 'lucide-react'
 export function CopyField({ value, mono = true }: { value: string; mono?: boolean }) {
   const [done, setDone] = useState(false)
   return (
-    <div className="mt-1 flex items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2">
+    <div className="mt-1 flex items-center gap-2 rounded-lg bg-white px-3 py-2">
       <span className={`min-w-0 flex-1 truncate text-xs ${mono ? 'font-mono' : ''}`}>{value}</span>
       <button
         type="button"

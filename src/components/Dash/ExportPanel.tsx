@@ -60,7 +60,7 @@ export function ExportPanel({ items }: { items: Item[] }) {
       <Card title="1. Choose data">
         <div className="space-y-1.5">
           {items.map((i) => (
-            <label key={i.slug} className="flex cursor-pointer items-center justify-between rounded-lg px-2 py-1.5 text-[13px] hover:bg-neutral-50">
+            <label key={i.slug} className="flex cursor-pointer items-center justify-between rounded-lg px-2 py-1.5 text-[13px] hover:bg-white">
               <span className="flex items-center gap-2.5">
                 <input type="checkbox" checked={selected.includes(i.slug)} onChange={() => toggle(i.slug)} />
                 {i.label}
@@ -76,7 +76,7 @@ export function ExportPanel({ items }: { items: Item[] }) {
           <button
             disabled={busy}
             onClick={download}
-            className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 px-3 py-2 text-xs font-medium hover:bg-neutral-100"
+            className="inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-medium hover:bg-neutral-100"
           >
             <Download size={14} /> Download JSON
           </button>
@@ -86,14 +86,14 @@ export function ExportPanel({ items }: { items: Item[] }) {
             value={target}
             onChange={(e) => setTarget(e.target.value)}
             placeholder="https://my-server.example/ingest"
-            className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-xs"
+            className="w-full rounded-lg bg-white px-3 py-2 text-xs outline-none ring-1 ring-neutral-200 focus:ring-neutral-400"
           />
           <input
             value={auth}
             onChange={(e) => setAuth(e.target.value)}
             type="password"
             placeholder="Authorization header (optional)"
-            className="mt-2 w-full rounded-lg border border-neutral-200 px-3 py-2 text-xs"
+            className="mt-2 w-full rounded-lg bg-white px-3 py-2 text-xs outline-none ring-1 ring-neutral-200 focus:ring-neutral-400"
           />
           <button
             disabled={busy}
@@ -112,7 +112,7 @@ export function ExportPanel({ items }: { items: Item[] }) {
           </p>
           <a
             href="/api/ca/tool"
-            className="mt-3 inline-flex items-center gap-2 rounded-lg border border-neutral-200 px-3 py-2 text-xs font-medium hover:bg-neutral-100"
+            className="mt-3 inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-medium hover:bg-neutral-100"
           >
             <FileCode2 size={14} /> Download sync tool (.html)
           </a>

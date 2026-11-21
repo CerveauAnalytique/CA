@@ -5,7 +5,6 @@ import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
 import React from 'react'
 import { DashShell } from '@/components/Dash/DashShell'
-import { getCounts } from '@/lib/caData'
 
 export const metadata: Metadata = {
   title: 'Dashboard — Cerveau Analytique',
@@ -19,12 +18,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const { user } = await payload.auth({ headers: await getHeaders() })
   if (!user) redirect('/login?redirect=/dashboard')
 
-  const counts = await getCounts(payload, user)
-
   return (
     <DashShell
       user={{ email: user.email ?? '', name: (user as unknown as { name?: string }).name }}
-      counts={counts}
     >
       {children}
     </DashShell>

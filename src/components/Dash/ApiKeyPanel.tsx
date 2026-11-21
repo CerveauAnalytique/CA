@@ -43,7 +43,7 @@ export function ApiKeyPanel({ enabled: initial, base }: { enabled: boolean; base
               <button
                 disabled={busy}
                 onClick={() => call('DELETE')}
-                className="rounded-lg border border-neutral-200 px-3 py-1.5 text-xs hover:bg-neutral-100"
+                className="rounded-lg bg-white px-3 py-1.5 text-xs hover:bg-neutral-100"
               >
                 Disable
               </button>

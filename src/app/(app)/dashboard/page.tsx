@@ -47,7 +47,7 @@ export default async function DashboardOverview() {
         </Card>
       </div>
 
-      <div className="space-y-4">
+      <div className="min-w-0 space-y-4">
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           {[
             ['Records', total],
@@ -55,7 +55,7 @@ export default async function DashboardOverview() {
             ['Collections', counts.length],
             ['API key', keyOn ? 'On' : 'Off'],
           ].map(([label, value]) => (
-            <div key={label as string} className="rounded-2xl border border-neutral-200 bg-white p-4">
+            <div key={label as string} className="rounded-2xl bg-neutral-50 p-4">
               <p className="text-[11px] text-neutral-400">{label}</p>
               <p className="mt-1 text-2xl font-semibold tracking-tight">{value}</p>
             </div>
@@ -70,12 +70,13 @@ export default async function DashboardOverview() {
             </Link>
           }
         >
-          <table className="w-full text-left text-[13px]">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[420px] text-left text-[13px]">
             <thead className="text-[11px] text-neutral-400">
               <tr>
-                <th className="rounded-l-lg bg-neutral-100 px-3 py-2 font-normal">Collection</th>
-                <th className="bg-neutral-100 px-3 py-2 font-normal">Records</th>
-                <th className="rounded-r-lg bg-neutral-100 px-3 py-2 font-normal">API</th>
+                <th className="rounded-l-lg bg-white px-3 py-2 font-normal">Collection</th>
+                <th className="bg-white px-3 py-2 font-normal">Records</th>
+                <th className="rounded-r-lg bg-white px-3 py-2 font-normal">API</th>
               </tr>
             </thead>
             <tbody>
@@ -92,6 +93,7 @@ export default async function DashboardOverview() {
               ))}
             </tbody>
           </table>
+          </div>
         </Card>
       </div>
     </div>
