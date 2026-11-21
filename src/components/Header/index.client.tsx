@@ -22,6 +22,8 @@ type Props = {
   header: Header
 }
 
+import { BrainIcon } from '@/components/Logo/BrainIcon'
+
 export function HeaderClient({ header }: Props) {
   const { user, logout } = useAuth()
   const menu = header.navItems || []
@@ -66,7 +68,9 @@ export function HeaderClient({ header }: Props) {
     <nav className="site-header">
       {/* Brand Title connected to Payload CMS siteTitle field */}
       <Link href="/" className="nav-logo">
-        {firstTitlePart} {secondTitlePart ? <span>{secondTitlePart}</span> : null}
+        <BrainIcon className="nav-logo-icon" />
+        <b>{firstTitlePart}</b>
+        {secondTitlePart ? <span>{secondTitlePart}</span> : null}
       </Link>
 
       {/* Dynamic Nav Links connected to Payload CMS header.navItems */}
