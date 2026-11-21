@@ -9,6 +9,7 @@ import {
   matchAcceptLanguage,
   stripLocale,
 } from '@/i18n/config'
+import { CLOUD_HOST, hostLocale, hostOf, isChatHost } from '@/lib/hosts'
 
 /**
  * 1. /admin is hidden: it only opens after an admin used their own /{username}/ad/{token} link.
@@ -32,7 +33,18 @@ async function adminGate(request: NextRequest) {
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl
 
-  if (pathname === '/admin' || pathname.startsWith('/admin/')) return adminGate(request)
+  // ca7.io / ca7.nl / ca7.be only show the chat; everything else lives on cloud.ca7.io
+  const host = hostOf(request.headers.get('host'))
+  const onChatHost = isChatHost(host)
+  if (onChatHost) {
+    const { rest } = stripLocale(pathname)
+    if (rest !== '/' && rest !== '/chat-ca7') {
+      const proto = request.headers.get('x-forwarded-proto') || 'https'
+      return NextResponse.redirect(`${proto}://${CLOUD_HOST}${pathname}${search}`, 307)
+    }
+  }
+
+  if (!onChatHost && (pathname === '/admin' || pathname.startsWith('/admin/'))) return adminGate(request)
 
   const { locale, rest } = stripLocale(pathname)
 
@@ -43,7 +55,8 @@ export async function proxy(request: NextRequest) {
     }
     const headers = new Headers(request.headers)
     headers.set(LOCALE_HEADER, locale)
-    const res = NextResponse.rewrite(new URL(`${rest}${search}`, request.url), { request: { headers } })
+    const target = onChatHost && rest === '/' ? '/chat-ca7' : rest
+    const res = NextResponse.rewrite(new URL(`${target}${search}`, request.url), { request: { headers } })
     // tell search engines about the other languages of this page
     const origin = process.env.NEXT_PUBLIC_SERVER_URL?.replace(/\/$/, '') || request.nextUrl.origin
     const tail = rest === '/' ? '' : rest
@@ -58,9 +71,12 @@ export async function proxy(request: NextRequest) {
 
   // No language code: send the visitor to the right one.
   const fromCookie = request.cookies.get(LOCALE_COOKIE)?.value
+  const domainLocale = hostLocale(host)
   const target = isLocale(fromCookie)
     ? fromCookie
-    : (matchAcceptLanguage(request.headers.get('accept-language')) ?? DEFAULT_LOCALE)
+    : isLocale(domainLocale)
+      ? domainLocale
+      : (matchAcceptLanguage(request.headers.get('accept-language')) ?? DEFAULT_LOCALE)
   const url = new URL(`/${target}${pathname === '/' ? '' : pathname}${search}`, request.url)
   const res = NextResponse.redirect(url, 307)
   res.headers.set('Vary', 'Accept-Language, Cookie')
