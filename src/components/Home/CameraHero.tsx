@@ -63,7 +63,7 @@ export function CameraHero() {
 
       <div className="relative mx-auto grid min-h-[inherit] max-w-[1280px] grid-cols-1 px-6 md:grid-cols-12">
         {/* Camera */}
-        <div className="pointer-events-none order-2 col-span-12 mt-4 flex items-center justify-center md:absolute md:inset-y-0 md:right-[-2%] md:order-none md:mt-0 md:w-[58%]">
+        <div className="pointer-events-none order-2 col-span-12 mt-4 flex items-center justify-center md:absolute md:right-[1%] md:top-[9%] md:bottom-0 md:order-none md:mt-0 md:w-[52%]">
           <DotCamera className="w-full drop-shadow-[0_0_40px_rgba(120,150,255,0.35)]" />
         </div>
 
