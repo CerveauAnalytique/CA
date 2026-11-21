@@ -3,10 +3,11 @@ import '../../app/theme/colors.dart';
 
 /// Pill / rounded buttons used across the website.
 class CaButton extends StatelessWidget {
-  const CaButton(this.label, {super.key, this.onPressed, this.outlined = false, this.blue = false, this.small = false, this.icon, this.busy = false});
+  const CaButton(this.label, {super.key, this.onPressed, this.outlined = false, this.blue = false, this.small = false, this.icon, this.busy = false, this.link = false});
   final String label;
   final VoidCallback? onPressed;
-  final bool outlined, blue, small, busy;
+  /// Look of a button only: the tap is handled by a surrounding link.
+  final bool outlined, blue, small, busy, link;
   final IconData? icon;
 
   @override
@@ -15,7 +16,7 @@ class CaButton extends StatelessWidget {
     final bg = blue ? Brand.blue : (outlined ? Colors.transparent : c.primaryBg);
     final fg = blue ? Colors.white : (outlined ? c.fg : c.primaryFg);
     return Opacity(
-      opacity: onPressed == null ? .5 : 1,
+      opacity: onPressed == null && !link ? .5 : 1,
       child: Material(
         color: bg,
         shape: StadiumBorder(side: outlined ? BorderSide(color: c.border.withValues(alpha: .25)) : BorderSide.none),

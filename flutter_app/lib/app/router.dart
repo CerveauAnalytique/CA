@@ -7,7 +7,9 @@ import '../core/widgets/atoms.dart';
 import '../features/auth/auth_pages.dart';
 import '../features/catalog/catalog.dart';
 import '../features/chat/chat_page.dart';
-import '../features/content/content_pages.dart';
+import '../features/content/cms.dart';
+import '../features/shop/checkout_pages.dart';
+import '../features/shop/shop_pages.dart';
 import '../features/dashboard/dashboard_pages.dart';
 import '../features/dashboard/dashboard_shell.dart';
 import '../features/home/home_page.dart';
@@ -48,7 +50,7 @@ GoRouter createRouter(WidgetRef ref) {
       if ((rest == '/login' || rest == '/create-account') && auth.user != null) return '/$lang/dashboard';
       return null;
     },
-    errorBuilder: (context, state) => Shell(lang: state.uri.pathSegments.isNotEmpty && isLang(state.uri.pathSegments.first) ? state.uri.pathSegments.first : 'en', child: OnWebsitePage(path: state.uri.path)),
+    errorBuilder: (context, state) => Shell(lang: state.uri.pathSegments.isNotEmpty && isLang(state.uri.pathSegments.first) ? state.uri.pathSegments.first : 'en', child: NotFoundPage(path: state.uri.path)),
     routes: [
       ShellRoute(
         builder: (context, state, child) => Shell(lang: state.uri.pathSegments.isNotEmpty && isLang(state.uri.pathSegments.first) ? state.uri.pathSegments.first : 'en', location: state.uri.toString(), child: child),
@@ -66,9 +68,21 @@ GoRouter createRouter(WidgetRef ref) {
               r('models/:slug', (s) => CatalogDetailPage(slug: s.pathParameters['slug']!, models: true)),
               r('datasets', (_) => const CatalogListPage(models: false)),
               r('datasets/:slug', (s) => CatalogDetailPage(slug: s.pathParameters['slug']!, models: false)),
-              r('privacy', (_) => const LegalPage('privacy')),
-              r('terms', (_) => const LegalPage('terms')),
-              r('cookies', (_) => const LegalPage('cookies')),
+              r('blog', (_) => const BlogPage()),
+              r('blog/:slug', (s) => BlogPostPage(slug: s.pathParameters['slug']!)),
+              r('shop', (_) => const ShopPage()),
+              r('shop/:slug', (s) => ProductPage(slug: s.pathParameters['slug']!)),
+              r('products', (_) => const ShopPage()),
+              r('products/:slug', (s) => ProductPage(slug: s.pathParameters['slug']!)),
+              r('cart', (_) => const CartPage()),
+              r('checkout', (_) => const CheckoutPage()),
+              r('checkout/confirm-order', (_) => const ConfirmOrderPage()),
+              r('orders', (_) => const OrdersPage()),
+              r('orders/:id', (s) => OrderPage(id: s.pathParameters['id']!)),
+              r('find-order', (_) => const FindOrderPage()),
+              GoRoute(path: 'account', redirect: (c, s) => '/${s.pathParameters['lang']}/dashboard/settings'),
+              GoRoute(path: 'api-access', redirect: (c, s) => '/${s.pathParameters['lang']}/pricing'),
+              r('account/addresses', (_) => const AddressesPage()),
               ShellRoute(
                 builder: (c, s, child) => _AuthGate(child: DashboardShell(child: child)),
                 routes: [
@@ -84,6 +98,9 @@ GoRouter createRouter(WidgetRef ref) {
                   r('dashboard/platform', (_) => const PlatformPage()),
                 ],
               ),
+              // everything else comes from the database: /about, /docs/quickstart, /privacy, CMS pages, ...
+              r(':a', (s) => CmsPage(s.pathParameters['a']!)),
+              r(':a/:b', (s) => CmsPage('${s.pathParameters['a']}/${s.pathParameters['b']}')),
             ],
           ),
         ],

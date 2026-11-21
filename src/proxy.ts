@@ -51,7 +51,7 @@ function withCors(request: NextRequest, res: NextResponse) {
 export async function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl
 
-  if (pathname.startsWith('/api/ca/')) {
+  if (pathname.startsWith('/api/ca/') || pathname === '/api/search') {
     if (request.method === 'OPTIONS') return withCors(request, new NextResponse(null, { status: 204 }))
     return withCors(request, NextResponse.next())
   }
@@ -107,4 +107,4 @@ export async function proxy(request: NextRequest) {
 }
 
 // everything except Next internals, the API and files with an extension (images, svg, robots.txt, ...)
-export const config = { matcher: ['/((?!_next/|api/(?!ca/)|.*\\..*).*)'] }
+export const config = { matcher: ['/((?!_next/|api/(?!ca/|search$)|.*\\..*).*)'] }

@@ -66,6 +66,7 @@ class ApiClient {
         if (first['message'] != null) return first['message'].toString();
       }
       if (json['error'] != null) return json['error'].toString();
+      if (json['message'] != null) return json['message'].toString();
     }
     return null;
   }

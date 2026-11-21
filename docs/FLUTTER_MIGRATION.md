@@ -14,30 +14,28 @@ against the running backend. The rest is listed so nothing is forgotten. Pages t
 
 | Area | Pages / parts | Notes |
 |---|---|---|
-| Shell | Header (nav, Explore menu, search ⌘K, user, theme, language), mobile menu, footer, languages | `lib/app/shell` |
-| Home | Hero with the dot camera (idle twinkle, scatter, follows the pointer), typing headline, chat box, icon strip, 4 sections | `features/home` |
-| Pricing | 5 packs | `features/pricing` (prices mirror `src/lib/plans.ts`) |
-| Auth | Login, create account (language), forgot password, remembered session, redirect to the saved language | `features/auth`, token in secure storage |
-| Chat | `/chat-ca7` incl. `?q=`, streaming from `/api/ca/chat`, stop, new chat, code blocks | `features/chat` |
-| Catalog | AI models and datasets: list, search, filter, detail (install, metrics, schema, card) | `features/catalog` |
-| Dashboard | Overview, Profile (name, username, e-mail, language, password), Data Connect (REST, CSV, push), Data Intelligence, Automation, Camera Intelligence, API keys, Export & sync, Pack & billing (Stripe checkout and portal), Platform | `features/dashboard` |
-| Legal | Privacy, Terms, Cookies | text exported from the site |
+| Shell | Header (nav, Explore menu, smart search, cart, user, theme, language), mobile menu, footer, languages | `lib/app/shell` |
+| Home, Pricing | Hero with the dot camera, sections; 5 packs | `features/home`, `features/pricing` |
+| Auth | Login, create account, forgot password, remembered session | `features/auth`, token in secure storage |
+| Chat | `/chat-ca7` with streaming answers | `features/chat` |
+| Catalog | AI models and datasets: list, search, filter, detail | `features/catalog` |
+| Dashboard | Overview, Profile, Data Connect, Data Intelligence, Automation, Camera, API keys, Export, Pack & billing, Platform | `features/dashboard` |
+| **Shop** | Products (search, category, sort), product page with variants, cart (guest and account), checkout with Mollie (iDEAL, Bancontact, cards), return page that confirms the order, orders, order page (also for guests with the link token), find order, saved addresses | `features/shop`; tested against a fake Mollie server: initiate, unpaid is refused, paid creates the order and lowers the stock |
+| **Content from the database** | About, careers, press, community, contact, status, sdks, api, research, security, privacy, terms, cookies and the docs pages come from the collection `site-pages`; CMS pages from `pages` (Lexical rich text, hero, content, call to action, banner, media); blog from `posts` | `features/content/cms.dart`; edit all of it in the admin panel |
+| **Smart search** | One search over products, pages, docs, research, blog, AI models and datasets, from the database; every word must match, typos are allowed, best match first, "did you mean" | `src/lib/search.ts`, `GET /api/search`, used by the website and the app |
 
-Responsive: desktop, tablet and phone (checked at 1440 and 390 px). Dark mode and RTL (Arabic) are implemented; only light mode
-at desktop and phone width was compared against the website.
+### Not migrated yet
 
-### Not migrated yet (still on the website)
-
-`about`, `research`, `api`, `docs/*`, `blog` and `blog/[slug]`, `careers`, `press`, `community`, `status`, `sdks`, `security`,
-`contact`, `[slug]` (CMS pages), `shop`, `shop/[id]`, `products`, `products/[slug]`, `marketplace`, `cart`, `checkout`,
-`checkout/confirm-order`, `orders`, `orders/[id]`, `account`, `account/addresses`, `find-order`, `api-access`.
-The shop (ecommerce, cart, checkout with Stripe/Mollie, orders, addresses) is the biggest missing part. The header has no cart
-button for that reason. `/admin` (Payload) stays on the web by design.
+- **Stripe card payments** in the app (Stripe's card form needs its own mobile/web component and a live key). In the app, card payments go through Mollie, which also takes cards. The website still has the Stripe checkout.
+- The layout blocks `archive`, `carousel`, `three-item-grid` and `form` of CMS pages (the app says the block is shown on the website).
+- The rich layout of some content pages (status badges, the contact form, the interactive docs sidebar): the app shows their text, lists, code and cards, which is what the database holds.
+- Order e-mails, product reviews and other plugin features that were never in the front end.
+- `/admin` (Payload) stays on the web by design.
 
 ### Differences from the website (on purpose or not done)
 
 - The bell icon links to `/notifications`, like the website does; that page does not exist there either.
-- The CART button of the header is missing (shop not migrated).
+- Prices are in USD, as in the shop data (the shop has one currency).
 - Texts of the dashboard, forgot-password and some labels are English only, as on the website (they were never translated there).
 - The hover effects of the Explore menu are click-only.
 
@@ -64,7 +62,7 @@ and compare page by page with `http://localhost:3000`. `flutter analyze` is clea
 
 ## Next steps (in order)
 
-1. Shop: products, product page, cart, checkout (Stripe and Mollie), orders, addresses, find order.
-2. Remaining content pages (about, research, docs, api, blog, careers, press, community, status, sdks, security, contact) and the CMS `[slug]` pages.
+1. Stripe card checkout in the app, and a cookie consent banner with the choices stored per account.
+2. The remaining CMS layout blocks and the docs sidebar.
 3. Integration tests on a device, and a visual comparison of dark mode and RTL.
 4. When everything is verified: serve the Flutter build instead of the Next.js pages and remove the replaced Next.js pages one by one.

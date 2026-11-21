@@ -42,6 +42,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_data_sources_type" AS ENUM('rest', 'csv', 'push', 'camera', 'openremote', 'thingsboard');
   CREATE TYPE "public"."enum_automations_operator" AS ENUM('gt', 'lt', 'eq', 'anomaly');
   CREATE TYPE "public"."enum_automations_action" AS ENUM('email', 'webhook');
+  CREATE TYPE "public"."enum_site_pages_blocks_heading_level" AS ENUM('2', '3');
+  CREATE TYPE "public"."enum_site_pages_section" AS ENUM('company', 'legal', 'product', 'docs', 'research');
   CREATE TYPE "public"."enum_forms_confirmation_type" AS ENUM('message', 'redirect');
   CREATE TYPE "public"."enum_addresses_country" AS ENUM('US', 'GB', 'CA', 'AU', 'AT', 'BE', 'BR', 'BG', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HK', 'HU', 'IN', 'IE', 'IT', 'JP', 'LV', 'LT', 'LU', 'MY', 'MT', 'MX', 'NL', 'NZ', 'NO', 'PL', 'PT', 'RO', 'SG', 'SK', 'SI', 'ES', 'SE', 'CH');
   CREATE TYPE "public"."enum_variants_status" AS ENUM('draft', 'published');
@@ -566,6 +568,87 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"enabled" boolean DEFAULT true,
   	"last_triggered_at" timestamp(3) with time zone,
   	"trigger_count" numeric DEFAULT 0,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "site_pages_blocks_heading" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"level" "enum_site_pages_blocks_heading_level" DEFAULT '2',
+  	"text" varchar NOT NULL,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "site_pages_blocks_paragraph" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"text" varchar NOT NULL,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "site_pages_blocks_list_items" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"text" varchar NOT NULL
+  );
+  
+  CREATE TABLE "site_pages_blocks_list" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "site_pages_blocks_code" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"code" varchar NOT NULL,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "site_pages_blocks_callout" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"text" varchar NOT NULL,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "site_pages_blocks_cards_items" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" varchar NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"title" varchar NOT NULL,
+  	"text" varchar,
+  	"meta" varchar
+  );
+  
+  CREATE TABLE "site_pages_blocks_cards" (
+  	"_order" integer NOT NULL,
+  	"_parent_id" integer NOT NULL,
+  	"_path" text NOT NULL,
+  	"id" varchar PRIMARY KEY NOT NULL,
+  	"block_name" varchar
+  );
+  
+  CREATE TABLE "site_pages" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"title" varchar NOT NULL,
+  	"slug" varchar NOT NULL,
+  	"section" "enum_site_pages_section" DEFAULT 'company',
+  	"published" boolean DEFAULT true,
+  	"eyebrow" varchar,
+  	"subtitle" varchar,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
@@ -1127,6 +1210,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"data_sources_id" integer,
   	"data_records_id" integer,
   	"automations_id" integer,
+  	"site_pages_id" integer,
   	"forms_id" integer,
   	"form_submissions_id" integer,
   	"addresses_id" integer,
@@ -1268,6 +1352,14 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "data_records" ADD CONSTRAINT "data_records_source_id_data_sources_id_fk" FOREIGN KEY ("source_id") REFERENCES "public"."data_sources"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "automations" ADD CONSTRAINT "automations_owner_id_users_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "automations" ADD CONSTRAINT "automations_source_id_data_sources_id_fk" FOREIGN KEY ("source_id") REFERENCES "public"."data_sources"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "site_pages_blocks_heading" ADD CONSTRAINT "site_pages_blocks_heading_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "site_pages_blocks_paragraph" ADD CONSTRAINT "site_pages_blocks_paragraph_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "site_pages_blocks_list_items" ADD CONSTRAINT "site_pages_blocks_list_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_pages_blocks_list"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "site_pages_blocks_list" ADD CONSTRAINT "site_pages_blocks_list_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "site_pages_blocks_code" ADD CONSTRAINT "site_pages_blocks_code_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "site_pages_blocks_callout" ADD CONSTRAINT "site_pages_blocks_callout_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "site_pages_blocks_cards_items" ADD CONSTRAINT "site_pages_blocks_cards_items_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_pages_blocks_cards"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "site_pages_blocks_cards" ADD CONSTRAINT "site_pages_blocks_cards_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."site_pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "forms_blocks_checkbox" ADD CONSTRAINT "forms_blocks_checkbox_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "forms_blocks_country" ADD CONSTRAINT "forms_blocks_country_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "forms_blocks_email" ADD CONSTRAINT "forms_blocks_email_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
@@ -1348,6 +1440,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_data_sources_fk" FOREIGN KEY ("data_sources_id") REFERENCES "public"."data_sources"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_data_records_fk" FOREIGN KEY ("data_records_id") REFERENCES "public"."data_records"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_automations_fk" FOREIGN KEY ("automations_id") REFERENCES "public"."automations"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_site_pages_fk" FOREIGN KEY ("site_pages_id") REFERENCES "public"."site_pages"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_forms_fk" FOREIGN KEY ("forms_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_form_submissions_fk" FOREIGN KEY ("form_submissions_id") REFERENCES "public"."form_submissions"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_addresses_fk" FOREIGN KEY ("addresses_id") REFERENCES "public"."addresses"("id") ON DELETE cascade ON UPDATE no action;
@@ -1501,6 +1594,31 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "automations_source_idx" ON "automations" USING btree ("source_id");
   CREATE INDEX "automations_updated_at_idx" ON "automations" USING btree ("updated_at");
   CREATE INDEX "automations_created_at_idx" ON "automations" USING btree ("created_at");
+  CREATE INDEX "site_pages_blocks_heading_order_idx" ON "site_pages_blocks_heading" USING btree ("_order");
+  CREATE INDEX "site_pages_blocks_heading_parent_id_idx" ON "site_pages_blocks_heading" USING btree ("_parent_id");
+  CREATE INDEX "site_pages_blocks_heading_path_idx" ON "site_pages_blocks_heading" USING btree ("_path");
+  CREATE INDEX "site_pages_blocks_paragraph_order_idx" ON "site_pages_blocks_paragraph" USING btree ("_order");
+  CREATE INDEX "site_pages_blocks_paragraph_parent_id_idx" ON "site_pages_blocks_paragraph" USING btree ("_parent_id");
+  CREATE INDEX "site_pages_blocks_paragraph_path_idx" ON "site_pages_blocks_paragraph" USING btree ("_path");
+  CREATE INDEX "site_pages_blocks_list_items_order_idx" ON "site_pages_blocks_list_items" USING btree ("_order");
+  CREATE INDEX "site_pages_blocks_list_items_parent_id_idx" ON "site_pages_blocks_list_items" USING btree ("_parent_id");
+  CREATE INDEX "site_pages_blocks_list_order_idx" ON "site_pages_blocks_list" USING btree ("_order");
+  CREATE INDEX "site_pages_blocks_list_parent_id_idx" ON "site_pages_blocks_list" USING btree ("_parent_id");
+  CREATE INDEX "site_pages_blocks_list_path_idx" ON "site_pages_blocks_list" USING btree ("_path");
+  CREATE INDEX "site_pages_blocks_code_order_idx" ON "site_pages_blocks_code" USING btree ("_order");
+  CREATE INDEX "site_pages_blocks_code_parent_id_idx" ON "site_pages_blocks_code" USING btree ("_parent_id");
+  CREATE INDEX "site_pages_blocks_code_path_idx" ON "site_pages_blocks_code" USING btree ("_path");
+  CREATE INDEX "site_pages_blocks_callout_order_idx" ON "site_pages_blocks_callout" USING btree ("_order");
+  CREATE INDEX "site_pages_blocks_callout_parent_id_idx" ON "site_pages_blocks_callout" USING btree ("_parent_id");
+  CREATE INDEX "site_pages_blocks_callout_path_idx" ON "site_pages_blocks_callout" USING btree ("_path");
+  CREATE INDEX "site_pages_blocks_cards_items_order_idx" ON "site_pages_blocks_cards_items" USING btree ("_order");
+  CREATE INDEX "site_pages_blocks_cards_items_parent_id_idx" ON "site_pages_blocks_cards_items" USING btree ("_parent_id");
+  CREATE INDEX "site_pages_blocks_cards_order_idx" ON "site_pages_blocks_cards" USING btree ("_order");
+  CREATE INDEX "site_pages_blocks_cards_parent_id_idx" ON "site_pages_blocks_cards" USING btree ("_parent_id");
+  CREATE INDEX "site_pages_blocks_cards_path_idx" ON "site_pages_blocks_cards" USING btree ("_path");
+  CREATE UNIQUE INDEX "site_pages_slug_idx" ON "site_pages" USING btree ("slug");
+  CREATE INDEX "site_pages_updated_at_idx" ON "site_pages" USING btree ("updated_at");
+  CREATE INDEX "site_pages_created_at_idx" ON "site_pages" USING btree ("created_at");
   CREATE INDEX "forms_blocks_checkbox_order_idx" ON "forms_blocks_checkbox" USING btree ("_order");
   CREATE INDEX "forms_blocks_checkbox_parent_id_idx" ON "forms_blocks_checkbox" USING btree ("_parent_id");
   CREATE INDEX "forms_blocks_checkbox_path_idx" ON "forms_blocks_checkbox" USING btree ("_path");
@@ -1686,6 +1804,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "payload_locked_documents_rels_data_sources_id_idx" ON "payload_locked_documents_rels" USING btree ("data_sources_id");
   CREATE INDEX "payload_locked_documents_rels_data_records_id_idx" ON "payload_locked_documents_rels" USING btree ("data_records_id");
   CREATE INDEX "payload_locked_documents_rels_automations_id_idx" ON "payload_locked_documents_rels" USING btree ("automations_id");
+  CREATE INDEX "payload_locked_documents_rels_site_pages_id_idx" ON "payload_locked_documents_rels" USING btree ("site_pages_id");
   CREATE INDEX "payload_locked_documents_rels_forms_id_idx" ON "payload_locked_documents_rels" USING btree ("forms_id");
   CREATE INDEX "payload_locked_documents_rels_form_submissions_id_idx" ON "payload_locked_documents_rels" USING btree ("form_submissions_id");
   CREATE INDEX "payload_locked_documents_rels_addresses_id_idx" ON "payload_locked_documents_rels" USING btree ("addresses_id");
@@ -1762,6 +1881,15 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "data_sources" CASCADE;
   DROP TABLE "data_records" CASCADE;
   DROP TABLE "automations" CASCADE;
+  DROP TABLE "site_pages_blocks_heading" CASCADE;
+  DROP TABLE "site_pages_blocks_paragraph" CASCADE;
+  DROP TABLE "site_pages_blocks_list_items" CASCADE;
+  DROP TABLE "site_pages_blocks_list" CASCADE;
+  DROP TABLE "site_pages_blocks_code" CASCADE;
+  DROP TABLE "site_pages_blocks_callout" CASCADE;
+  DROP TABLE "site_pages_blocks_cards_items" CASCADE;
+  DROP TABLE "site_pages_blocks_cards" CASCADE;
+  DROP TABLE "site_pages" CASCADE;
   DROP TABLE "forms_blocks_checkbox" CASCADE;
   DROP TABLE "forms_blocks_country" CASCADE;
   DROP TABLE "forms_blocks_email" CASCADE;
@@ -1858,6 +1986,8 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "public"."enum_data_sources_type";
   DROP TYPE "public"."enum_automations_operator";
   DROP TYPE "public"."enum_automations_action";
+  DROP TYPE "public"."enum_site_pages_blocks_heading_level";
+  DROP TYPE "public"."enum_site_pages_section";
   DROP TYPE "public"."enum_forms_confirmation_type";
   DROP TYPE "public"."enum_addresses_country";
   DROP TYPE "public"."enum_variants_status";

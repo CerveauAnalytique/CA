@@ -78,7 +78,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           Wrap(children: [Text('${context.t('Forgot your password?')} ', style: const TextStyle(fontSize: 14)), Lnk(to: '/forgot-password$extra', child: Text(context.t('Click here to reset it'), style: const TextStyle(fontSize: 14, decoration: TextDecoration.underline)))]),
           const SizedBox(height: 24),
           Row(children: [
-            Lnk(to: '/create-account$extra', child: CaButton(context.t('Create an account'), outlined: true)),
+            Lnk(to: '/create-account$extra', child: CaButton(context.t('Create an account'), outlined: true, link: true)),
             const Spacer(),
             CaButton(_busy ? context.t('Processing') : context.t('Continue'), onPressed: _submit, busy: _busy),
           ]),

@@ -28,6 +28,8 @@ import { Datasets } from './collections/Datasets'
 import { Automations, DataRecords, DataSources } from './collections/DataSources'
 import { migrations } from './migrations'
 import { seedCatalogIfEmpty } from './utilities/seedCatalog'
+import { SitePages } from './collections/SitePages'
+import { seedSitePagesIfEmpty } from './utilities/seedSitePages'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -52,9 +54,10 @@ export default buildConfig({
   },
   // origins of other front ends that call this API with a token, e.g. the Flutter web app (comma separated)
   cors: process.env.CA7_APP_ORIGINS ? process.env.CA7_APP_ORIGINS.split(',').map((o) => o.trim()) : undefined,
-  collections: [Users, Pages, Categories, Media, Posts, AiModels, Datasets, DataSources, DataRecords, Automations],
+  collections: [Users, Pages, Categories, Media, Posts, AiModels, Datasets, DataSources, DataRecords, Automations, SitePages],
   onInit: async (payload) => {
     await seedCatalogIfEmpty(payload)
+    await seedSitePagesIfEmpty(payload)
   },
   db: postgresAdapter({
     // tests run on a database that was created by the migrations: do not let the dev schema push change it

@@ -45,6 +45,8 @@ type Args = {
 
 export const mollieAdapter = ({ apiKey, siteUrl, label = 'iDEAL / Bancontact / Card' }: Args): PaymentAdapter => {
   const base = siteUrl.replace(/\/$/, '')
+  // where the shopper lands after paying: the website, or the Flutter app when CA7_APP_URL is set
+  const returnBase = (process.env.CA7_APP_URL || siteUrl).replace(/\/$/, '')
 
   return {
     name: 'mollie',
@@ -86,14 +88,14 @@ export const mollieAdapter = ({ apiKey, siteUrl, label = 'iDEAL / Bancontact / C
           amount: { currency: currency.toUpperCase(), value: toValue(amount) },
           description: `Order ${cart.id}`,
           // replaced with the payment id right below
-          redirectUrl: `${base}/checkout/confirm-order?provider=mollie`,
+          redirectUrl: `${returnBase}/checkout/confirm-order?provider=mollie`,
           ...(webhookUrl ? { webhookUrl } : {}),
           metadata: { cartID: cart.id, shippingAddress },
         }),
       })
 
       // Mollie does not append the payment id to the return URL, so put it there ourselves.
-      const redirectUrl = `${base}/checkout/confirm-order?provider=mollie&paymentId=${payment.id}&email=${encodeURIComponent(customerEmail)}`
+      const redirectUrl = `${returnBase}/checkout/confirm-order?provider=mollie&paymentId=${payment.id}&email=${encodeURIComponent(customerEmail)}`
       await mollie(apiKey, `/payments/${payment.id}`, {
         method: 'PATCH',
         body: JSON.stringify({ redirectUrl }),

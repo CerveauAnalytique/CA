@@ -82,6 +82,7 @@ export interface Config {
     'data-sources': DataSource;
     'data-records': DataRecord;
     automations: Automation;
+    'site-pages': SitePage;
     forms: Form;
     'form-submissions': FormSubmission;
     addresses: Address;
@@ -121,6 +122,7 @@ export interface Config {
     'data-sources': DataSourcesSelect<false> | DataSourcesSelect<true>;
     'data-records': DataRecordsSelect<false> | DataRecordsSelect<true>;
     automations: AutomationsSelect<false> | AutomationsSelect<true>;
+    'site-pages': SitePagesSelect<false> | SitePagesSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
@@ -1293,6 +1295,77 @@ export interface Automation {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-pages".
+ */
+export interface SitePage {
+  id: number;
+  title: string;
+  /**
+   * The address without language, for example about or docs/quickstart.
+   */
+  slug: string;
+  section?: ('company' | 'legal' | 'product' | 'docs' | 'research') | null;
+  published?: boolean | null;
+  eyebrow?: string | null;
+  subtitle?: string | null;
+  blocks?:
+    | (
+        | {
+            level?: ('2' | '3') | null;
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'heading';
+          }
+        | {
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'paragraph';
+          }
+        | {
+            items?:
+              | {
+                  text: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'list';
+          }
+        | {
+            code: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'code';
+          }
+        | {
+            text: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'callout';
+          }
+        | {
+            items?:
+              | {
+                  title: string;
+                  text?: string | null;
+                  meta?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cards';
+          }
+      )[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
@@ -1371,6 +1444,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'automations';
         value: number | Automation;
+      } | null)
+    | ({
+        relationTo: 'site-pages';
+        value: number | SitePage;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1826,6 +1903,79 @@ export interface AutomationsSelect<T extends boolean = true> {
   enabled?: T;
   lastTriggeredAt?: T;
   triggerCount?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-pages_select".
+ */
+export interface SitePagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  section?: T;
+  published?: T;
+  eyebrow?: T;
+  subtitle?: T;
+  blocks?:
+    | T
+    | {
+        heading?:
+          | T
+          | {
+              level?: T;
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        paragraph?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        list?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        code?:
+          | T
+          | {
+              code?: T;
+              id?: T;
+              blockName?: T;
+            };
+        callout?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cards?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    meta?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+      };
   updatedAt?: T;
   createdAt?: T;
 }

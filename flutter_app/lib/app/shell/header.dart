@@ -9,6 +9,7 @@ import '../../core/widgets/lnk.dart';
 import '../../core/widgets/responsive.dart';
 import '../theme/colors.dart';
 import '../theme/theme.dart';
+import '../../features/shop/shop_data.dart';
 import 'search_dialog.dart';
 
 const _explore = [
@@ -109,6 +110,7 @@ class SiteHeader extends ConsumerWidget implements PreferredSizeWidget {
             Lnk(to: '/login', child: Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Text(context.t('Log in'), style: TextStyle(fontSize: 13, color: c.muted)))),
           const SizedBox(width: 8),
         ],
+        const _CartButton(),
         startBtn,
         if (!mobile) ...[
           const SizedBox(width: 8),
@@ -201,6 +203,32 @@ class _LanguageMenu extends ConsumerWidget {
       },
       itemBuilder: (_) => [for (final l in languages) PopupMenuItem(value: l.code, child: Row(children: [Text(l.flag), const SizedBox(width: 8), Text(l.name, style: TextStyle(fontWeight: l.code == lang ? FontWeight.w600 : FontWeight.w400))]))],
       child: Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: Text(cur.flag, style: const TextStyle(fontSize: 20))),
+    );
+  }
+}
+
+/// Cart icon with the number of items (the website's CART button).
+class _CartButton extends ConsumerWidget {
+  const _CartButton();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final n = ref.watch(cartProvider).cart?.count ?? 0;
+    final c = context.ca;
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(end: 8),
+      child: Lnk(
+        to: '/cart',
+        child: Tooltip(
+          message: context.t('Cart'),
+          child: SizedBox(
+            height: 32,
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              Icon(Icons.shopping_cart_outlined, size: 16, color: c.muted),
+              if (n > 0) Padding(padding: const EdgeInsets.only(left: 4), child: Text('$n', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: c.fg))),
+            ]),
+          ),
+        ),
+      ),
     );
   }
 }

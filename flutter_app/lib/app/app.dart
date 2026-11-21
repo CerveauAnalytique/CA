@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../core/i18n/i18n.dart';
 import '../core/providers.dart';
+import '../features/shop/shop_data.dart';
 import 'router.dart';
 import 'theme/theme.dart';
 
@@ -19,6 +20,7 @@ class _Ca7AppState extends ConsumerState<Ca7App> {
   void initState() {
     super.initState();
     ref.read(authProvider).restore();
+    ref.read(cartProvider).load();
   }
 
   @override
