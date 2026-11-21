@@ -9,7 +9,7 @@ import '../../core/widgets/dot_icon.dart';
 import '../../core/widgets/lnk.dart';
 import '../../core/widgets/responsive.dart';
 
-/// Centered card with the CA7 logo, like the website's login page.
+/// Centered form on the page background (no card), with the CA7 logo.
 Widget _frame(BuildContext context, String title, String intro, Widget form) {
   final c = context.ca;
   return Container1280(
@@ -18,14 +18,8 @@ Widget _frame(BuildContext context, String title, String intro, Widget form) {
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 440),
-        child: Container(
-          padding: EdgeInsets.all(context.isDesktop ? 40 : 24),
-          decoration: BoxDecoration(
-            color: c.bg,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Neutral.c200),
-            boxShadow: const [BoxShadow(color: Color(0x0D000000), blurRadius: 25, offset: Offset(0, 20), spreadRadius: -5)],
-          ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
           child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
             const Center(child: Ca7Logo()),
             const SizedBox(height: 24),

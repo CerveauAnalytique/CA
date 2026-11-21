@@ -76,6 +76,7 @@ What exists in this repository today, and what does not:
 | Platform tools (OpenRemote, Dify, Airbyte, ThingsBoard, TimescaleDB) | **Install scripts, status page, one CA7 login for ThingsBoard and OpenRemote (OIDC provider, tested with a simulated client), and OpenRemote/ThingsBoard as Data Connect sources (tested with a fake server)** (`platform/`, `/dashboard/platform`, Enterprise and admins). **Not run or tested here** (no Docker in the build environment), no real tool tried, Dify and Airbyte have no OIDC login, Airbyte/Dify not wired to CA7 data. See `platform/README.md` and `platform/SSO.md` |
 | Profile settings (name, username, e-mail, language, password) | Built: `/dashboard/settings` |
 | Content pages from the database (`site-pages`), smart search | Built; shown by the Flutter app. The Next.js pages still hold their own copy of the text |
+| Marketing banner above the navbar | Built: admin panel > Globals > Marketing banner (on/off, text, link, color, closable); shown on the website and in the Flutter app |
 | Pack limits and billing | **Built:** limits are enforced (`src/lib/limits.ts`: data sources, API calls per month, stored records, chat per 10 minutes, automation). Hobby and Pro by card through Stripe subscriptions (`/api/ca/billing/*`, needs `STRIPE_SECRET_KEY` and the webhook `STRIPE_WEBHOOKS_SIGNING_SECRET`). Business and Enterprise are by invoice: an admin sets `users.plan`. Not built: Mollie subscriptions, VAT handling, limits for AI models and file storage (records are the storage measure) |
 
 ## Principles

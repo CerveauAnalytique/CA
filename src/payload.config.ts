@@ -21,6 +21,7 @@ import { Pages } from '@/collections/Pages'
 import { Posts } from '@/collections/Posts'
 import { Users } from '@/collections/Users'
 import { Footer } from '@/globals/Footer'
+import { Banner } from '@/globals/Banner'
 import { Header } from '@/globals/Header'
 import { plugins } from './plugins'
 import { AiModels } from './collections/AiModels'
@@ -120,7 +121,7 @@ export default buildConfig({
       : {}),
   }),
   endpoints: [],
-  globals: [Header, Footer],
+  globals: [Header, Footer, Banner],
   plugins,
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

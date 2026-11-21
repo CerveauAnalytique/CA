@@ -68,6 +68,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_transactions_currency" AS ENUM('USD');
   CREATE TYPE "public"."enum_header_nav_items_link_type" AS ENUM('reference', 'custom');
   CREATE TYPE "public"."enum_footer_nav_items_link_type" AS ENUM('reference', 'custom');
+  CREATE TYPE "public"."enum_banner_color" AS ENUM('blue', 'black', 'green', 'orange');
   CREATE TABLE "users_roles" (
   	"order" integer NOT NULL,
   	"parent_id" integer NOT NULL,
@@ -1301,6 +1302,18 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"pages_id" integer
   );
   
+  CREATE TABLE "banner" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"enabled" boolean DEFAULT true,
+  	"text" varchar DEFAULT 'New: connect your data to one AI platform with CA7.',
+  	"link_label" varchar DEFAULT 'Learn more',
+  	"link_url" varchar DEFAULT '/pricing',
+  	"color" "enum_banner_color" DEFAULT 'blue',
+  	"dismissible" boolean DEFAULT true,
+  	"updated_at" timestamp(3) with time zone,
+  	"created_at" timestamp(3) with time zone
+  );
+  
   ALTER TABLE "users_roles" ADD CONSTRAINT "users_roles_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "users_sessions" ADD CONSTRAINT "users_sessions_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "pages_hero_links" ADD CONSTRAINT "pages_hero_links_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
@@ -1946,6 +1959,7 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "footer_nav_items" CASCADE;
   DROP TABLE "footer" CASCADE;
   DROP TABLE "footer_rels" CASCADE;
+  DROP TABLE "banner" CASCADE;
   DROP TYPE "public"."enum_users_roles";
   DROP TYPE "public"."enum_users_plan";
   DROP TYPE "public"."enum_users_language";
@@ -2011,5 +2025,6 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "public"."enum_transactions_status";
   DROP TYPE "public"."enum_transactions_currency";
   DROP TYPE "public"."enum_header_nav_items_link_type";
-  DROP TYPE "public"."enum_footer_nav_items_link_type";`)
+  DROP TYPE "public"."enum_footer_nav_items_link_type";
+  DROP TYPE "public"."enum_banner_color";`)
 }

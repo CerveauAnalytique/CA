@@ -23,7 +23,7 @@ export default async function Login() {
 
   return (
     <div className="container">
-      <div className="mx-auto my-12 w-full max-w-[440px] rounded-3xl border border-neutral-200 bg-white p-8 shadow-xl shadow-black/5 dark:border-neutral-800 dark:bg-neutral-950 md:p-10">
+      <div className="mx-auto my-12 w-full max-w-[400px] bg-transparent py-4">
         <RenderParams />
         <div className="mb-6 flex justify-center">
           <Ca7Logo />

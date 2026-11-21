@@ -145,10 +145,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    banner: Banner;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    banner: BannerSelect<false> | BannerSelect<true>;
   };
   locale: null;
   widgets: {
@@ -2438,6 +2440,27 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "banner".
+ */
+export interface Banner {
+  id: number;
+  enabled?: boolean | null;
+  /**
+   * One short sentence.
+   */
+  text?: string | null;
+  linkLabel?: string | null;
+  /**
+   * A page of the site (/pricing) or a full address (https://...).
+   */
+  linkUrl?: string | null;
+  color?: ('blue' | 'black' | 'green' | 'orange') | null;
+  dismissible?: boolean | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2484,6 +2507,21 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "banner_select".
+ */
+export interface BannerSelect<T extends boolean = true> {
+  enabled?: T;
+  text?: T;
+  linkLabel?: T;
+  linkUrl?: T;
+  color?: T;
+  dismissible?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/components/Footer'
+import { MarketingBanner } from '@/components/MarketingBanner'
 import { Header } from '@/components/Header'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { ensureStartsWith } from '@/utilities/ensureStartsWith'
@@ -44,8 +45,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
         <Providers>
           <LivePreviewListener />
 
+          <MarketingBanner />
           <Header />
-          <main className="pt-[56px]">{children}</main>
+          <main style={{ paddingTop: 'calc(56px + var(--banner-h, 0px))' }}>{children}</main>
           <Footer />
         </Providers>
         </I18nProvider>

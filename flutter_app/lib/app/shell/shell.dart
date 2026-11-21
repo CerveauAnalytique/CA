@@ -4,6 +4,7 @@ import '../../core/providers.dart';
 import '../theme/theme.dart';
 import 'footer.dart';
 import 'header.dart';
+import 'marketing_banner.dart';
 import 'mobile_menu.dart';
 
 /// Header + page + footer around every page; keeps the language in sync with the address (/nl/...).
@@ -39,6 +40,7 @@ class _ShellState extends ConsumerState<Shell> {
       key: _key,
       endDrawer: const MobileMenu(),
       body: Column(children: [
+        const MarketingBanner(),
         SiteHeader(onMenu: () => _key.currentState?.openEndDrawer()),
         Expanded(
           child: SingleChildScrollView(

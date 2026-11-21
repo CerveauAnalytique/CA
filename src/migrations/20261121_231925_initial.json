@@ -15008,6 +15008,80 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
+    },
+    "public.banner": {
+      "name": "banner",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "enabled": {
+          "name": "enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "text": {
+          "name": "text",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'New: connect your data to one AI platform with CA7.'"
+        },
+        "link_label": {
+          "name": "link_label",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Learn more'"
+        },
+        "link_url": {
+          "name": "link_url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'/pricing'"
+        },
+        "color": {
+          "name": "color",
+          "type": "enum_banner_color",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'blue'"
+        },
+        "dismissible": {
+          "name": "dismissible",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {
@@ -15631,6 +15705,16 @@
         "reference",
         "custom"
       ]
+    },
+    "public.enum_banner_color": {
+      "name": "enum_banner_color",
+      "schema": "public",
+      "values": [
+        "blue",
+        "black",
+        "green",
+        "orange"
+      ]
     }
   },
   "schemas": {},
@@ -15643,6 +15727,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "2cd86216-81d3-46e2-9e17-c98837a5c881",
+  "id": "c7d81dd4-ac47-4ea6-ab80-198e832a4850",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
