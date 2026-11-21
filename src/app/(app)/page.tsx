@@ -4,7 +4,7 @@ import { CameraHero } from '@/components/Home/CameraHero'
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-[#020618]">
+    <main className="min-h-screen bg-white">
       <CameraHero />
     </main>
   )

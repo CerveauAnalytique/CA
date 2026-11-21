@@ -271,7 +271,7 @@ export function DotCamera({ className }: { className?: string }) {
         const py = Math.min(H - 1, Math.floor(gy))
         const l = data[(py * W + px) * 4] / 255
         if (l < 0.06) continue
-        dots.push({ x: gx, y: gy, r: (GRID / 2) * 0.98 * Math.sqrt(l) })
+        dots.push({ x: gx, y: gy, r: (GRID / 2) * 0.98 * (0.4 + 0.6 * Math.sqrt(l)) })
       }
     }
 
@@ -281,7 +281,7 @@ export function DotCamera({ className }: { className?: string }) {
     const render = (t: number) => {
       ctx.setTransform(scale * dpr, 0, 0, scale * dpr, 0, 0)
       ctx.clearRect(0, 0, W, H)
-      ctx.fillStyle = '#fff'
+      ctx.fillStyle = '#1a3df0'
       const sweep = (t / 1000) * 220
       ctx.beginPath()
       for (const d of dots) {

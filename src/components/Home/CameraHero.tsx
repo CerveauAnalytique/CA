@@ -35,36 +35,31 @@ export function CameraHero() {
 
   return (
     <section
-      className="relative w-full overflow-hidden text-white"
-      style={{
-        minHeight: 'calc(100vh - 56px)',
-        background:
-          'radial-gradient(ellipse 70% 80% at 58% 48%, #2149f5 0%, #1233d6 38%, #0a1c92 68%, #020618 100%)',
-      }}
+      className="relative w-full overflow-hidden bg-white text-neutral-900"
+      style={{ minHeight: 'calc(100vh - 56px)' }}
     >
-      {/* dark corner top right */}
+      {/* soft blue glow behind the camera */}
       <div
         className="pointer-events-none absolute inset-0"
-        style={{ background: 'radial-gradient(circle at 100% 0%, #000 0%, transparent 38%)' }}
+        style={{
+          background:
+            'radial-gradient(ellipse 45% 55% at 72% 50%, rgba(26,61,240,0.08) 0%, transparent 70%)',
+        }}
       />
 
       {/* blurred giant brand text at the bottom */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-[3vw] left-0 right-0 select-none text-center font-black uppercase leading-none tracking-tighter text-white/30 blur-[10px]"
+        className="pointer-events-none absolute -bottom-[3vw] left-0 right-0 select-none text-center font-black uppercase leading-none tracking-tighter text-neutral-900/[0.06] blur-[10px]"
         style={{ fontSize: '17vw' }}
       >
         Cerveau
       </div>
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-1/4"
-        style={{ background: 'linear-gradient(to top, rgba(2,6,24,0.6), transparent)' }}
-      />
 
       <div className="relative mx-auto grid min-h-[inherit] max-w-[1280px] grid-cols-1 px-6 md:grid-cols-12">
         {/* Camera */}
         <div className="pointer-events-none order-2 col-span-12 mt-4 flex items-center justify-center md:absolute md:right-[1%] md:top-[9%] md:bottom-0 md:order-none md:mt-0 md:w-[52%]">
-          <DotCamera className="w-full drop-shadow-[0_0_40px_rgba(120,150,255,0.35)]" />
+          <DotCamera className="w-full " />
         </div>
 
         {/* Left copy */}
@@ -75,8 +70,8 @@ export function CameraHero() {
               <br />
               across every corner
               <br />
-              of <span className="text-white/55">{typed}</span>
-              <span className="ml-0.5 inline-block h-[0.9em] w-[2px] translate-y-[0.12em] animate-pulse bg-white/70" />
+              of <span className="text-neutral-400">{typed}</span>
+              <span className="ml-0.5 inline-block h-[0.9em] w-[2px] translate-y-[0.12em] animate-pulse bg-neutral-700" />
             </h1>
 
             <div className="mt-12 flex items-center gap-3">
@@ -86,22 +81,22 @@ export function CameraHero() {
               >
                 View Live Demo
               </Link>
-              <span className="flex h-10 w-10 items-center justify-center rounded-md border border-white/70 text-[10px] font-semibold">
+              <span className="flex h-10 w-10 items-center justify-center rounded-md border border-[#1a3df0] text-[10px] font-semibold text-[#1a3df0]">
                 ((•))
               </span>
             </div>
           </div>
 
           <div className="mt-16 flex items-end gap-10 md:mt-0">
-            <ul className="text-[13px] font-light uppercase leading-[1.45] tracking-wide text-white/90">
+            <ul className="text-[13px] font-light uppercase leading-[1.45] tracking-wide text-neutral-700">
               <li>24/7</li>
               <li>AI Detect</li>
               <li>Night Vision</li>
               <li>Cloud Backup</li>
             </ul>
             <div className="flex gap-3">
-              <span className="mt-[-48px] hidden h-24 w-px bg-white/50 md:block" />
-              <p className="max-w-[210px] text-[12px] font-light leading-snug text-white/85">
+              <span className="mt-[-48px] hidden h-24 w-px bg-neutral-300 md:block" />
+              <p className="max-w-[210px] text-[12px] font-light leading-snug text-neutral-600">
                 Every camera reports motion, presence and vehicle activity 24/7 — footage stored
                 securely in the cloud.
               </p>
@@ -110,7 +105,7 @@ export function CameraHero() {
         </div>
 
         {/* Top-right blurb */}
-        <p className="relative z-10 order-3 col-span-12 hidden max-w-[230px] justify-self-end pt-10 text-[12px] font-light leading-snug text-white/90 md:col-span-3 md:col-start-10 md:block md:pt-16">
+        <p className="relative z-10 order-3 col-span-12 hidden max-w-[230px] justify-self-end pt-10 text-[12px] font-light leading-snug text-neutral-700 md:col-span-3 md:col-start-10 md:block md:pt-16">
           Real-time motion detection, night vision and instant alerts — all monitored from a single
           dashboard built for security teams.
         </p>
