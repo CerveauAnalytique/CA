@@ -20,7 +20,7 @@ export const Users: CollectionConfig = {
   },
   admin: {
     group: 'Users',
-    defaultColumns: ['name', 'email', 'roles'],
+    defaultColumns: ['name', 'email', 'language', 'roles'],
     useAsTitle: 'name',
   },
   auth: {
@@ -31,6 +31,22 @@ export const Users: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+    },
+    {
+      name: 'language',
+      type: 'select',
+      label: 'Language',
+      defaultValue: 'en',
+      options: [
+        { label: 'English', value: 'en' },
+        { label: 'Nederlands', value: 'nl' },
+        { label: 'Deutsch', value: 'de' },
+        { label: 'Français', value: 'fr' },
+        { label: 'Español', value: 'es' },
+        { label: 'Polski', value: 'pl' },
+        { label: 'العربية', value: 'ar' },
+      ],
+      admin: { description: 'Chosen at sign-up. The site opens in this language when the customer logs in.' },
     },
     {
       name: 'roles',

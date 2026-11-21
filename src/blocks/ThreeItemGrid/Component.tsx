@@ -1,7 +1,7 @@
 import type { Media, Product, ThreeItemGridBlock as ThreeItemGridBlockProps } from '@/payload-types'
 
 import { GridTileImage } from '@/components/Grid/tile'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import React from 'react'
 import type { DefaultDocumentIDType } from 'payload'
 

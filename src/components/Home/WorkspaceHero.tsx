@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import { Globe, ChevronLeft, ChevronRight, RotateCcw, Search, Terminal } from 'lucide-react'
 
 export function WorkspaceHero() {

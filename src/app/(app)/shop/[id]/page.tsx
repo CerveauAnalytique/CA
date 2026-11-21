@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/i18n/client'
+import { getT } from '@/i18n/server'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import { ArrowLeft, Download, Star } from 'lucide-react'
@@ -15,6 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function AppPage({ params }: Props) {
+  const t = await getT()
   const app = await getApp((await params).id)
   if (!app) notFound()
 
@@ -24,7 +26,7 @@ export default async function AppPage({ params }: Props) {
   return (
     <div className="mx-auto w-full max-w-[1280px] px-6 py-12 md:py-16">
       <Link href="/shop" className="inline-flex items-center gap-1.5 text-[13px] text-neutral-500 hover:text-neutral-900">
-        <ArrowLeft size={14} /> Back to shop
+        <ArrowLeft size={14} /> {t('Back to shop')}
       </Link>
 
       <div className="mt-8 grid gap-10 md:grid-cols-[1fr_320px]">
@@ -44,7 +46,7 @@ export default async function AppPage({ params }: Props) {
             </div>
           </div>
 
-          <h2 className="mt-10 text-[14px] font-semibold">About this app</h2>
+          <h2 className="mt-10 text-[14px] font-semibold">{t('About this app')}</h2>
           <p className="mt-3 max-w-2xl whitespace-pre-wrap text-[15px] leading-relaxed text-neutral-600">
             {app.description}
           </p>
@@ -57,19 +59,19 @@ export default async function AppPage({ params }: Props) {
               href={marketDownloadUrl(app.id)}
               className="mt-4 flex h-12 items-center justify-center gap-2 rounded-full bg-neutral-900 text-[15px] font-medium text-white"
             >
-              <Download size={16} /> Install
+              <Download size={16} /> {t('Install')}
             </a>
           ) : (
             <p className="mt-4 rounded-xl bg-white p-3 text-[13px] text-neutral-500">
-              This app is not available for download yet.
+              {t('This app is not available for download yet.')}
             </p>
           )}
           <dl className="mt-6 space-y-3 text-[13px]">
             {[
-              ['Rating', (<span key="r" className="inline-flex items-center gap-1"><Star size={13} className="fill-amber-400 text-amber-400" />{app.rating.toFixed(1)}</span>)],
-              ['Downloads', app.downloads.toLocaleString('en-US')],
-              ['Version', app.version],
-              ['Category', app.category],
+              [t('Rating'), (<span key="r" className="inline-flex items-center gap-1"><Star size={13} className="fill-amber-400 text-amber-400" />{app.rating.toFixed(1)}</span>)],
+              [t('Downloads'), app.downloads.toLocaleString('en-US')],
+              [t('Version'), app.version],
+              [t('Category'), app.category],
             ].map(([k, v]) => (
               <div key={k as string} className="flex items-center justify-between">
                 <dt className="text-neutral-400">{k}</dt>

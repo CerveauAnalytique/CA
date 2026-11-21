@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getT } from '@/i18n/server'
 import { Pill, Specs, formatBytes, formatNumber } from '@/components/Catalog/parts'
 
 export const dynamic = 'force-dynamic'
@@ -27,13 +28,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function DatasetPage({ params }: Props) {
+  const t = await getT()
   const d = await load((await params).slug)
   if (!d) notFound()
 
   return (
     <div className="mx-auto w-full max-w-[1280px] px-6 py-12 md:py-16">
       <Link href="/datasets" className="inline-flex items-center gap-1.5 text-[13px] text-neutral-500 hover:text-neutral-900">
-        <ArrowLeft size={14} /> All datasets
+        <ArrowLeft size={14} /> {t('All datasets')}
       </Link>
 
       <div className="mt-8 grid gap-10 md:grid-cols-[1fr_320px]">
@@ -50,14 +52,14 @@ export default async function DatasetPage({ params }: Props) {
 
           {d.schemaColumns && d.schemaColumns.length > 0 && (
             <>
-              <h2 className="mt-10 text-[14px] font-semibold">Schema</h2>
+              <h2 className="mt-10 text-[14px] font-semibold">{t('Schema')}</h2>
               <div className="mt-3 overflow-x-auto rounded-2xl bg-neutral-50 p-2">
                 <table className="w-full min-w-[420px] text-left text-[13px]">
                   <thead className="text-[11px] text-neutral-400">
                     <tr>
-                      <th className="px-3 py-2 font-normal">Column</th>
-                      <th className="px-3 py-2 font-normal">Type</th>
-                      <th className="px-3 py-2 font-normal">Description</th>
+                      <th className="px-3 py-2 font-normal">{t('Column')}</th>
+                      <th className="px-3 py-2 font-normal">{t('Type')}</th>
+                      <th className="px-3 py-2 font-normal">{t('Description')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -76,7 +78,7 @@ export default async function DatasetPage({ params }: Props) {
 
           {d.datasetCard && (
             <>
-              <h2 className="mt-10 text-[14px] font-semibold">About this dataset</h2>
+              <h2 className="mt-10 text-[14px] font-semibold">{t('About this dataset')}</h2>
               <div className="mt-3 max-w-2xl whitespace-pre-wrap text-[14px] leading-relaxed text-neutral-600">
                 {d.datasetCard}
               </div>
@@ -92,18 +94,18 @@ export default async function DatasetPage({ params }: Props) {
               rel="noreferrer"
               className="mb-6 flex h-12 items-center justify-center gap-2 rounded-full bg-neutral-900 text-[14px] font-medium text-white"
             >
-              Get the data <ExternalLink size={14} />
+              {t('Get the data')} <ExternalLink size={14} />
             </a>
           )}
           <Specs
             rows={[
-              ['Format', d.format],
-              ['Version', d.version],
-              ['License', d.license],
-              ['Rows', formatNumber(d.rowCount)],
-              ['Columns', formatNumber(d.columnCount)],
-              ['Size', formatBytes(d.sizeBytes)],
-              ['Downloads', formatNumber(d.downloads)],
+              [t('Format'), d.format],
+              [t('Version'), d.version],
+              [t('License'), d.license],
+              [t('Rows'), formatNumber(d.rowCount)],
+              [t('Columns'), formatNumber(d.columnCount)],
+              [t('Size'), formatBytes(d.sizeBytes)],
+              [t('Downloads'), formatNumber(d.downloads)],
             ]}
           />
           {d.tags && d.tags.length > 0 && (

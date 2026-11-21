@@ -1,18 +1,20 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import Link from 'next/link'
+import Link, { useT } from '@/i18n/client'
 import { usePathname } from 'next/navigation'
 import { ChevronDown } from 'lucide-react'
+import { tr } from '@/i18n/translate'
 
 const ITEMS = [
-  { href: '/shop', title: 'Shop', text: 'Apps and tools for CA7', img: '/nav/shop.svg' },
-  { href: '/models', title: 'AI Models', text: 'Models for your data and cameras', img: '/nav/models.svg' },
-  { href: '/datasets', title: 'Datasets', text: 'Data from cameras, sensors and logs', img: '/nav/datasets.svg' },
+  { href: '/shop', title: tr('Shop'), text: tr('Apps and tools for CA7'), img: '/nav/shop.svg' },
+  { href: '/models', title: tr('AI Models'), text: tr('Models for your data and cameras'), img: '/nav/models.svg' },
+  { href: '/datasets', title: tr('Datasets'), text: tr('Data from cameras, sensors and logs'), img: '/nav/datasets.svg' },
 ]
 
 /** One "Explore" entry in the navbar that holds Shop, AI Models and Datasets. */
 export function ExploreMenu() {
+  const t = useT()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const pathname = usePathname()
@@ -48,7 +50,7 @@ export function ExploreMenu() {
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
       >
-        Explore
+        {t('Explore')}
         <ChevronDown size={13} className={`nav-dd__chev ${open ? 'is-open' : ''}`} />
       </button>
 
@@ -60,8 +62,8 @@ export function ExploreMenu() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={i.img} alt="" width={96} height={96} />
               </span>
-              <span className="nav-dd__title">{i.title}</span>
-              <span className="nav-dd__text">{i.text}</span>
+              <span className="nav-dd__title">{t(i.title)}</span>
+              <span className="nav-dd__text">{t(i.text)}</span>
             </Link>
           ))}
         </div>

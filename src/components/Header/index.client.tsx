@@ -4,7 +4,8 @@ import { CMSLink } from '@/components/Link'
 import { Cart } from '@/components/Cart'
 import { OpenCartButton } from '@/components/Cart/OpenCart'
 import { ThemeToggle } from '@/components/ThemeToggle'
-import Link from 'next/link'
+import Link, { useT } from '@/i18n/client'
+import { LanguageSwitcher } from './LanguageSwitcher'
 import React, { Suspense, useEffect, useRef, useState } from 'react'
 
 import { MobileMenu } from './MobileMenu'
@@ -26,6 +27,7 @@ import { Ca7Logo } from '@/components/Logo/Ca7Logo'
 import { ExploreMenu } from './ExploreMenu'
 
 export function HeaderClient({ header }: Props) {
+  const t = useT()
   const { user, logout } = useAuth()
   const menu = header.navItems || []
   const pathname = usePathname()
@@ -37,10 +39,10 @@ export function HeaderClient({ header }: Props) {
   const username = formatUserDisplayName(user)
   const userAvatar = (user as any)?.avatar?.url || (user as any)?.avatar || (user as any)?.image?.url
 
-  const searchPlaceholder = header.searchPlaceholder || 'Search docs, research, products…'
-  const loginLabel = header.loginLabel || 'Log in'
+  const searchPlaceholder = header.searchPlaceholder ? t(header.searchPlaceholder) : t('Search docs, research, products…')
+  const loginLabel = header.loginLabel ? t(header.loginLabel) : t('Log in')
   const loginURL = header.loginURL || '/login'
-  const startLabel = 'Start chat'
+  const startLabel = t('Start chat')
   const startURL = '/chat-ca7'
 
   useEffect(() => {
@@ -92,15 +94,15 @@ export function HeaderClient({ header }: Props) {
                 'text-white bg-white/10': pathname.includes('/research'),
               })}
             >
-              Research
+              {t('Research')}
             </Link>
             <Link
               href="/api"
               className={cn('nav-link', {
-                'text-white bg-white/10': pathname === '/api',
+                'text-white bg-white/10': /\/api$/.test(pathname),
               })}
             >
-              API
+              {t('API')}
             </Link>
             <Link
               href="/docs"
@@ -108,7 +110,7 @@ export function HeaderClient({ header }: Props) {
                 'text-white bg-white/10': pathname.includes('/docs'),
               })}
             >
-              Docs
+              {t('Docs')}
             </Link>
           </>
         )}
@@ -139,7 +141,7 @@ export function HeaderClient({ header }: Props) {
         {/* Marketplace Store Icon Button */}
         <Link
           href="/marketplace"
-          title="Marketplace & Enterprise Models"
+          title={t('Marketplace & Enterprise Models')}
           className="relative hidden h-8 w-8 items-center justify-center rounded-md text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-white transition-colors md:flex"
         >
           <Store className="h-4 w-4" />
@@ -148,7 +150,7 @@ export function HeaderClient({ header }: Props) {
         {/* Notification Bell Icon Button */}
         <Link
           href="/notifications"
-          title="Notifications & System Alerts"
+          title={t('Notifications & System Alerts')}
           className="relative hidden h-8 w-8 items-center justify-center rounded-md text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-white transition-colors md:flex"
         >
           <Bell className="h-4 w-4" />
@@ -171,10 +173,10 @@ export function HeaderClient({ header }: Props) {
             <button
               onClick={() => logout()}
               className="btn-login inline-flex items-center gap-1.5 text-xs text-neutral-400 hover:text-red-400 border-neutral-800 hover:border-red-500/30 transition-colors"
-              title="Log out"
+              title={t('Log out')}
             >
               <LogOut className="h-3.5 w-3.5" />
-              <span>Log out</span>
+              <span>{t('Log out')}</span>
             </button>
           </div>
         ) : (
@@ -201,6 +203,8 @@ export function HeaderClient({ header }: Props) {
         <div className="hidden md:block">
           <ThemeToggle />
         </div>
+
+        <LanguageSwitcher />
       </div>
 
       <SearchModal

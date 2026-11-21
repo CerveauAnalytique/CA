@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import { ArrowLeft, ExternalLink } from 'lucide-react'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getT } from '@/i18n/server'
 import { Pill, Specs, formatBytes, formatNumber } from '@/components/Catalog/parts'
 
 export const dynamic = 'force-dynamic'
@@ -27,13 +28,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ModelPage({ params }: Props) {
+  const t = await getT()
   const m = await load((await params).slug)
   if (!m) notFound()
 
   return (
     <div className="mx-auto w-full max-w-[1280px] px-6 py-12 md:py-16">
       <Link href="/models" className="inline-flex items-center gap-1.5 text-[13px] text-neutral-500 hover:text-neutral-900">
-        <ArrowLeft size={14} /> All models
+        <ArrowLeft size={14} /> {t('All models')}
       </Link>
 
       <div className="mt-8 grid gap-10 md:grid-cols-[1fr_320px]">
@@ -51,7 +53,7 @@ export default async function ModelPage({ params }: Props) {
 
           {m.installCommand && (
             <>
-              <h2 className="mt-10 text-[14px] font-semibold">Install</h2>
+              <h2 className="mt-10 text-[14px] font-semibold">{t('Install')}</h2>
               <pre className="mt-3 overflow-x-auto rounded-xl bg-neutral-900 p-4 text-[13px] leading-relaxed text-neutral-100">
                 <code>{m.installCommand}</code>
               </pre>
@@ -60,7 +62,7 @@ export default async function ModelPage({ params }: Props) {
 
           {m.metrics && m.metrics.length > 0 && (
             <>
-              <h2 className="mt-10 text-[14px] font-semibold">Metrics</h2>
+              <h2 className="mt-10 text-[14px] font-semibold">{t('Metrics')}</h2>
               <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {m.metrics.map((x) => (
                   <div key={x.id} className="rounded-2xl bg-neutral-50 p-4">
@@ -74,7 +76,7 @@ export default async function ModelPage({ params }: Props) {
 
           {m.modelCard && (
             <>
-              <h2 className="mt-10 text-[14px] font-semibold">Model card</h2>
+              <h2 className="mt-10 text-[14px] font-semibold">{t('Model card')}</h2>
               <div className="mt-3 max-w-2xl whitespace-pre-wrap text-[14px] leading-relaxed text-neutral-600">
                 {m.modelCard}
               </div>
@@ -90,18 +92,18 @@ export default async function ModelPage({ params }: Props) {
               rel="noreferrer"
               className="mb-6 flex h-12 items-center justify-center gap-2 rounded-full bg-neutral-900 text-[14px] font-medium text-white"
             >
-              Get the model <ExternalLink size={14} />
+              {t('Get the model')} <ExternalLink size={14} />
             </a>
           )}
           <Specs
             rows={[
-              ['Framework', m.framework],
-              ['Base model', m.baseModel],
-              ['Version', m.version],
-              ['Stage', m.stage],
-              ['License', m.license],
-              ['Size', formatBytes(m.sizeBytes)],
-              ['Downloads', formatNumber(m.downloads)],
+              [t('Framework'), m.framework],
+              [t('Base model'), m.baseModel],
+              [t('Version'), m.version],
+              [t('Stage'), m.stage],
+              [t('License'), m.license],
+              [t('Size'), formatBytes(m.sizeBytes)],
+              [t('Downloads'), formatNumber(m.downloads)],
             ]}
           />
           {m.tags && m.tags.length > 0 && (

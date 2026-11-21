@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import { SearchIcon, X, BookOpen, ShoppingBag, FileText, ArrowRight } from 'lucide-react'
 
 interface SearchResultItem {

@@ -193,6 +193,10 @@ export interface UserAuthOperations {
 export interface User {
   id: number;
   name?: string | null;
+  /**
+   * Chosen at sign-up. The site opens in this language when the customer logs in.
+   */
+  language?: ('en' | 'nl' | 'de' | 'fr' | 'es' | 'pl' | 'ar') | null;
   roles?: ('admin' | 'customer')[] | null;
   orders?: {
     docs?: (number | Order)[];
@@ -1320,6 +1324,7 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  language?: T;
   roles?: T;
   orders?: T;
   cart?: T;

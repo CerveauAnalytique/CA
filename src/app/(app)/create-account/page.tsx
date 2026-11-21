@@ -9,8 +9,10 @@ import { getPayload } from 'payload'
 
 import { CreateAccountForm } from '@/components/forms/CreateAccountForm'
 import { redirect } from 'next/navigation'
+import { getT } from '@/i18n/server'
 
 export default async function CreateAccount() {
+  const t = await getT()
   const headers = await getHeaders()
   const payload = await getPayload({ config: configPromise })
   const { user } = await payload.auth({ headers })
@@ -21,7 +23,7 @@ export default async function CreateAccount() {
 
   return (
     <div className="container py-16">
-      <h1 className="text-xl mb-4">Create Account</h1>
+      <h1 className="text-xl mb-4">{t('Create account')}</h1>
       <RenderParams />
       <CreateAccountForm />
     </div>

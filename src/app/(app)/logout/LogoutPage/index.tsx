@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuth } from '@/providers/Auth'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import React, { Fragment, useEffect, useState } from 'react'
 
 export const LogoutPage: React.FC = (props) => {

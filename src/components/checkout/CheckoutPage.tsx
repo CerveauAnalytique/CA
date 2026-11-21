@@ -10,7 +10,7 @@ import { useAuth } from '@/providers/Auth'
 import { useTheme } from '@/providers/Theme'
 import { Elements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import { useRouter } from 'next/navigation'
 import React, { Suspense, useCallback, useEffect, useState } from 'react'
 

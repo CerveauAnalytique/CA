@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/i18n/client'
+import { getT } from '@/i18n/server'
 import React from 'react'
 import { Download, Search, Star } from 'lucide-react'
 import {
@@ -30,7 +31,7 @@ const href = (q: string, category: string, sort: string) => {
   return s ? `/shop?${s}` : '/shop'
 }
 
-function AppCard({ app }: { app: MarketApp }) {
+function AppCard({ app, featuredLabel }: { app: MarketApp; featuredLabel: string }) {
   const icon = marketAsset(app.icon_url)
   return (
     <Link
@@ -46,7 +47,7 @@ function AppCard({ app }: { app: MarketApp }) {
         )}
         {app.featured && (
           <span className="rounded-full bg-neutral-900 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-white">
-            Featured
+            {featuredLabel}
           </span>
         )}
       </div>
@@ -69,6 +70,7 @@ function AppCard({ app }: { app: MarketApp }) {
 }
 
 export default async function ShopPage({ searchParams }: Props) {
+  const t = await getT()
   const sp = await searchParams
   const q = one(sp.q)
   const category = one(sp.category) || 'All Categories'
@@ -80,12 +82,12 @@ export default async function ShopPage({ searchParams }: Props) {
     <div className="mx-auto w-full max-w-[1280px] px-6 py-12 md:py-16">
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
-          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-400">Shop</p>
+          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-400">{t('Shop')}</p>
           <h1 className="mt-3 text-[clamp(30px,4vw,48px)] font-light leading-tight tracking-tight">
-            Apps and tools for CA7
+            {t('Apps and tools for CA7')}
           </h1>
           <p className="mt-3 max-w-xl text-[15px] text-neutral-500">
-            Install ready-made apps for your cameras, sensors and data, or publish your own.
+            {t('Install ready-made apps for your cameras, sensors and data, or publish your own.')}
           </p>
         </div>
         <a
@@ -94,7 +96,7 @@ export default async function ShopPage({ searchParams }: Props) {
           rel="noreferrer"
           className="inline-flex h-11 shrink-0 items-center rounded-full bg-neutral-900 px-6 text-[14px] font-medium text-white"
         >
-          Publish an app
+          {t('Publish an app')}
         </a>
       </div>
 
@@ -103,7 +105,7 @@ export default async function ShopPage({ searchParams }: Props) {
         <input
           name="q"
           defaultValue={q}
-          placeholder="Search apps and tools…"
+          placeholder={t('Search apps and tools…')}
           className="h-9 flex-1 bg-transparent text-[14px] outline-none placeholder:text-neutral-400"
         />
         {category !== 'All Categories' && <input type="hidden" name="category" value={category} />}
@@ -133,7 +135,7 @@ export default async function ShopPage({ searchParams }: Props) {
                 sort === s ? 'bg-neutral-100 font-medium text-neutral-900' : 'text-neutral-500'
               }`}
             >
-              {s === 'popular' ? 'Popular' : 'New'}
+              {s === 'popular' ? t('Popular') : t('New')}
             </Link>
           ))}
         </div>
@@ -142,17 +144,17 @@ export default async function ShopPage({ searchParams }: Props) {
       <div className="mt-8">
         {apps === null ? (
           <div className="rounded-2xl bg-neutral-50 p-10 text-center">
-            <p className="text-[15px] font-medium">The shop is offline right now.</p>
-            <p className="mt-1 text-[13px] text-neutral-500">Please try again in a moment.</p>
+            <p className="text-[15px] font-medium">{t('The shop is offline right now.')}</p>
+            <p className="mt-1 text-[13px] text-neutral-500">{t('Please try again in a moment.')}</p>
           </div>
         ) : apps.length === 0 ? (
           <div className="rounded-2xl bg-neutral-50 p-10 text-center text-[14px] text-neutral-500">
-            No apps found. Try a different search or category.
+            {t('No apps found. Try a different search or category.')}
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {apps.map((a) => (
-              <AppCard key={a.id} app={a} />
+              <AppCard key={a.id} app={a} featuredLabel={t('Featured')} />
             ))}
           </div>
         )}

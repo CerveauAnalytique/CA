@@ -1,5 +1,5 @@
 import React from 'react'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import { ArrowUpRight } from 'lucide-react'
 
 export interface BlogPostItem {

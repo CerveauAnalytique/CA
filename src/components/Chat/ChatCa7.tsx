@@ -3,14 +3,16 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { ArrowUp, Plus, Square } from 'lucide-react'
 import { BrainIcon } from '@/components/Logo/BrainIcon'
+import { useT } from '@/i18n/client'
+import { tr } from '@/i18n/translate'
 
 type Msg = { id: string; role: 'user' | 'assistant'; content: string; error?: boolean }
 
 const SUGGESTIONS = [
-  'Summarise these sensor readings: 21.4, 21.6, 35.2, 21.5',
-  'Write a SQL query for daily camera motion events',
-  'How do I share my data through the API?',
-  'Which anomalies matter in temperature data?',
+  tr('Summarise these sensor readings: 21.4, 21.6, 35.2, 21.5'),
+  tr('Write a SQL query for daily camera motion events'),
+  tr('How do I share my data through the API?'),
+  tr('Which anomalies matter in temperature data?'),
 ]
 
 const uid = () => Math.random().toString(36).slice(2)
@@ -43,6 +45,7 @@ function Content({ text }: { text: string }) {
 }
 
 export function ChatCa7() {
+  const t = useT()
   const [messages, setMessages] = useState<Msg[]>([])
   const [input, setInput] = useState('')
   const [busy, setBusy] = useState(false)
@@ -77,7 +80,7 @@ export function ChatCa7() {
         })
         if (!res.ok || !res.body) {
           const data = await res.json().catch(() => ({}))
-          throw new Error(data.error || 'CA7 could not answer right now.')
+          throw new Error(data.error || t('CA7 could not answer right now.'))
         }
         const reader = res.body.getReader()
         const dec = new TextDecoder()
@@ -128,7 +131,7 @@ export function ChatCa7() {
             }}
             className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-neutral-200"
           >
-            <Plus size={13} /> New chat
+            <Plus size={13} /> {t('New chat')}
           </button>
         )}
       </div>
@@ -138,20 +141,20 @@ export function ChatCa7() {
           <div className="flex flex-1 flex-col items-center justify-center pb-24 text-center">
             <BrainIcon className="h-14 w-14" />
             <h1 className="mt-6 text-[clamp(30px,4vw,44px)] font-light leading-tight tracking-tight">
-              What can CA7 help you with?
+              {t('What can CA7 help you with?')}
             </h1>
             <p className="mt-3 max-w-md text-[15px] text-neutral-500">
-              The AI that is very good with data: sensors, cameras, SQL, analytics.
+              {t('The AI that is very good with data: sensors, cameras, SQL, analytics.')}
             </p>
             <div className="mt-8 grid w-full gap-2.5 sm:grid-cols-2">
               {SUGGESTIONS.map((s) => (
                 <button
                   key={s}
                   type="button"
-                  onClick={() => send(s, [])}
+                  onClick={() => send(t(s), [])}
                   className="rounded-2xl bg-neutral-100 px-4 py-3 text-left text-[13px] text-neutral-700 transition hover:bg-neutral-200"
                 >
-                  {s}
+                  {t(s)}
                 </button>
               ))}
             </div>
@@ -204,13 +207,13 @@ export function ChatCa7() {
                 }
               }}
               rows={1}
-              placeholder="Ask CA7 anything…"
+              placeholder={t('Ask CA7 anything…')}
               className="max-h-40 min-h-[40px] flex-1 resize-none bg-transparent py-2.5 text-[15px] outline-none placeholder:text-neutral-400"
             />
             {busy ? (
               <button
                 type="button"
-                aria-label="Stop"
+                aria-label={t('Stop')}
                 onClick={() => abortRef.current?.abort()}
                 className="grid h-10 w-10 place-items-center rounded-full bg-neutral-900 text-white"
               >
@@ -219,7 +222,7 @@ export function ChatCa7() {
             ) : (
               <button
                 type="submit"
-                aria-label="Send"
+                aria-label={t('Send')}
                 disabled={!input.trim()}
                 className="grid h-10 w-10 place-items-center rounded-full bg-neutral-900 text-white disabled:opacity-30"
               >
@@ -228,7 +231,7 @@ export function ChatCa7() {
             )}
           </div>
           <p className="mt-2 text-center text-[11px] text-neutral-400">
-            CA7 can make mistakes. Check important numbers.
+            {t('CA7 can make mistakes. Check important numbers.')}
           </p>
         </form>
       </div>

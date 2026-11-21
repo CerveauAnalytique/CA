@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 import { Button } from '@/components/ui/button'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import { headers as getHeaders } from 'next/headers.js'
 import configPromise from '@payload-config'
 import { AccountForm } from '@/components/forms/AccountForm'

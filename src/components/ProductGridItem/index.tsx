@@ -1,6 +1,6 @@
 import type { Product, Variant } from '@/payload-types'
 
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import React from 'react'
 import clsx from 'clsx'
 import { Media } from '@/components/Media'

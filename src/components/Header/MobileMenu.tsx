@@ -7,10 +7,11 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from 
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { useAuth } from '@/providers/Auth'
 import { ArrowUpRight, SearchIcon, XIcon } from 'lucide-react'
-import Link from 'next/link'
+import Link, { useT } from '@/i18n/client'
 import { usePathname, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 
+import { tr } from '@/i18n/translate'
 import { formatUserDisplayName } from '@/utilities/formatUserDisplayName'
 
 interface Props {
@@ -28,15 +29,16 @@ function MenuLinesIcon() {
 }
 
 const LINKS = [
-  { href: '/shop', label: 'Shop' },
-  { href: '/models', label: 'AI Models' },
-  { href: '/datasets', label: 'Datasets' },
-  { href: '/research', label: 'Research' },
-  { href: '/api', label: 'API' },
-  { href: '/docs', label: 'Docs' },
+  { href: '/shop', label: tr('Shop') },
+  { href: '/models', label: tr('AI Models') },
+  { href: '/datasets', label: tr('Datasets') },
+  { href: '/research', label: tr('Research') },
+  { href: '/api', label: tr('API') },
+  { href: '/docs', label: tr('Docs') },
 ]
 
 export function MobileMenu({ menu, onSearch }: Props) {
+  const t = useT()
   const { user, logout } = useAuth()
   const username = formatUserDisplayName(user)
 
@@ -64,7 +66,7 @@ export function MobileMenu({ menu, onSearch }: Props) {
   return (
     <Sheet onOpenChange={setIsOpen} open={isOpen}>
       <SheetTrigger
-        aria-label={isOpen ? 'Close menu' : 'Open menu'}
+        aria-label={isOpen ? t('Close menu') : t('Open menu')}
         className="relative flex h-9 w-9 items-center justify-center rounded-md text-neutral-900 transition-colors hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800"
       >
         {isOpen ? <XIcon className="h-5 w-5" /> : <MenuLinesIcon />}
@@ -74,8 +76,8 @@ export function MobileMenu({ menu, onSearch }: Props) {
         side="right"
         className="w-full gap-0 border-0 bg-white px-6 pb-8 pt-4 sm:max-w-none dark:bg-neutral-950 [&>button]:hidden"
       >
-        <SheetTitle className="sr-only">Menu</SheetTitle>
-        <SheetDescription className="sr-only">Site navigation</SheetDescription>
+        <SheetTitle className="sr-only">{t('Menu')}</SheetTitle>
+        <SheetDescription className="sr-only">{t('Site navigation')}</SheetDescription>
 
         <nav className="flex-1 overflow-y-auto">
           {onSearch && (
@@ -87,7 +89,7 @@ export function MobileMenu({ menu, onSearch }: Props) {
               }}
               className="mb-2 flex w-full items-center gap-3 rounded-2xl bg-neutral-100 px-4 py-3 text-left text-[15px] text-neutral-500 dark:bg-neutral-900"
             >
-              <SearchIcon size={18} /> Search docs, research, products…
+              <SearchIcon size={18} /> {t('Search docs, research, products…')}
             </button>
           )}
           <ul>
@@ -100,7 +102,7 @@ export function MobileMenu({ menu, onSearch }: Props) {
               : LINKS.map((l) => (
                   <li key={l.href}>
                     <Link href={l.href} onClick={close} className={linkClass}>
-                      {l.label}
+                      {t(l.label)}
                       <ArrowUpRight size={20} className="text-neutral-300" />
                     </Link>
                   </li>
@@ -114,7 +116,7 @@ export function MobileMenu({ menu, onSearch }: Props) {
             onClick={close}
             className="flex h-12 w-full items-center justify-center rounded-full bg-neutral-900 text-[15px] font-medium text-white dark:bg-white dark:text-neutral-900"
           >
-            Start chat
+            {t('Start chat')}
           </Link>
 
           {user ? (
@@ -122,13 +124,13 @@ export function MobileMenu({ menu, onSearch }: Props) {
               <p className="truncate text-sm font-semibold">{username}</p>
               <div className="mt-3 flex flex-wrap gap-2 text-[13px]">
                 <Link href="/dashboard" onClick={close} className="rounded-full bg-white px-3 py-1.5 dark:bg-neutral-800">
-                  Dashboard
+                  {t('Dashboard')}
                 </Link>
                 <Link href="/account" onClick={close} className="rounded-full bg-white px-3 py-1.5 dark:bg-neutral-800">
-                  Account
+                  {t('Account')}
                 </Link>
                 <Link href="/orders" onClick={close} className="rounded-full bg-white px-3 py-1.5 dark:bg-neutral-800">
-                  Orders
+                  {t('Orders')}
                 </Link>
                 <button
                   type="button"
@@ -138,7 +140,7 @@ export function MobileMenu({ menu, onSearch }: Props) {
                   }}
                   className="rounded-full bg-white px-3 py-1.5 text-red-600 dark:bg-neutral-800"
                 >
-                  Log out
+                  {t('Log out')}
                 </button>
               </div>
             </div>
@@ -148,12 +150,12 @@ export function MobileMenu({ menu, onSearch }: Props) {
               onClick={close}
               className="flex h-12 w-full items-center justify-center rounded-full bg-neutral-100 text-[15px] font-medium dark:bg-neutral-900"
             >
-              Log in
+              {t('Log in')}
             </Link>
           )}
 
           <div className="flex items-center justify-between pt-1 text-[13px] text-neutral-500">
-            <span>Appearance</span>
+            <span>{t('Appearance')}</span>
             <ThemeToggle />
           </div>
         </div>

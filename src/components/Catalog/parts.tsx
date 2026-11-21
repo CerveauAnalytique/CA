@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import React from 'react'
 
 export function CatalogHead({
@@ -19,13 +19,23 @@ export function CatalogHead({
   )
 }
 
-export function SearchBox({ action, q, extra }: { action: string; q: string; extra?: Record<string, string> }) {
+export function SearchBox({
+  action,
+  q,
+  extra,
+  placeholder,
+}: {
+  action: string
+  q: string
+  extra?: Record<string, string>
+  placeholder: string
+}) {
   return (
     <form action={action} className="mt-8 flex items-center gap-2 rounded-full bg-neutral-100 px-5 py-1.5">
       <input
         name="q"
         defaultValue={q}
-        placeholder="Search…"
+        placeholder={placeholder}
         className="h-9 flex-1 bg-transparent text-[14px] outline-none placeholder:text-neutral-400"
       />
       {Object.entries(extra ?? {}).map(([k, v]) => (

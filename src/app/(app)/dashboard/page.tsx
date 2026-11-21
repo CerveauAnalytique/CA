@@ -1,7 +1,7 @@
 import { headers as getHeaders } from 'next/headers'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import React from 'react'
 import { Card } from '@/components/Dash/DashShell'
 import { CopyField } from '@/components/Dash/CopyField'

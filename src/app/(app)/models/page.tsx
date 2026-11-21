@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import React from 'react'
 import { Download } from 'lucide-react'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import { getT } from '@/i18n/server'
+import { tr } from '@/i18n/translate'
 import { Chips, CatalogHead, Pill, SearchBox } from '@/components/Catalog/parts'
 
 export const metadata: Metadata = {
@@ -16,7 +18,7 @@ type Props = { searchParams: Promise<{ [k: string]: string | string[] | undefine
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v) || ''
 
 const FRAMEWORKS = [
-  { value: 'all', label: 'All' },
+  { value: 'all', label: tr('All') },
   { value: 'ollama', label: 'Ollama' },
   { value: 'pytorch', label: 'PyTorch' },
   { value: 'tensorflow', label: 'TensorFlow' },
@@ -26,6 +28,7 @@ const FRAMEWORKS = [
 ]
 
 export default async function ModelsPage({ searchParams }: Props) {
+  const t = await getT()
   const sp = await searchParams
   const q = one(sp.q).trim()
   const framework = one(sp.framework) || 'all'
@@ -57,17 +60,17 @@ export default async function ModelsPage({ searchParams }: Props) {
   return (
     <div className="mx-auto w-full max-w-[1280px] px-6 py-12 md:py-16">
       <CatalogHead
-        eyebrow="AI Models"
-        title="AI models for your data"
-        text="Ready-to-run models for cameras, sensors and analytics. Pick one, install it and connect it to CA7."
+        eyebrow={t('AI Models')}
+        title={t('AI models for your data')}
+        text={t('Ready-to-run models for cameras, sensors and analytics. Pick one, install it and connect it to CA7.')}
       />
-      <SearchBox action="/models" q={q} extra={framework !== 'all' ? { framework } : undefined} />
-      <Chips items={FRAMEWORKS} active={framework} hrefFor={hrefFor} />
+      <SearchBox placeholder={t('Search…')} action="/models" q={q} extra={framework !== 'all' ? { framework } : undefined} />
+      <Chips items={FRAMEWORKS.map((f) => ({ ...f, label: t(f.label) }))} active={framework} hrefFor={hrefFor} />
 
       <div className="mt-8">
         {res.docs.length === 0 ? (
           <div className="rounded-2xl bg-neutral-50 p-10 text-center text-[14px] text-neutral-500">
-            No models found.
+            {t('No models found.')}
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

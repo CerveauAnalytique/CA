@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useAuth } from '@/providers/Auth'
-import Link from 'next/link'
+import Link, { setLanguageCookie, useLocale, useT } from '@/i18n/client'
+import { isLocale, localizePath } from '@/i18n/config'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useRef } from 'react'
 import { useForm } from 'react-hook-form'
@@ -21,6 +22,8 @@ export const LoginForm: React.FC = () => {
   const searchParams = useSearchParams()
   const allParams = searchParams.toString() ? `?${searchParams.toString()}` : ''
   const redirect = useRef(searchParams.get('redirect'))
+  const t = useT()
+  const locale = useLocale()
   const { login } = useAuth()
   const router = useRouter()
   const [error, setError] = React.useState<null | string>(null)
@@ -34,14 +37,21 @@ export const LoginForm: React.FC = () => {
   const onSubmit = useCallback(
     async (data: FormData) => {
       try {
-        await login(data)
-        if (redirect?.current) router.push(redirect.current)
-        else router.push('/dashboard')
+        const user = await login(data)
+        const target = redirect?.current || '/dashboard'
+        // the account remembers the customer's language: open the site in it
+        const lang = (user as { language?: string } | undefined)?.language
+        if (isLocale(lang) && lang !== locale) {
+          setLanguageCookie(lang)
+          window.location.assign(localizePath(target, lang))
+          return
+        }
+        router.push(target)
       } catch (_) {
-        setError('There was an error with the credentials provided. Please try again.')
+        setError(t('There was an error with the credentials provided. Please try again.'))
       }
     },
-    [login, router],
+    [login, router, locale, t],
   )
 
   return (
@@ -49,29 +59,29 @@ export const LoginForm: React.FC = () => {
       <Message className="classes.message" error={error} />
       <div className="flex flex-col gap-8">
         <FormItem>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t('Email')}</Label>
           <Input
             id="email"
             type="email"
-            {...register('email', { required: 'Email is required.' })}
+            {...register('email', { required: t('Email is required.') })}
           />
           {errors.email && <FormError message={errors.email.message} />}
         </FormItem>
 
         <FormItem>
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">{t('Password')}</Label>
           <Input
             id="password"
             type="password"
-            {...register('password', { required: 'Please provide a password.' })}
+            {...register('password', { required: t('Please provide a password.') })}
           />
           {errors.password && <FormError message={errors.password.message} />}
         </FormItem>
 
         <div className="text-primary/70 mb-6 prose prose-a:hover:text-primary dark:prose-invert">
           <p>
-            Forgot your password?{' '}
-            <Link href={`/forgot-password${allParams}`}>Click here to reset it</Link>
+            {t('Forgot your password?')}{' '}
+            <Link href={`/forgot-password${allParams}`}>{t('Click here to reset it')}</Link>
           </p>
         </div>
       </div>
@@ -79,11 +89,11 @@ export const LoginForm: React.FC = () => {
       <div className="flex gap-4 justify-between">
         <Button asChild variant="outline" size="lg">
           <Link href={`/create-account${allParams}`} className="grow max-w-[50%]">
-            Create an account
+            {t('Create an account')}
           </Link>
         </Button>
         <Button className="grow" disabled={isLoading} size="lg" type="submit" variant="default">
-          {isLoading ? 'Processing' : 'Continue'}
+          {isLoading ? t('Processing') : t('Continue')}
         </Button>
       </div>
     </form>

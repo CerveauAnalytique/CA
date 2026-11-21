@@ -3,7 +3,7 @@ import type { Media, Product } from '@/payload-types'
 
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import AutoScroll from 'embla-carousel-auto-scroll'
-import Link from 'next/link'
+import Link from '@/i18n/client'
 import React from 'react'
 import { GridTileImage } from '@/components/Grid/tile'
 

@@ -2,33 +2,36 @@
 
 import React, { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
+import { useT } from '@/i18n/client'
+import { tr } from '@/i18n/translate'
 import { SectionHead } from './SectionHead'
 import { DotIcon } from '@/components/Logo/DotIcon'
 
 const ITEMS = [
   {
     n: '1.0',
-    title: 'Create a Digital Brain',
-    text: 'Train your own AI brain on your data and tell it what to watch for, in plain language.',
+    title: tr('Create a Digital Brain'),
+    text: tr('Train your own AI brain on your data and tell it what to watch for, in plain language.'),
   },
   {
     n: '2.0',
-    title: 'Connect Cameras & Sensors',
-    text: 'Turn any camera into a smart camera, and add sensors for motion, temperature, sound, air quality, GPS, energy and more. Get instant alerts on your phone.',
+    title: tr('Connect Cameras & Sensors'),
+    text: tr('Turn any camera into a smart camera, and add sensors for motion, temperature, sound, air quality, GPS, energy and more. Get instant alerts on your phone.'),
   },
   {
     n: '3.0',
-    title: 'Apps Marketplace',
-    text: 'Install ready-made apps or publish your own and share them with everyone.',
+    title: tr('Apps Marketplace'),
+    text: tr('Install ready-made apps or publish your own and share them with everyone.'),
   },
   {
     n: '4.0',
-    title: 'Share with the Data API',
-    text: 'Open your data to other tools and teams through the API, with full control over who can see what.',
+    title: tr('Share with the Data API'),
+    text: tr('Open your data to other tools and teams through the API, with full control over who can see what.'),
   },
 ]
 
 export function UpdatesSection() {
+  const t = useT()
   const [open, setOpen] = useState(1)
 
   return (
@@ -45,9 +48,9 @@ export function UpdatesSection() {
       />
       <SectionHead
         index="02/04"
-        label="Build your brain"
-        title="Make your own smart camera"
-        text="No code and no experts needed. Connect a camera or sensor, teach your digital brain what to look for, and add apps from the marketplace."
+        label={t('Build your brain')}
+        title={t('Make your own smart camera')}
+        text={t('No code and no experts needed. Connect a camera or sensor, teach your digital brain what to look for, and add apps from the marketplace.')}
       />
 
       <div className="relative mx-auto mt-16 max-w-[1040px] px-6">
@@ -83,7 +86,7 @@ export function UpdatesSection() {
                       {item.n}
                     </span>
                     <span className="flex-1 font-mono text-[17px] font-medium text-neutral-900">
-                      {item.title}
+                      {t(item.title)}
                     </span>
                     <ChevronDown
                       size={18}
@@ -92,7 +95,7 @@ export function UpdatesSection() {
                   </button>
                   {isOpen && (
                     <p className="px-6 pb-6 pl-[4.4rem] text-[13px] leading-relaxed text-neutral-500">
-                      {item.text}
+                      {t(item.text)}
                     </p>
                   )}
                 </div>
