@@ -1,13 +1,12 @@
 import React from 'react'
 import Link from 'next/link'
 import { BrainIcon } from '@/components/Logo/BrainIcon'
+import { Ca7Logo } from '@/components/Logo/Ca7Logo'
 
 /** Text + icon logo, shown on the admin login page. */
 export const AdminLogo: React.FC = () => (
   <span className="ca-brand ca-brand--login">
-    <BrainIcon className="ca-brand__icon" />
-    <b>Cerveau</b>
-    <span>Analytique</span>
+    <Ca7Logo />
   </span>
 )
 
@@ -18,10 +17,8 @@ export const AdminIcon: React.FC = () => <BrainIcon className="ca-brand__icon ca
 export const AdminHeader: React.FC = () => (
   <header className="ca-admin-header">
     <div className="ca-admin-header__inner">
-      <Link href="/" className="ca-brand">
-        <BrainIcon className="ca-brand__icon" />
-        <b>Cerveau</b>
-        <span>Analytique</span>
+      <Link href="/" className="ca-brand" aria-label="CA7">
+        <Ca7Logo />
       </Link>
       <nav className="ca-admin-header__links">
         <Link href="/shop">Shop</Link>
@@ -45,6 +42,6 @@ export const AdminFooter: React.FC = () => (
       <Link href="/security">Security</Link>
       <Link href="/docs">Docs</Link>
     </div>
-    <p>Cerveau Analytique © 2026</p>
+    <p>CA7 © 2026</p>
   </footer>
 )

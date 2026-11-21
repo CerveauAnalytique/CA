@@ -10,6 +10,8 @@ import { Order } from '@/payload-types'
 import { OrderItem } from '@/components/OrderItem'
 import { getPayload } from 'payload'
 import { redirect } from 'next/navigation'
+import { checkRole } from '@/access/utilities'
+import { adminUrl } from '@/lib/adminGate'
 
 export default async function AccountPage() {
   const headers = await getHeaders()
@@ -17,11 +19,16 @@ export default async function AccountPage() {
   const { user } = await payload.auth({ headers })
 
   let orders: Order[] | null = null
+  let adminLink: string | null = null
 
   if (!user) {
     redirect(
       `/login?warning=${encodeURIComponent('Please login to access your account settings.')}`,
     )
+  }
+
+  if (user && checkRole(['admin'], user)) {
+    adminLink = await adminUrl(user)
   }
 
   try {
@@ -48,6 +55,22 @@ export default async function AccountPage() {
 
   return (
     <>
+      {adminLink && (
+        <div className="border p-8 rounded-lg bg-primary-foreground flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-xl font-medium">Admin panel</h2>
+            <p className="text-sm text-neutral-500 mt-1">
+              Your private link to the admin panel. Do not share it.
+            </p>
+          </div>
+          <Button asChild variant="default">
+            <Link href={adminLink} prefetch={false}>
+              Open admin panel
+            </Link>
+          </Button>
+        </div>
+      )}
+
       <div className="border p-8 rounded-lg bg-primary-foreground">
         <h1 className="text-3xl font-medium mb-8">Account settings</h1>
         <AccountForm />
