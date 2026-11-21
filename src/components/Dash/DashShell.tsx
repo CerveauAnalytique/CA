@@ -11,7 +11,12 @@ type Props = {
 
 const TABS = [
   { href: '/dashboard', label: 'Overview' },
+  { href: '/dashboard/connect', label: 'Data Connect' },
+  { href: '/dashboard/intelligence', label: 'Data Intelligence' },
+  { href: '/dashboard/automation', label: 'Automation' },
+  { href: '/dashboard/camera', label: 'Camera Intelligence' },
   { href: '/dashboard/api', label: 'API keys' },
+  { href: '/dashboard/plan', label: 'Pack & billing' },
   { href: '/dashboard/export', label: 'Export & sync' },
 ]
 
@@ -27,7 +32,7 @@ export function DashShell({ user, children }: Props) {
         Your data, {name}
       </h1>
       <p className="mt-3 max-w-xl text-[15px] text-neutral-500 dark:text-neutral-400">
-        Manage your API key and export everything you saved in CA7.
+        Connect your data, see what it says, automate, and manage your API key and pack.
       </p>
 
       <nav className="mt-8 flex flex-wrap gap-2" aria-label="Dashboard sections">

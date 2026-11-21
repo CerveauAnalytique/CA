@@ -11,18 +11,22 @@ build their own AI models and automate. Smart cameras are **one data source and 
 
 Full plan, packs, build order and an honest status table: **[docs/PRODUCT.md](docs/PRODUCT.md)**. Keep that table up to date.
 
-## What to build next (in this order)
+## What exists now and what is next (details: the status table in `docs/PRODUCT.md`)
 
-1. **Data Connect:** 3 to 5 good connectors: SQL, REST API, CSV and IoT/MQTT. A connector has a configuration (credentials,
-   stored encrypted, never returned to the browser), a sync/read function, a schema description and access control per customer.
-2. **CA7 Chat on company data:** the chat (`src/components/Chat/ChatCa7.tsx`, `src/app/(app)/api/ca/chat/route.ts`) must answer
-   **only from the customer's connected data**, say which source an answer came from, and say what is missing when data is
-   not available. It must never invent numbers. Test it with questions whose answer is known.
-3. **Data Intelligence and Automation:** analysis, anomaly detection, and actions triggered by events and data.
-4. **Camera Intelligence** as a separate module, only when there are concrete customers and use cases.
+Built in a first version: pack limits (`src/lib/limits.ts`) and Stripe billing, Data Connect (REST, CSV, push API), Data Intelligence
+(statistics, trend, unusual values), Automation (e-mail, webhook), CA7 Chat with data context (Pro and up), camera desktop agent preview.
+All settings pages live in `/dashboard/*`.
 
-Also open: billing for the packs (subscriptions via Mollie/Stripe, and setting `users.plan` automatically), enforcing pack
-limits, EUR prices in the shop, and a proper file/object storage for customer data.
+Build next, in this order:
+
+1. **Data Connect:** SQL databases (credentials encrypted, read-only, never returned to the browser) and direct MQTT. Keep the
+   private-address check (`assertPublicUrl` in `src/lib/connect.ts`) on everything the server fetches for a customer.
+2. **CA7 Chat on company data:** today the model only gets statistics. Make it answer from the customer's rows, say which source an
+   answer came from and what is missing. It must never invent numbers. Test with questions whose answer is known.
+3. **Data Intelligence:** forecasting and own AI models per customer; more than one statistic (not only mean and 3 sigma).
+4. **Camera Intelligence:** object and person recognition, RTSP, a graphical desktop app with installers (the agent in
+   `desktop/ca7-camera-agent` only measures movement).
+5. **Billing:** Mollie subscriptions, VAT, plan changes between Hobby and Pro, limits for AI models and file storage.
 
 ## Rules
 

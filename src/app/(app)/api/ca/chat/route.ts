@@ -1,12 +1,14 @@
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { clientKey, rateLimit } from '@/lib/rateLimit'
+import { limitsOf } from '@/lib/limits'
+import { analyze, summaryText } from '@/lib/intelligence'
 
 export const dynamic = 'force-dynamic'
 
 // requests per 10 minutes: visitors without an account and customers who are logged in
 const LIMIT_ANON = Number(process.env.CA7_CHAT_LIMIT_ANON || 10)
-const LIMIT_USER = Number(process.env.CA7_CHAT_LIMIT_USER || 60)
+const LIMIT_USER_OVERRIDE = process.env.CA7_CHAT_LIMIT_USER ? Number(process.env.CA7_CHAT_LIMIT_USER) : null
 const WINDOW = 10 * 60 * 1000
 const MAX_BODY = 200_000
 
@@ -29,15 +31,15 @@ export async function POST(request: Request) {
   }
 
   // logged-in customers get a higher limit; everyone else is limited per address
-  let user: { id: string | number } | null = null
+  let user = null as { id: string | number; plan?: string | null; roles?: string[] | null } | null
   try {
     const payload = await getPayload({ config: configPromise })
-    user = (await payload.auth({ headers: request.headers })).user
+    user = (await payload.auth({ headers: request.headers })).user as typeof user
   } catch {
     /* treated as a visitor */
   }
   const limited = user
-    ? rateLimit(`u:${user.id}`, LIMIT_USER, WINDOW)
+    ? rateLimit(`u:${user.id}`, LIMIT_USER_OVERRIDE ?? limitsOf(user).chat, WINDOW)
     : rateLimit(`ip:${clientKey(request)}`, LIMIT_ANON, WINDOW)
   if (!limited.ok) {
     return Response.json(
@@ -60,6 +62,29 @@ export async function POST(request: Request) {
   }
   if (!messages.length || messages[messages.length - 1].role !== 'user') {
     return Response.json({ error: 'Send at least one user message.' }, { status: 400 })
+  }
+
+  // Pro and up: CA7 answers from the customer's own data (their connected sources)
+  if (user && limitsOf(user).chatOnData) {
+    try {
+      const payload = await getPayload({ config: configPromise })
+      const sources = await payload.find({ collection: 'data-sources', where: { owner: { equals: user.id } }, limit: 10, depth: 0, overrideAccess: true })
+      const parts: string[] = []
+      for (const src of sources.docs) {
+        const recs = await payload.find({ collection: 'data-records', where: { source: { equals: src.id } }, sort: '-recordedAt', limit: 300, depth: 0, overrideAccess: true })
+        const stats = analyze(recs.docs.reverse().map((d) => ({ data: d.data as Record<string, unknown>, at: d.recordedAt ?? undefined })), true)
+        if (stats.length) parts.push(summaryText(src.name, stats))
+      }
+      if (parts.length) {
+        messages = [
+          { role: 'user', content: `Context: this is the customer's own data. Answer questions about it using only these facts, and say when you do not know.\n\n${parts.join('\n\n').slice(0, 6000)}` },
+          { role: 'assistant', content: 'Understood. I will answer from your data.' },
+          ...messages,
+        ]
+      }
+    } catch {
+      /* chat still works without the data context */
+    }
   }
 
   let upstream: Response

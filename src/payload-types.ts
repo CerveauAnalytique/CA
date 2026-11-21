@@ -79,6 +79,9 @@ export interface Config {
     posts: Post;
     'ai-models': AiModel;
     datasets: Dataset;
+    'data-sources': DataSource;
+    'data-records': DataRecord;
+    automations: Automation;
     forms: Form;
     'form-submissions': FormSubmission;
     addresses: Address;
@@ -115,6 +118,9 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     'ai-models': AiModelsSelect<false> | AiModelsSelect<true>;
     datasets: DatasetsSelect<false> | DatasetsSelect<true>;
+    'data-sources': DataSourcesSelect<false> | DataSourcesSelect<true>;
+    'data-records': DataRecordsSelect<false> | DataRecordsSelect<true>;
+    automations: AutomationsSelect<false> | AutomationsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
@@ -197,6 +203,16 @@ export interface User {
    * The pack of this customer. Only admins can change it.
    */
   plan?: ('free' | 'hobby' | 'pro' | 'business' | 'enterprise') | null;
+  /**
+   * Month of the API call counter (YYYY-MM).
+   */
+  usageMonth?: string | null;
+  /**
+   * API calls this month.
+   */
+  apiCallsMonth?: number | null;
+  stripeCustomerId?: string | null;
+  stripeSubscriptionId?: string | null;
   /**
    * Chosen at sign-up. The site opens in this language when the customer logs in.
    */
@@ -1173,6 +1189,89 @@ export interface Dataset {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "data-sources".
+ */
+export interface DataSource {
+  id: number;
+  owner: number | User;
+  name: string;
+  type: 'rest' | 'csv' | 'push' | 'camera';
+  /**
+   * REST: the URL that returns JSON.
+   */
+  url?: string | null;
+  /**
+   * REST: extra request headers, e.g. {"Authorization":"Bearer ..."}
+   */
+  headers?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * REST: where the list is in the JSON, e.g. data.items
+   */
+  recordsPath?: string | null;
+  ingestToken?: string | null;
+  lastSyncAt?: string | null;
+  lastError?: string | null;
+  recordCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "data-records".
+ */
+export interface DataRecord {
+  id: number;
+  owner: number | User;
+  source: number | DataSource;
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  recordedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "automations".
+ */
+export interface Automation {
+  id: number;
+  owner: number | User;
+  name: string;
+  source: number | DataSource;
+  /**
+   * The field in your data, e.g. temperature
+   */
+  field: string;
+  operator: 'gt' | 'lt' | 'eq' | 'anomaly';
+  threshold?: number | null;
+  action: 'email' | 'webhook';
+  /**
+   * E-mail address or webhook URL
+   */
+  target: string;
+  enabled?: boolean | null;
+  lastTriggeredAt?: string | null;
+  triggerCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
@@ -1239,6 +1338,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'datasets';
         value: number | Dataset;
+      } | null)
+    | ({
+        relationTo: 'data-sources';
+        value: number | DataSource;
+      } | null)
+    | ({
+        relationTo: 'data-records';
+        value: number | DataRecord;
+      } | null)
+    | ({
+        relationTo: 'automations';
+        value: number | Automation;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1329,6 +1440,10 @@ export interface PayloadMigration {
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
   plan?: T;
+  usageMonth?: T;
+  apiCallsMonth?: T;
+  stripeCustomerId?: T;
+  stripeSubscriptionId?: T;
   language?: T;
   roles?: T;
   orders?: T;
@@ -1635,6 +1750,55 @@ export interface DatasetsSelect<T extends boolean = true> {
       };
   downloadUrl?: T;
   datasetCard?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "data-sources_select".
+ */
+export interface DataSourcesSelect<T extends boolean = true> {
+  owner?: T;
+  name?: T;
+  type?: T;
+  url?: T;
+  headers?: T;
+  recordsPath?: T;
+  ingestToken?: T;
+  lastSyncAt?: T;
+  lastError?: T;
+  recordCount?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "data-records_select".
+ */
+export interface DataRecordsSelect<T extends boolean = true> {
+  owner?: T;
+  source?: T;
+  data?: T;
+  recordedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "automations_select".
+ */
+export interface AutomationsSelect<T extends boolean = true> {
+  owner?: T;
+  name?: T;
+  source?: T;
+  field?: T;
+  operator?: T;
+  threshold?: T;
+  action?: T;
+  target?: T;
+  enabled?: T;
+  lastTriggeredAt?: T;
+  triggerCount?: T;
   updatedAt?: T;
   createdAt?: T;
 }

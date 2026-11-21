@@ -1,6 +1,7 @@
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { buildExport, CORS_HEADERS } from '@/lib/caData'
+import { countApiCall } from '@/lib/limits'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,6 +22,14 @@ export async function GET(request: Request) {
     return Response.json(
       { error: 'Unauthorized. Send `Authorization: users API-Key <key>` or log in.' },
       { status: 401, headers: CORS_HEADERS },
+    )
+  }
+
+  const call = await countApiCall(payload, user as never)
+  if (!call.ok) {
+    return Response.json(
+      { error: `Your pack allows ${call.limit} API calls per month. Upgrade at /pricing.` },
+      { status: 402, headers: CORS_HEADERS },
     )
   }
 

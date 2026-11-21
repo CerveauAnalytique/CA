@@ -4,6 +4,9 @@ import type { Payload } from 'payload'
 export const DATA_COLLECTIONS = [
   { slug: 'ai-models', label: 'AI models' },
   { slug: 'datasets', label: 'Datasets' },
+  { slug: 'data-sources', label: 'Data sources' },
+  { slug: 'data-records', label: 'Data records' },
+  { slug: 'automations', label: 'Automations' },
   { slug: 'products', label: 'Products' },
   { slug: 'orders', label: 'Orders' },
   { slug: 'carts', label: 'Carts' },

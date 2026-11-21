@@ -53,7 +53,7 @@ export const PLANS: Plan[] = [
       tr('Email support'),
     ],
     cta: tr('Choose Hobby'),
-    href: '/create-account?plan=hobby',
+    href: '/dashboard/plan',
     icon: 'models',
   },
   {
@@ -73,7 +73,7 @@ export const PLANS: Plan[] = [
       tr('Up to 10 of your own AI models'),
     ],
     cta: tr('Choose Pro'),
-    href: '/contact?plan=pro',
+    href: '/dashboard/plan',
     highlight: true,
     icon: 'integrate',
   },

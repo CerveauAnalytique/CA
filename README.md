@@ -33,10 +33,12 @@ Full plan, status and build order: **[docs/PRODUCT.md](docs/PRODUCT.md)**.
 ## Where the project stands
 
 The website, accounts, pricing, seven languages, Stripe and Mollie payments, the AI Models and Datasets
-catalog, API keys and data export are built. **Data Connect, Data Intelligence, Automation and Camera
-Intelligence are not built yet, and CA7 Chat is not yet connected to customer data.**
-The next steps, in order: connectors (SQL, REST API, CSV, IoT/MQTT), reliable chat on company data,
-analysis, anomaly detection and automation, then the camera module.
+catalog, API keys and data export are built. First versions are built of: **pack billing and limits** (Hobby and Pro by card,
+limits enforced), **Data Connect** (REST, CSV, push API for IoT), **Data Intelligence** (statistics, trends, unusual values),
+**Automation** (e-mail and webhook, Business pack), **CA7 Chat with your data** (Pro and up) and a **Camera Intelligence desktop
+agent** (movement only). Everything is in the dashboard (settings) at `/dashboard`.
+**Not built yet:** SQL and direct MQTT connectors, person/object recognition, RTSP and a graphical desktop app, Mollie subscriptions.
+The next steps are listed in `AGENTS.md`.
 
 For AI assistants and new developers working on this repository: read [AGENTS.md](AGENTS.md) first.
 

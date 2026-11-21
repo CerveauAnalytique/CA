@@ -39,6 +39,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_ai_models_stage" AS ENUM('development', 'staging', 'production', 'archived');
   CREATE TYPE "public"."enum_datasets_source" AS ENUM('cameras', 'sensors', 'logs', 'business', 'other');
   CREATE TYPE "public"."enum_datasets_format" AS ENUM('csv', 'parquet', 'jsonl', 'json', 'images', 'other');
+  CREATE TYPE "public"."enum_data_sources_type" AS ENUM('rest', 'csv', 'push', 'camera');
+  CREATE TYPE "public"."enum_automations_operator" AS ENUM('gt', 'lt', 'eq', 'anomaly');
+  CREATE TYPE "public"."enum_automations_action" AS ENUM('email', 'webhook');
   CREATE TYPE "public"."enum_forms_confirmation_type" AS ENUM('message', 'redirect');
   CREATE TYPE "public"."enum_addresses_country" AS ENUM('US', 'GB', 'CA', 'AU', 'AT', 'BE', 'BR', 'BG', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HK', 'HU', 'IN', 'IE', 'IT', 'JP', 'LV', 'LT', 'LU', 'MY', 'MT', 'MX', 'NL', 'NZ', 'NO', 'PL', 'PT', 'RO', 'SG', 'SK', 'SI', 'ES', 'SE', 'CH');
   CREATE TYPE "public"."enum_variants_status" AS ENUM('draft', 'published');
@@ -82,6 +85,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"id" serial PRIMARY KEY NOT NULL,
   	"name" varchar,
   	"plan" "enum_users_plan" DEFAULT 'free',
+  	"usage_month" varchar,
+  	"api_calls_month" numeric DEFAULT 0,
+  	"stripe_customer_id" varchar,
+  	"stripe_subscription_id" varchar,
   	"language" "enum_users_language" DEFAULT 'en',
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
@@ -513,6 +520,49 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"parent_id" integer NOT NULL,
   	"path" varchar NOT NULL,
   	"text" varchar
+  );
+  
+  CREATE TABLE "data_sources" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"owner_id" integer NOT NULL,
+  	"name" varchar NOT NULL,
+  	"type" "enum_data_sources_type" NOT NULL,
+  	"url" varchar,
+  	"headers" jsonb,
+  	"records_path" varchar,
+  	"ingest_token" varchar,
+  	"last_sync_at" timestamp(3) with time zone,
+  	"last_error" varchar,
+  	"record_count" numeric DEFAULT 0,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "data_records" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"owner_id" integer NOT NULL,
+  	"source_id" integer NOT NULL,
+  	"data" jsonb NOT NULL,
+  	"recorded_at" timestamp(3) with time zone,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+  );
+  
+  CREATE TABLE "automations" (
+  	"id" serial PRIMARY KEY NOT NULL,
+  	"owner_id" integer NOT NULL,
+  	"name" varchar NOT NULL,
+  	"source_id" integer NOT NULL,
+  	"field" varchar NOT NULL,
+  	"operator" "enum_automations_operator" DEFAULT 'gt' NOT NULL,
+  	"threshold" numeric,
+  	"action" "enum_automations_action" DEFAULT 'email' NOT NULL,
+  	"target" varchar NOT NULL,
+  	"enabled" boolean DEFAULT true,
+  	"last_triggered_at" timestamp(3) with time zone,
+  	"trigger_count" numeric DEFAULT 0,
+  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
   
   CREATE TABLE "forms_blocks_checkbox" (
@@ -1069,6 +1119,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"posts_id" integer,
   	"ai_models_id" integer,
   	"datasets_id" integer,
+  	"data_sources_id" integer,
+  	"data_records_id" integer,
+  	"automations_id" integer,
   	"forms_id" integer,
   	"form_submissions_id" integer,
   	"addresses_id" integer,
@@ -1205,6 +1258,11 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "ai_models_texts" ADD CONSTRAINT "ai_models_texts_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."ai_models"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "datasets_schema_columns" ADD CONSTRAINT "datasets_schema_columns_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."datasets"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "datasets_texts" ADD CONSTRAINT "datasets_texts_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."datasets"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "data_sources" ADD CONSTRAINT "data_sources_owner_id_users_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "data_records" ADD CONSTRAINT "data_records_owner_id_users_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "data_records" ADD CONSTRAINT "data_records_source_id_data_sources_id_fk" FOREIGN KEY ("source_id") REFERENCES "public"."data_sources"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "automations" ADD CONSTRAINT "automations_owner_id_users_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "automations" ADD CONSTRAINT "automations_source_id_data_sources_id_fk" FOREIGN KEY ("source_id") REFERENCES "public"."data_sources"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "forms_blocks_checkbox" ADD CONSTRAINT "forms_blocks_checkbox_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "forms_blocks_country" ADD CONSTRAINT "forms_blocks_country_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "forms_blocks_email" ADD CONSTRAINT "forms_blocks_email_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
@@ -1282,6 +1340,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_posts_fk" FOREIGN KEY ("posts_id") REFERENCES "public"."posts"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_ai_models_fk" FOREIGN KEY ("ai_models_id") REFERENCES "public"."ai_models"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_datasets_fk" FOREIGN KEY ("datasets_id") REFERENCES "public"."datasets"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_data_sources_fk" FOREIGN KEY ("data_sources_id") REFERENCES "public"."data_sources"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_data_records_fk" FOREIGN KEY ("data_records_id") REFERENCES "public"."data_records"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_automations_fk" FOREIGN KEY ("automations_id") REFERENCES "public"."automations"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_forms_fk" FOREIGN KEY ("forms_id") REFERENCES "public"."forms"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_form_submissions_fk" FOREIGN KEY ("form_submissions_id") REFERENCES "public"."form_submissions"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_addresses_fk" FOREIGN KEY ("addresses_id") REFERENCES "public"."addresses"("id") ON DELETE cascade ON UPDATE no action;
@@ -1422,6 +1483,18 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "datasets_updated_at_idx" ON "datasets" USING btree ("updated_at");
   CREATE INDEX "datasets_created_at_idx" ON "datasets" USING btree ("created_at");
   CREATE INDEX "datasets_texts_order_parent" ON "datasets_texts" USING btree ("order","parent_id");
+  CREATE INDEX "data_sources_owner_idx" ON "data_sources" USING btree ("owner_id");
+  CREATE INDEX "data_sources_updated_at_idx" ON "data_sources" USING btree ("updated_at");
+  CREATE INDEX "data_sources_created_at_idx" ON "data_sources" USING btree ("created_at");
+  CREATE INDEX "data_records_owner_idx" ON "data_records" USING btree ("owner_id");
+  CREATE INDEX "data_records_source_idx" ON "data_records" USING btree ("source_id");
+  CREATE INDEX "data_records_recorded_at_idx" ON "data_records" USING btree ("recorded_at");
+  CREATE INDEX "data_records_updated_at_idx" ON "data_records" USING btree ("updated_at");
+  CREATE INDEX "data_records_created_at_idx" ON "data_records" USING btree ("created_at");
+  CREATE INDEX "automations_owner_idx" ON "automations" USING btree ("owner_id");
+  CREATE INDEX "automations_source_idx" ON "automations" USING btree ("source_id");
+  CREATE INDEX "automations_updated_at_idx" ON "automations" USING btree ("updated_at");
+  CREATE INDEX "automations_created_at_idx" ON "automations" USING btree ("created_at");
   CREATE INDEX "forms_blocks_checkbox_order_idx" ON "forms_blocks_checkbox" USING btree ("_order");
   CREATE INDEX "forms_blocks_checkbox_parent_id_idx" ON "forms_blocks_checkbox" USING btree ("_parent_id");
   CREATE INDEX "forms_blocks_checkbox_path_idx" ON "forms_blocks_checkbox" USING btree ("_path");
@@ -1604,6 +1677,9 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "payload_locked_documents_rels_posts_id_idx" ON "payload_locked_documents_rels" USING btree ("posts_id");
   CREATE INDEX "payload_locked_documents_rels_ai_models_id_idx" ON "payload_locked_documents_rels" USING btree ("ai_models_id");
   CREATE INDEX "payload_locked_documents_rels_datasets_id_idx" ON "payload_locked_documents_rels" USING btree ("datasets_id");
+  CREATE INDEX "payload_locked_documents_rels_data_sources_id_idx" ON "payload_locked_documents_rels" USING btree ("data_sources_id");
+  CREATE INDEX "payload_locked_documents_rels_data_records_id_idx" ON "payload_locked_documents_rels" USING btree ("data_records_id");
+  CREATE INDEX "payload_locked_documents_rels_automations_id_idx" ON "payload_locked_documents_rels" USING btree ("automations_id");
   CREATE INDEX "payload_locked_documents_rels_forms_id_idx" ON "payload_locked_documents_rels" USING btree ("forms_id");
   CREATE INDEX "payload_locked_documents_rels_form_submissions_id_idx" ON "payload_locked_documents_rels" USING btree ("form_submissions_id");
   CREATE INDEX "payload_locked_documents_rels_addresses_id_idx" ON "payload_locked_documents_rels" USING btree ("addresses_id");
@@ -1677,6 +1753,9 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TABLE "datasets_schema_columns" CASCADE;
   DROP TABLE "datasets" CASCADE;
   DROP TABLE "datasets_texts" CASCADE;
+  DROP TABLE "data_sources" CASCADE;
+  DROP TABLE "data_records" CASCADE;
+  DROP TABLE "automations" CASCADE;
   DROP TABLE "forms_blocks_checkbox" CASCADE;
   DROP TABLE "forms_blocks_country" CASCADE;
   DROP TABLE "forms_blocks_email" CASCADE;
@@ -1770,6 +1849,9 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   DROP TYPE "public"."enum_ai_models_stage";
   DROP TYPE "public"."enum_datasets_source";
   DROP TYPE "public"."enum_datasets_format";
+  DROP TYPE "public"."enum_data_sources_type";
+  DROP TYPE "public"."enum_automations_operator";
+  DROP TYPE "public"."enum_automations_action";
   DROP TYPE "public"."enum_forms_confirmation_type";
   DROP TYPE "public"."enum_addresses_country";
   DROP TYPE "public"."enum_variants_status";

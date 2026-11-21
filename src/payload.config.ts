@@ -25,6 +25,7 @@ import { Header } from '@/globals/Header'
 import { plugins } from './plugins'
 import { AiModels } from './collections/AiModels'
 import { Datasets } from './collections/Datasets'
+import { Automations, DataRecords, DataSources } from './collections/DataSources'
 import { migrations } from './migrations'
 import { seedCatalogIfEmpty } from './utilities/seedCatalog'
 
@@ -49,7 +50,7 @@ export default buildConfig({
     },
     user: Users.slug,
   },
-  collections: [Users, Pages, Categories, Media, Posts, AiModels, Datasets],
+  collections: [Users, Pages, Categories, Media, Posts, AiModels, Datasets, DataSources, DataRecords, Automations],
   onInit: async (payload) => {
     await seedCatalogIfEmpty(payload)
   },

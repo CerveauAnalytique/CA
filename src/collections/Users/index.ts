@@ -52,6 +52,31 @@ export const Users: CollectionConfig = {
       admin: { position: 'sidebar', description: 'The pack of this customer. Only admins can change it.' },
     },
     {
+      name: 'usageMonth',
+      type: 'text',
+      access: { create: adminOnlyFieldAccess, read: adminOnlyFieldAccess, update: adminOnlyFieldAccess },
+      admin: { position: 'sidebar', readOnly: true, description: 'Month of the API call counter (YYYY-MM).' },
+    },
+    {
+      name: 'apiCallsMonth',
+      type: 'number',
+      defaultValue: 0,
+      access: { create: adminOnlyFieldAccess, read: adminOnlyFieldAccess, update: adminOnlyFieldAccess },
+      admin: { position: 'sidebar', readOnly: true, description: 'API calls this month.' },
+    },
+    {
+      name: 'stripeCustomerId',
+      type: 'text',
+      access: { create: adminOnlyFieldAccess, read: adminOnlyFieldAccess, update: adminOnlyFieldAccess },
+      admin: { position: 'sidebar', readOnly: true },
+    },
+    {
+      name: 'stripeSubscriptionId',
+      type: 'text',
+      access: { create: adminOnlyFieldAccess, read: adminOnlyFieldAccess, update: adminOnlyFieldAccess },
+      admin: { position: 'sidebar', readOnly: true },
+    },
+    {
       name: 'language',
       type: 'select',
       label: 'Language',

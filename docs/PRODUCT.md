@@ -67,13 +67,13 @@ What exists in this repository today, and what does not:
 | Website, pricing, languages (7), payments (Stripe, Mollie), accounts | Built |
 | API keys, data export (`/api/ca/export`), downloadable sync tool | Built |
 | AI Models and Datasets catalog (admin-managed) | Built (a catalog; no model training or hosting yet) |
-| CA7 Chat | UI and streaming route exist (`/api/ca/chat` to an Ollama `ca7` model). **It is not connected to customer data yet** |
-| Data Connect | **Not built.** Only CSV-style export and the REST export exist. No SQL/REST/CSV/MQTT connectors |
+| CA7 Chat | UI and streaming route (`/api/ca/chat` to an Ollama `ca7` model). Pro and up: gets statistics of the customer's own sources as context (`src/app/(app)/api/ca/chat/route.ts`). Not a full retrieval system: it sees summaries, not raw rows |
+| Data Connect | **Built (first version):** REST API (with private-address protection), CSV upload, push API for IoT, MQTT bridges and scripts (`/api/ca/ingest`). **Not built:** SQL databases and direct MQTT. Settings: `/dashboard/connect` |
 | Data Storage | Catalog records only. No file/object storage for customer data |
-| Data Intelligence (analysis, anomalies) | **Not built** |
-| Automation | **Not built** |
-| Camera Intelligence | **Not built.** The hero image is a dotted picture only |
-| Pack limits and billing (subscriptions) | **Not built.** Pack is set by an admin in `users.plan` |
+| Data Intelligence | **Built (first version):** statistics, trend and unusual values (3 standard deviations, Pro and up) per field: `/dashboard/intelligence`, `/api/ca/insights`. No forecasting or machine-learning models yet |
+| Automation | **Built (first version, Business and up):** rules on a field (greater, less, equals, unusual) that send an e-mail or call a webhook when new data arrives: `/dashboard/automation` |
+| Camera Intelligence | **Preview.** A desktop agent (`desktop/ca7-camera-agent`) reads camera snapshots and sends movement scores as data. **Not built:** recognising people or objects, RTSP, a graphical app, installers |
+| Pack limits and billing | **Built:** limits are enforced (`src/lib/limits.ts`: data sources, API calls per month, stored records, chat per 10 minutes, automation). Hobby and Pro by card through Stripe subscriptions (`/api/ca/billing/*`, needs `STRIPE_SECRET_KEY` and the webhook `STRIPE_WEBHOOKS_SIGNING_SECRET`). Business and Enterprise are by invoice: an admin sets `users.plan`. Not built: Mollie subscriptions, VAT handling, limits for AI models and file storage (records are the storage measure) |
 
 ## Principles
 
