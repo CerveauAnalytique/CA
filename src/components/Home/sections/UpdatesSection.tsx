@@ -14,7 +14,7 @@ const ITEMS = [
   {
     n: '2.0',
     title: 'Connect Cameras & Sensors',
-    text: 'Turn any camera into a smart camera, and add sensors for motion, temperature, sound and more. Get instant alerts on your phone.',
+    text: 'Turn any camera into a smart camera, and add sensors for motion, temperature, sound, air quality, GPS, energy and more. Get instant alerts on your phone.',
   },
   {
     n: '3.0',

@@ -6,7 +6,7 @@ const CARDS = [
   {
     Icon: ProtectionIcon,
     title: 'Save Your Data',
-    text: 'Store camera footage, sensor readings and files securely in the cloud, searchable in seconds.',
+    text: 'Store camera footage, sensor readings, logs and files securely in the cloud, searchable in seconds.',
   },
   {
     Icon: AccessIcon,
