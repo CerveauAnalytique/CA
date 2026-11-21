@@ -55,7 +55,7 @@ export default buildConfig({
   },
   db: postgresAdapter({
     // runs the migrations in src/migrations when the site starts in production
-    prodMigrations: migrations,
+    prodMigrations: process.env.PAYLOAD_SKIP_MIGRATIONS === '1' ? undefined : migrations,
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
