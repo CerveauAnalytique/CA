@@ -6,7 +6,7 @@ import { DotCameraCanvas } from './DotCameraCanvas'
 import { useT } from '@/i18n/client'
 import { tr } from '@/i18n/translate'
 
-const WORDS = [tr('your IoT'), tr('your devices'), tr('your sensors'), tr('your company data')]
+const WORDS = [tr('business data'), tr('your databases'), tr('your IoT'), tr('your sensors'), tr('your cameras')]
 
 function useTyping(words: string[]) {
   // Start with the first word fully shown so the headline reads correctly from the first paint.
@@ -71,7 +71,7 @@ export function CameraHero() {
         <div className="relative z-10 order-1 col-span-12 flex flex-col justify-between py-10 md:col-span-5 md:py-16">
           <div>
             <h1 className="text-[clamp(34px,4.3vw,58px)] font-light leading-[1.08] tracking-tight">
-              {t('Create your own digital brain for')}
+              {t('The AI brain for')}
               <br />
               <span className="text-neutral-400">{typed}</span>
               <span className="ms-0.5 inline-block h-[0.9em] w-[2px] translate-y-[0.12em] animate-pulse bg-neutral-700" />
@@ -84,10 +84,10 @@ export function CameraHero() {
 
           <div className="mt-16 flex items-end gap-10 md:mt-0">
             <ul className="text-[13px] font-light uppercase leading-[1.45] tracking-wide text-neutral-700 dark:text-neutral-300">
-              <li>{t('AI models')}</li>
-              <li>{t('Datasets')}</li>
-              <li>{t('Data API')}</li>
-              <li>{t('Internal support')}</li>
+              <li>{t('Data Connect')}</li>
+              <li>{t('AI Models')}</li>
+              <li>{t('CA7 Chat')}</li>
+              <li>{t('Automation')}</li>
             </ul>
             <div className="flex gap-3">
               <span className="mt-[-48px] hidden h-24 w-px bg-neutral-300 md:block dark:bg-neutral-700" />
@@ -100,7 +100,7 @@ export function CameraHero() {
 
         {/* Top-right blurb */}
         <p className="relative z-10 order-3 col-span-12 hidden max-w-[230px] justify-self-end pt-10 text-[12px] font-light leading-snug text-neutral-700 md:col-span-3 md:col-start-10 md:block md:pt-16 dark:text-neutral-300">
-          {t('CA7 helps companies turn IoT and company data into answers: build your own AI models, use datasets and one API, and support your teams. No code needed.')}
+          {t('CA7 connects your databases, APIs, IoT devices, sensors and cameras to one AI platform. Ask questions to your own data, build your own AI models and automate. No code needed.')}
         </p>
       </div>
     </section>

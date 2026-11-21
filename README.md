@@ -1,19 +1,58 @@
 # CA7
 
-CA7 helps companies turn IoT and company data into answers: save data from devices and sensors,
-build your own AI models, share datasets through one API, and support your teams.
+**CA7: the AI brain for business data.**
 
-Built with [Payload CMS](https://payloadcms.com) and Next.js 16 (App Router), PostgreSQL and Tailwind CSS 4.
+CA7 is an AI data platform for companies. Companies connect their own data, devices and systems
+(databases, REST APIs, CSV files, IoT devices, sensors and cameras) to one AI platform, and then
+analyze it, ask questions to it, build their own AI models and automate on top of it.
 
-## What is in it
+Smart cameras and sensors are **one of the data sources**, not the whole product. A smart camera
+becomes an optional module (Camera Intelligence), added when there are concrete customers.
+
+> Example: a logistics company connects 30 cameras, 12 sensors and its warehouse system.
+> The owner asks: *"How many pallets were processed today, how many trucks are still waiting, and are
+> there temperature deviations?"* CA7 gets the data from the connected systems, analyzes it and answers
+> based on the data that is available.
+
+## What CA7 is made of
+
+| Module | |
+|---|---|
+| **Data Connect** | Connect databases, APIs, IoT devices, sensors and cameras |
+| **AI Models** | Use existing AI models or build your own on company data |
+| **Data Intelligence** | Patterns, anomalies and trends |
+| **CA7 Chat** | Ask questions to your own data |
+| **Data Storage** | Datasets, logs, sensor information and other data |
+| **Automation** | AI takes actions based on events and data |
+| **Camera Intelligence** | Smart cameras as an extra module (later) |
+| **API** | Other apps and systems talk to CA7 |
+
+Packs: Free (EUR 0), Hobby (EUR 20), Pro (EUR 99 to 199), Business (EUR 500), Enterprise (from EUR 1,500).
+Full plan, status and build order: **[docs/PRODUCT.md](docs/PRODUCT.md)**.
+
+## Where the project stands
+
+The website, accounts, pricing, seven languages, Stripe and Mollie payments, the AI Models and Datasets
+catalog, API keys and data export are built. **Data Connect, Data Intelligence, Automation and Camera
+Intelligence are not built yet, and CA7 Chat is not yet connected to customer data.**
+The next steps, in order: connectors (SQL, REST API, CSV, IoT/MQTT), reliable chat on company data,
+analysis, anomaly detection and automation, then the camera module.
+
+For AI assistants and new developers working on this repository: read [AGENTS.md](AGENTS.md) first.
+
+## Built with
+
+[Payload CMS](https://payloadcms.com) and Next.js 16 (App Router), PostgreSQL and Tailwind CSS 4.
+
+## What is in the website
 
 | Area | What it does |
 |---|---|
-| **Home** (`/`) | IoT / company-data landing page with the dotted camera that follows the pointer |
+| **Home** (`/`) | Landing page: the AI brain for business data, with the dotted camera that follows the pointer |
 | **AI Models, Datasets** (`/models`, `/datasets`) | Catalog managed in the admin panel (Payload collections `ai-models`, `datasets`) |
 | **CA7 chat** (`/chat-ca7`) | Streaming chat for the `ca7` model (Qwen via Ollama, see [`ai/ca7`](ai/ca7/README.md)) |
 | **Shop** (`/shop`, `/products`) | Apps from the Marketplace API, and hardware/products from Payload |
-| **Pricing** (`/pricing`) | Free, Hobby (EUR 20, incl. VAT) and Company (EUR 500, excl. VAT) packs |
+| **Pricing** (`/pricing`) | Free, Hobby, Pro, Business and Enterprise packs (`src/lib/plans.ts`) |
 | **Dashboard** (`/dashboard`) | Logged-in customers: API key, data export, downloadable sync tool |
 | **Payments** | Stripe (cards) and Mollie (iDEAL, Bancontact, ...) |
 | **Languages** | en, nl, de, fr, es, pl, ar (right-to-left), language codes in the address: [docs/I18N.md](docs/I18N.md) |
@@ -44,6 +83,7 @@ account over the internet; for local work set `SMTP_HOST=localhost`.
 
 ## Documentation
 
+- [Product plan and status](docs/PRODUCT.md)
 - [Going live](docs/DEPLOY.md): environment variables, migrations, hidden admin, known limits
 - [Languages and translations](docs/I18N.md)
 - [CA7 model](ai/ca7/README.md)

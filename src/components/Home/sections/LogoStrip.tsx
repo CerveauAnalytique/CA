@@ -4,11 +4,11 @@ import { tr } from '@/i18n/translate'
 import { DotIcon, type DotIconName } from '@/components/Logo/DotIcon'
 
 const ITEMS: { name: string; icon: DotIconName }[] = [
-  { name: tr('Data storage'), icon: 'database' },
-  { name: tr('AI models'), icon: 'models' },
-  { name: tr('Datasets'), icon: 'datasets' },
+  { name: tr('Data Connect'), icon: 'integrate' },
+  { name: tr('AI Models'), icon: 'models' },
+  { name: tr('Data Intelligence'), icon: 'analytics' },
+  { name: tr('CA7 Chat'), icon: 'chat' },
   { name: tr('Data API'), icon: 'api' },
-  { name: tr('IoT devices'), icon: 'camera' },
 ]
 
 export async function LogoStrip() {

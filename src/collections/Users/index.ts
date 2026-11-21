@@ -45,7 +45,9 @@ export const Users: CollectionConfig = {
       options: [
         { label: 'Free', value: 'free' },
         { label: 'Hobby', value: 'hobby' },
-        { label: 'Company', value: 'company' },
+        { label: 'Pro', value: 'pro' },
+        { label: 'Business', value: 'business' },
+        { label: 'Enterprise', value: 'enterprise' },
       ],
       admin: { position: 'sidebar', description: 'The pack of this customer. Only admins can change it.' },
     },

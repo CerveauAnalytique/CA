@@ -26,11 +26,11 @@ export default async function PricingPage() {
         </p>
       </div>
 
-      <div className="mt-12 grid gap-4 md:grid-cols-3">
+      <div className="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         {PLANS.map((p) => (
           <section
             key={p.id}
-            className={`relative flex flex-col rounded-3xl p-7 ${
+            className={`relative flex flex-col rounded-3xl p-6 ${
               p.highlight
                 ? 'bg-neutral-900 text-white dark:bg-neutral-800 dark:ring-1 dark:ring-white/25'
                 : 'bg-neutral-50 text-neutral-900 dark:bg-neutral-900 dark:text-white'
@@ -49,8 +49,9 @@ export default async function PricingPage() {
               {t(p.tagline)}
             </p>
 
-            <p className="mt-6 flex items-baseline gap-2">
-              <span className="text-[44px] font-light leading-none tracking-tight">€{p.price}</span>
+            <p className="mt-6 flex flex-wrap items-baseline gap-x-2">
+              {p.from && <span className="text-[13px] text-neutral-500 dark:text-neutral-400">{t('from')}</span>}
+              <span className="text-[40px] font-light leading-none tracking-tight">€{p.price.toLocaleString('en-US')}</span>
               {p.price > 0 && (
                 <span className={`text-[13px] ${p.highlight ? 'text-neutral-300' : 'text-neutral-500 dark:text-neutral-400'}`}>
                   {t('per month')}
@@ -83,7 +84,7 @@ export default async function PricingPage() {
       </div>
 
       <p className="mt-8 text-center text-[13px] text-neutral-500 dark:text-neutral-400">
-        {t('Hobby prices include VAT. Company prices are excluded VAT.')}{' '}
+        {t('Hobby prices include VAT. Other prices are excluded VAT.')}{' '}
         <Link href="/contact" className="underline">
           {t('Need something different? Contact us.')}
         </Link>

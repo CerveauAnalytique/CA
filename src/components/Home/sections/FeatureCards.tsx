@@ -6,19 +6,19 @@ import { DotIcon, type DotIconName } from '@/components/Logo/DotIcon'
 
 const CARDS = [
   {
-    icon: 'database' as DotIconName,
-    title: tr('Save Your Data'),
-    text: tr('Store sensor readings, device data, logs and files securely in the cloud, searchable in seconds.'),
+    icon: 'integrate' as DotIconName,
+    title: tr('Data Connect'),
+    text: tr('Connect databases, REST APIs, CSV files, IoT devices, sensors and cameras in one place.'),
+  },
+  {
+    icon: 'models' as DotIconName,
+    title: tr('AI Models'),
+    text: tr('Use existing AI models or build your own on your company data.'),
   },
   {
     icon: 'analytics' as DotIconName,
-    title: tr('Analytique Insights'),
-    text: tr('Turn raw IoT and company data into clear answers with AI analytics, live dashboards and smart alerts.'),
-  },
-  {
-    icon: 'api' as DotIconName,
-    title: tr('Data Share API'),
-    text: tr('Share datasets with your team, partners or apps through one secure and easy API.'),
+    title: tr('Data Intelligence'),
+    text: tr('AI finds patterns, anomalies and trends in your data and answers questions about it.'),
   },
 ]
 
@@ -45,8 +45,8 @@ export async function FeatureCards() {
       <SectionHead
         index="01/04"
         label={t('Everything you need')}
-        title={t('One platform for your company data')}
-        text={t('CA7 saves data from your IoT devices, sensors and any other source, analyzes it with AI models you build yourself and shares it through one API, so your teams solve real problems with it.')}
+        title={t('The AI brain for business data')}
+        text={t('CA7 connects databases, APIs, IoT devices, sensors and cameras, stores your data and lets AI analyze it, so your teams solve real problems.')}
       />
 
       <div className="relative mx-auto mt-20 max-w-[1040px] px-6">

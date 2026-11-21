@@ -3,7 +3,7 @@ import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    CREATE TYPE "public"."enum_users_roles" AS ENUM('admin', 'customer');
-  CREATE TYPE "public"."enum_users_plan" AS ENUM('free', 'hobby', 'company');
+  CREATE TYPE "public"."enum_users_plan" AS ENUM('free', 'hobby', 'pro', 'business', 'enterprise');
   CREATE TYPE "public"."enum_users_language" AS ENUM('en', 'nl', 'de', 'fr', 'es', 'pl', 'ar');
   CREATE TYPE "public"."enum_pages_hero_links_link_type" AS ENUM('reference', 'custom');
   CREATE TYPE "public"."enum_pages_hero_links_link_appearance" AS ENUM('default', 'outline');

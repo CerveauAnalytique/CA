@@ -19,7 +19,7 @@ export default function HomePage() {
 }
 
 export const metadata: Metadata = {
-  title: 'CA7 — Create your own digital brain for your IoT',
+  title: 'CA7 — The AI brain for business data',
   description:
-    'Turn IoT and company data into answers: build your own AI models, use datasets and one API, and support your teams.',
+    'CA7 connects databases, APIs, IoT devices, sensors and cameras to one AI platform: ask your own data questions, build your own AI models and automate.',
 }

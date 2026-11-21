@@ -196,7 +196,7 @@ export interface User {
   /**
    * The pack of this customer. Only admins can change it.
    */
-  plan?: ('free' | 'hobby' | 'company') | null;
+  plan?: ('free' | 'hobby' | 'pro' | 'business' | 'enterprise') | null;
   /**
    * Chosen at sign-up. The site opens in this language when the customer logs in.
    */

@@ -10,29 +10,34 @@ import { DotIcon } from '@/components/Logo/DotIcon'
 const ITEMS = [
   {
     n: '1.0',
-    title: tr('Create a Digital Brain'),
-    text: tr('Train your own AI brain on your data and tell it what to watch for, in plain language.'),
+    title: tr('CA7 Chat'),
+    text: tr('Ask questions to your own data and get answers based on the data that is available.'),
   },
   {
     n: '2.0',
-    title: tr('Connect your IoT devices'),
-    text: tr('Connect sensors, machines, cameras and any other device. Track motion, temperature, sound, air quality, GPS, energy and more, and get instant alerts on your phone.'),
+    title: tr('Data Storage'),
+    text: tr('Store datasets, logs, sensor information and other data securely, searchable in seconds.'),
   },
   {
     n: '3.0',
-    title: tr('Apps Marketplace'),
-    text: tr('Install ready-made apps or publish your own and share them with everyone.'),
+    title: tr('Automation'),
+    text: tr('Let AI take action based on events and data.'),
   },
   {
     n: '4.0',
-    title: tr('Share with the Data API'),
-    text: tr('Open your data to other tools and teams through the API, with full control over who can see what.'),
+    title: tr('Data API'),
+    text: tr('Let other apps and systems talk to CA7 through one API, with full control over who can see what.'),
+  },
+  {
+    n: '5.0',
+    title: tr('Camera Intelligence'),
+    text: tr('Add smart cameras as an extra module: detect objects and get alerts, as one more data source.'),
   },
 ]
 
 export function UpdatesSection() {
   const t = useT()
-  const [open, setOpen] = useState(1)
+  const [open, setOpen] = useState(0)
 
   return (
     <section className="relative overflow-hidden bg-neutral-50 py-24 dark:bg-neutral-900">
@@ -49,8 +54,8 @@ export function UpdatesSection() {
       <SectionHead
         index="02/04"
         label={t('Build your brain')}
-        title={t('Build your own AI model for your IoT')}
-        text={t('No code and no experts needed. Connect your IoT devices, train your own AI model on your data, and add apps from the marketplace.')}
+        title={t('Ask questions to your own data')}
+        text={t('No code and no experts needed. Connect your data, ask CA7 in plain language, and let AI act on what it finds.')}
       />
 
       <div className="relative mx-auto mt-16 max-w-[1040px] px-6">
@@ -63,7 +68,7 @@ export function UpdatesSection() {
             }}
           >
             <div className="h-[260px] w-full max-w-[380px]">
-              <DotIcon name="models" size={240} />
+              <DotIcon name="chat" size={220} />
             </div>
           </div>
 

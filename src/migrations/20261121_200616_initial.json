@@ -13367,7 +13367,9 @@
       "values": [
         "free",
         "hobby",
-        "company"
+        "pro",
+        "business",
+        "enterprise"
       ]
     },
     "public.enum_users_language": {
@@ -13934,6 +13936,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "60cf7f66-deaa-438b-aff9-8cc2dc1cd0ae",
+  "id": "b24b0eb3-a6ea-482c-a1ab-81e7a9bce4ed",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

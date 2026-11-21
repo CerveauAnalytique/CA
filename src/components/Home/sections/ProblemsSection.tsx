@@ -43,7 +43,22 @@ export async function ProblemsSection() {
         text={t('Start with a real problem. Pick an AI model, connect a dataset and use the API, so your teams get answers and your support team gets time back.')}
       />
 
-      <div className="relative mx-auto mt-16 grid max-w-[1040px] gap-4 px-6 md:grid-cols-2">
+      <div className="relative mx-auto mt-16 max-w-[1040px] px-6">
+        <div className="rounded-3xl bg-neutral-900 p-7 text-white dark:bg-neutral-800 dark:ring-1 dark:ring-white/20 md:p-9">
+          <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-400">{t('Example')}</p>
+          <p className="mt-3 text-[18px] font-light leading-snug md:text-[22px]">
+            {t('A logistics company connects 30 cameras, 12 sensors and its warehouse system to CA7.')}
+          </p>
+          <p className="mt-4 text-[15px] leading-relaxed text-neutral-300">
+            {t('The owner asks: “How many pallets were processed today, how many trucks are still waiting, and are there temperature deviations?”')}
+          </p>
+          <p className="mt-4 text-[15px] leading-relaxed text-neutral-300">
+            {t('CA7 gets the data from the connected systems, analyzes it and answers based on the data that is available.')}
+          </p>
+        </div>
+      </div>
+
+      <div className="relative mx-auto mt-4 grid max-w-[1040px] gap-4 px-6 md:grid-cols-2">
         {PROBLEMS.map((p) => (
           <div key={t(p.title)} className="flex gap-5 rounded-2xl bg-neutral-50 p-6 dark:bg-neutral-900">
             <DotIcon name={p.icon} size={96} className="shrink-0" />
