@@ -13,6 +13,7 @@
 | `CA7_CHAT_LIMIT_ANON`, `CA7_CHAT_LIMIT_USER` | Chat requests per 10 minutes for visitors / logged-in customers |
 | `MARKETPLACE_API_URL`, `NEXT_PUBLIC_MARKETPLACE_WEB_URL` | The Marketplace API and web app (CerveauAnalytique/Marketplace) |
 | `CA7_CLOUD_HOST`, `CA7_CHAT_HOSTS` | Domains (defaults below) |
+| `OPENREMOTE_URL`, `DIFY_URL`, `AIRBYTE_URL`, `THINGSBOARD_URL` | Addresses of the platform tools (`platform/README.md`) |
 | `ADMIN_GATE=off` | Turns the hidden admin link off (used by the e2e tests) |
 
 ## Domains

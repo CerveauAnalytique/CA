@@ -11,12 +11,14 @@ type Props = {
 
 const TABS = [
   { href: '/dashboard', label: 'Overview' },
+  { href: '/dashboard/settings', label: 'Profile' },
   { href: '/dashboard/connect', label: 'Data Connect' },
   { href: '/dashboard/intelligence', label: 'Data Intelligence' },
   { href: '/dashboard/automation', label: 'Automation' },
   { href: '/dashboard/camera', label: 'Camera Intelligence' },
   { href: '/dashboard/api', label: 'API keys' },
   { href: '/dashboard/plan', label: 'Pack & billing' },
+  { href: '/dashboard/platform', label: 'Platform' },
   { href: '/dashboard/export', label: 'Export & sync' },
 ]
 

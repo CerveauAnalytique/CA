@@ -84,6 +84,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TABLE "users" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"name" varchar,
+  	"username" varchar,
   	"plan" "enum_users_plan" DEFAULT 'free',
   	"usage_month" varchar,
   	"api_calls_month" numeric DEFAULT 0,
@@ -1365,6 +1366,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "users_roles_parent_idx" ON "users_roles" USING btree ("parent_id");
   CREATE INDEX "users_sessions_order_idx" ON "users_sessions" USING btree ("_order");
   CREATE INDEX "users_sessions_parent_id_idx" ON "users_sessions" USING btree ("_parent_id");
+  CREATE UNIQUE INDEX "users_username_idx" ON "users" USING btree ("username");
   CREATE INDEX "users_updated_at_idx" ON "users" USING btree ("updated_at");
   CREATE INDEX "users_created_at_idx" ON "users" USING btree ("created_at");
   CREATE UNIQUE INDEX "users_email_idx" ON "users" USING btree ("email");

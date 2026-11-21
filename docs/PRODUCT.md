@@ -73,6 +73,8 @@ What exists in this repository today, and what does not:
 | Data Intelligence | **Built (first version):** statistics, trend and unusual values (3 standard deviations, Pro and up) per field: `/dashboard/intelligence`, `/api/ca/insights`. No forecasting or machine-learning models yet |
 | Automation | **Built (first version, Business and up):** rules on a field (greater, less, equals, unusual) that send an e-mail or call a webhook when new data arrives: `/dashboard/automation` |
 | Camera Intelligence | **Preview.** A desktop agent (`desktop/ca7-camera-agent`) reads camera snapshots and sends movement scores as data. **Not built:** recognising people or objects, RTSP, a graphical app, installers |
+| Platform tools (OpenRemote, Dify, Airbyte, ThingsBoard, TimescaleDB) | **Install scripts and a status/launcher page only** (`platform/`, `/dashboard/platform`, Enterprise and admins). **Not run or tested here** (no Docker in the build environment), no single sign-on, not yet wired into CA7 data. See `platform/README.md` |
+| Profile settings (name, username, e-mail, language, password) | Built: `/dashboard/settings` |
 | Pack limits and billing | **Built:** limits are enforced (`src/lib/limits.ts`: data sources, API calls per month, stored records, chat per 10 minutes, automation). Hobby and Pro by card through Stripe subscriptions (`/api/ca/billing/*`, needs `STRIPE_SECRET_KEY` and the webhook `STRIPE_WEBHOOKS_SIGNING_SECRET`). Business and Enterprise are by invoice: an admin sets `users.plan`. Not built: Mollie subscriptions, VAT handling, limits for AI models and file storage (records are the storage measure) |
 
 ## Principles

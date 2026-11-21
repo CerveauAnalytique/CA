@@ -55,6 +55,8 @@ export default buildConfig({
     await seedCatalogIfEmpty(payload)
   },
   db: postgresAdapter({
+    // tests run on a database that was created by the migrations: do not let the dev schema push change it
+    push: !process.env.VITEST,
     // runs the migrations in src/migrations when the site starts in production
     prodMigrations: process.env.PAYLOAD_SKIP_MIGRATIONS === '1' ? undefined : migrations,
     pool: {

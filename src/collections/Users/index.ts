@@ -5,8 +5,11 @@ import { adminOnlyFieldAccess } from '@/access/adminOnlyFieldAccess'
 import { publicAccess } from '@/access/publicAccess'
 import { adminOrSelf } from '@/access/adminOrSelf'
 import { checkRole } from '@/access/utilities'
+import { isLocale } from '@/i18n/config'
 
 import { ensureFirstUserIsAdmin } from './hooks/ensureFirstUserIsAdmin'
+
+const RESERVED_USERNAMES = ['admin', 'api', 'login', 'logout', 'account', 'dashboard', 'shop', 'pricing', 'support', 'root', 'ca7', 'cloud']
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -31,6 +34,20 @@ export const Users: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+    },
+    {
+      name: 'username',
+      type: 'text',
+      unique: true,
+      index: true,
+      label: 'Username',
+      validate: (value: string | null | undefined) => {
+        if (!value) return true
+        if (!/^[a-z0-9][a-z0-9_-]{2,29}$/.test(value)) return 'Use 3-30 lowercase letters, numbers, - or _.'
+        if (RESERVED_USERNAMES.includes(value) || isLocale(value)) return 'This username is reserved.'
+        return true
+      },
+      admin: { description: 'Shown in your profile. Also the first part of the private admin link.' },
     },
     {
       name: 'plan',

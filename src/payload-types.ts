@@ -200,6 +200,10 @@ export interface User {
   id: number;
   name?: string | null;
   /**
+   * Shown in your profile. Also the first part of the private admin link.
+   */
+  username?: string | null;
+  /**
    * The pack of this customer. Only admins can change it.
    */
   plan?: ('free' | 'hobby' | 'pro' | 'business' | 'enterprise') | null;
@@ -1439,6 +1443,7 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  username?: T;
   plan?: T;
   usageMonth?: T;
   apiCallsMonth?: T;

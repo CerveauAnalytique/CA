@@ -38,8 +38,8 @@ function safeEqual(a: string, b: string): boolean {
 }
 
 /** URL-safe handle for the first path segment. */
-export function adminSlug(user: { name?: string | null; email?: string | null }): string {
-  const base = (user.name || user.email?.split('@')[0] || 'admin')
+export function adminSlug(user: { username?: string | null; name?: string | null; email?: string | null }): string {
+  const base = (user.username || user.name || user.email?.split('@')[0] || 'admin')
     .toLowerCase()
     .normalize('NFKD')
     .replace(/[^a-z0-9]+/g, '-')

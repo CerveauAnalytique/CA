@@ -189,6 +189,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "username": {
+          "name": "username",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "plan": {
           "name": "plan",
           "type": "enum_users_plan",
@@ -307,6 +313,21 @@
         }
       },
       "indexes": {
+        "users_username_idx": {
+          "name": "users_username_idx",
+          "columns": [
+            {
+              "expression": "username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
         "users_updated_at_idx": {
           "name": "users_updated_at_idx",
           "columns": [
@@ -14599,6 +14620,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "81357b60-0adb-4192-9004-1dc9c7603fa2",
+  "id": "fcb8cb0a-b4c0-4f35-b085-0c3aeb4e5661",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
