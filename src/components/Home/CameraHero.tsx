@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { HomeChatInput } from './HomeChatInput'
 
 const WORDS = ['your property', 'every entrance', 'day and night']
 
@@ -80,16 +80,8 @@ export function CameraHero() {
               <span className="ml-0.5 inline-block h-[0.9em] w-[2px] translate-y-[0.12em] animate-pulse bg-neutral-700" />
             </h1>
 
-            <div className="mt-12 flex items-center gap-3">
-              <Link
-                href="/ai"
-                className="inline-flex h-10 items-center bg-[#1a3df0] px-8 text-sm font-medium text-white transition hover:bg-[#2a4cff]"
-              >
-                View Live Demo
-              </Link>
-              <span className="flex h-10 w-10 items-center justify-center rounded-md border border-[#1a3df0] text-[10px] font-semibold text-[#1a3df0]">
-                ((•))
-              </span>
+            <div className="mt-10">
+              <HomeChatInput />
             </div>
           </div>
 
