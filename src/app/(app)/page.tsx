@@ -1,6 +1,7 @@
 import React from 'react'
 import { Hero } from '@/components/Home/Hero'
 import { BlogCards, BlogPostItem } from '@/components/Home/BlogCards'
+import { QuizCard } from '@/components/Home/QuizCard'
 import { WorkspaceHero } from '@/components/Home/WorkspaceHero'
 import type { Metadata } from 'next'
 import { getPayload } from 'payload'
@@ -89,6 +90,9 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 transition-colors">
       <Hero />
+      <section className="px-6 py-16">
+        <QuizCard />
+      </section>
       <BlogCards stories={storiesPosts} business={businessPosts} />
       <WorkspaceHero />
     </main>
