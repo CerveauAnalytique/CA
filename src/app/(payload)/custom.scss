@@ -8,3 +8,109 @@
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+
+/* ─── Cerveau Analytique admin theme (matches website) ─── */
+:root,
+html[data-theme='light'] {
+  --theme-bg: #fafafa;
+  --theme-elevation-0: #ffffff;
+  --theme-elevation-50: #f5f5f5;
+  --theme-elevation-100: #efefef;
+  --theme-elevation-150: #e5e5e5;
+  --theme-text: #0a0a0a;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, 'Helvetica Neue', Arial, sans-serif;
+}
+html[data-theme='dark'] {
+  --theme-bg: #0a0a0a;
+  --theme-elevation-0: #0a0a0a;
+  --theme-elevation-50: #111111;
+  --theme-elevation-100: #171717;
+  --theme-elevation-150: #262626;
+  --theme-text: #ffffff;
+}
+
+body {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Brand */
+.ca-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 18px;
+  letter-spacing: -0.2px;
+  color: var(--theme-text);
+  text-decoration: none;
+  white-space: nowrap;
+
+  b { font-weight: 700; }
+  span { font-weight: 300; color: var(--theme-elevation-500); margin-left: -3px; }
+}
+.ca-brand__icon { height: 30px; width: 30px; color: var(--theme-text); flex-shrink: 0; }
+.ca-brand__icon--nav { height: 26px; width: 26px; }
+.ca-brand--login { font-size: 28px; margin-bottom: 8px; .ca-brand__icon { height: 40px; width: 40px; } }
+
+/* Navbar above the admin */
+.ca-admin-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: color-mix(in srgb, var(--theme-bg) 94%, transparent);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--theme-elevation-150);
+}
+.ca-admin-header__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  height: 56px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.ca-admin-header__links {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+
+  a {
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: var(--theme-elevation-500);
+    text-decoration: none;
+    &:hover { color: var(--theme-text); background: var(--theme-elevation-100); }
+  }
+}
+.ca-admin-header__cta {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--theme-text);
+  color: var(--theme-bg);
+  text-decoration: none;
+  &:hover { opacity: 0.85; }
+}
+@media (max-width: 768px) {
+  .ca-admin-header__links { display: none; }
+  .ca-admin-header__inner { justify-content: space-between; }
+}
+
+/* Footer in sidebar */
+.ca-admin-footer {
+  margin-top: auto;
+  padding: 16px 0 4px;
+  border-top: 1px solid var(--theme-elevation-150);
+  background: var(--theme-elevation-50);
+
+  &__links { display: flex; flex-wrap: wrap; gap: 4px 14px; }
+  a { font-size: 12px; color: var(--theme-elevation-500); text-decoration: none; &:hover { text-decoration: underline; color: var(--theme-text); } }
+  p { margin: 8px 0 0; font-size: 12px; color: var(--theme-elevation-500); }
+}
+
+/* Softer, rounder UI to match website */
+.btn--style-primary { border-radius: 999px; }
+.template-default .nav, .nav { border-right: 1px solid var(--theme-elevation-150); }
