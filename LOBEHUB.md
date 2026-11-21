@@ -1,6 +1,6 @@
-# LobeHub chat (Neuriy AI)
+# LobeHub chat (CA7)
 
-`/chat-neuriy` embeds a self-hosted [LobeHub](https://github.com/lobehub/lobehub) when
+`/chat-ca7` embeds a self-hosted [LobeHub](https://github.com/lobehub/lobehub) when
 `NEXT_PUBLIC_LOBEHUB_URL` is set. Without it, the built-in demo chat is shown.
 
 ## Run LobeHub
@@ -33,7 +33,7 @@ Settings → AI Providers. `OLLAMA_PROXY_URL` points LobeHub at it.
 ## Connect to this site
 
 Set `NEXT_PUBLIC_LOBEHUB_URL=http://localhost:3010` in `.env` and restart the site. The home
-page chat bar sends visitors to `/chat-neuriy?q=...`; the page shows the question with a Copy
+page chat bar sends visitors to `/chat-ca7?q=...`; the page shows the question with a Copy
 button so it can be pasted into LobeHub.
 
 LobeHub sends no `X-Frame-Options` unless `ENABLED_CSP=1`, so leave that unset for embedding.

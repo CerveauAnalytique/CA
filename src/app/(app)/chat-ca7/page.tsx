@@ -15,7 +15,7 @@ function FallbackChat() {
       id: 'welcome',
       role: 'assistant',
       content:
-        'Hello! I am Neuriy AI, your analytical intelligence assistant. How can I assist you with models, APIs, datasets, or carbon emissions analysis today?',
+        'Hello! I am CA7, your analytical intelligence assistant. How can I assist you with models, APIs, datasets, or carbon emissions analysis today?',
     },
   ])
   const [input, setInput] = useState('')
@@ -70,7 +70,7 @@ function FallbackChat() {
             <Sparkles className="h-5 w-5 text-gold" />
           </div>
           <div>
-            <h1 className="text-lg font-bold tracking-tight">Chat Neuriy AI</h1>
+            <h1 className="text-lg font-bold tracking-tight">Chat CA7</h1>
             <p className="text-xs text-neutral-400">
               Interactive AI Assistant • Cerveau Intelligence System
             </p>
@@ -113,7 +113,7 @@ function FallbackChat() {
         {loading && (
           <div className="flex justify-start">
             <div className="flex items-center gap-2 p-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl rounded-tl-none text-xs text-neutral-400">
-              <Bot className="w-4 h-4 animate-spin text-gold" /> Neuriy AI is thinking…
+              <Bot className="w-4 h-4 animate-spin text-gold" /> CA7 is thinking…
             </div>
           </div>
         )}
@@ -124,7 +124,7 @@ function FallbackChat() {
           <input
             className="flex-1 py-3 px-4 rounded-xl border border-neutral-800 bg-neutral-900 text-sm text-white placeholder:text-neutral-500 focus:outline-none focus:border-neutral-700"
             value={input}
-            placeholder="Ask Neuriy AI a question..."
+            placeholder="Ask CA7 a question..."
             onChange={(e) => setInput(e.target.value)}
             disabled={loading}
           />
@@ -144,8 +144,8 @@ function FallbackChat() {
 
 const LOBEHUB_URL = process.env.NEXT_PUBLIC_LOBEHUB_URL
 
-/** Neuriy AI chat: embeds the self-hosted LobeHub when configured, otherwise the built-in demo chat. */
-export default function ChatNeuriyPage() {
+/** CA7 chat: embeds the self-hosted LobeHub when configured, otherwise the built-in demo chat. */
+export default function ChatCA7Page() {
   const [question, setQuestion] = useState('')
   const [copied, setCopied] = useState(false)
 
@@ -173,7 +173,7 @@ export default function ChatNeuriyPage() {
       <div className="flex items-center justify-between gap-4 rounded-t-2xl border border-b-0 border-neutral-200 px-4 py-2 text-sm dark:border-neutral-800">
         <div className="flex min-w-0 items-center gap-2">
           <Sparkles className="h-4 w-4 shrink-0" />
-          <span className="font-semibold">Neuriy AI</span>
+          <span className="font-semibold">CA7</span>
           {question && (
             <span className="flex min-w-0 items-center gap-2 text-neutral-500">
               <span className="truncate">Your question: “{question}”</span>
@@ -198,7 +198,7 @@ export default function ChatNeuriyPage() {
       </div>
       <iframe
         src={LOBEHUB_URL}
-        title="Neuriy AI chat"
+        title="CA7 chat"
         className="w-full flex-1 rounded-b-2xl border border-neutral-200 dark:border-neutral-800"
         allow="clipboard-read; clipboard-write; microphone"
       />

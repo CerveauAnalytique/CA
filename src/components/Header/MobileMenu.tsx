@@ -97,7 +97,7 @@ export function MobileMenu({ menu }: Props) {
 
         <div className="mt-4 pt-4 border-t border-neutral-800">
           <Button asChild className="w-full font-medium" variant="default">
-            <Link href="/chat-neuriy" onClick={closeMobileMenu}>
+            <Link href="/chat-ca7" onClick={closeMobileMenu}>
               Start chat →
             </Link>
           </Button>

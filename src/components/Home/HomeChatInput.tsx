@@ -26,11 +26,11 @@ export function HomeChatInput() {
 
   const handleSend = () => {
     if (!text.trim() && !attachment) {
-      router.push('/chat-neuriy')
+      router.push('/chat-ca7')
       return
     }
     const queryParam = encodeURIComponent(text.trim())
-    router.push(`/chat-neuriy?q=${queryParam}`)
+    router.push(`/chat-ca7?q=${queryParam}`)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -106,7 +106,7 @@ export function HomeChatInput() {
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask Neuriy AI anything..."
+          placeholder="Ask CA7 anything..."
           rows={1}
           className="w-full bg-transparent resize-none outline-none text-neutral-900 dark:text-white placeholder:text-neutral-400 dark:placeholder:text-neutral-500 text-[15px] font-normal min-h-[36px] max-h-[140px] leading-relaxed"
         />
@@ -165,7 +165,7 @@ export function HomeChatInput() {
       </div>
 
       <p className="text-[11.5px] text-neutral-400 dark:text-neutral-500 text-center mt-2.5 font-sans">
-        Powered by Neuriy AI Engine • Press Enter to chat
+        Powered by CA7 Engine • Press Enter to chat
       </p>
     </div>
   )

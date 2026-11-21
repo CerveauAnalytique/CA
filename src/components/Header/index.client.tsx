@@ -46,7 +46,7 @@ export function HeaderClient({ header }: Props) {
   const loginLabel = header.loginLabel || 'Log in'
   const loginURL = header.loginURL || '/login'
   const startLabel = 'Start chat'
-  const startURL = '/chat-neuriy'
+  const startURL = '/chat-ca7'
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -172,7 +172,7 @@ export function HeaderClient({ header }: Props) {
         {/* Mobile text-only links for Chat, Login/Account, & Log out */}
         <div className="flex md:hidden items-center gap-2 mr-1">
           <Link
-            href="/chat-neuriy"
+            href="/chat-ca7"
             className="text-xs font-semibold text-neutral-300 hover:text-white transition-colors"
           >
             Chat
