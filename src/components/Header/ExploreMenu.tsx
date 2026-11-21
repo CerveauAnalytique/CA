@@ -6,9 +6,9 @@ import { usePathname } from 'next/navigation'
 import { ChevronDown } from 'lucide-react'
 
 const ITEMS = [
-  { href: '/shop', title: 'Shop', text: 'Apps and tools for CA7' },
-  { href: '/models', title: 'AI Models', text: 'Models for your data and cameras' },
-  { href: '/datasets', title: 'Datasets', text: 'Data from cameras, sensors and logs' },
+  { href: '/shop', title: 'Shop', text: 'Apps and tools for CA7', img: '/nav/shop.svg' },
+  { href: '/models', title: 'AI Models', text: 'Models for your data and cameras', img: '/nav/models.svg' },
+  { href: '/datasets', title: 'Datasets', text: 'Data from cameras, sensors and logs', img: '/nav/datasets.svg' },
 ]
 
 /** One "Explore" entry in the navbar that holds Shop, AI Models and Datasets. */
@@ -56,6 +56,10 @@ export function ExploreMenu() {
         <div className="nav-dd__panel" role="menu">
           {ITEMS.map((i) => (
             <Link key={i.href} href={i.href} role="menuitem" className="nav-dd__item">
+              <span className="nav-dd__img">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={i.img} alt="" width={96} height={96} />
+              </span>
               <span className="nav-dd__title">{i.title}</span>
               <span className="nav-dd__text">{i.text}</span>
             </Link>
