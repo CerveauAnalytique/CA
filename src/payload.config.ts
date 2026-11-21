@@ -23,6 +23,9 @@ import { Users } from '@/collections/Users'
 import { Footer } from '@/globals/Footer'
 import { Header } from '@/globals/Header'
 import { plugins } from './plugins'
+import { AiModels } from './collections/AiModels'
+import { Datasets } from './collections/Datasets'
+import { seedCatalogIfEmpty } from './utilities/seedCatalog'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -45,7 +48,10 @@ export default buildConfig({
     },
     user: Users.slug,
   },
-  collections: [Users, Pages, Categories, Media, Posts],
+  collections: [Users, Pages, Categories, Media, Posts, AiModels, Datasets],
+  onInit: async (payload) => {
+    await seedCatalogIfEmpty(payload)
+  },
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URL || '',

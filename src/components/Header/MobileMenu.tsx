@@ -20,6 +20,8 @@ interface Props {
 
 const LINKS = [
   { href: '/shop', label: 'Shop' },
+  { href: '/models', label: 'AI Models' },
+  { href: '/datasets', label: 'Datasets' },
   { href: '/research', label: 'Research' },
   { href: '/api', label: 'API' },
   { href: '/docs', label: 'Docs' },

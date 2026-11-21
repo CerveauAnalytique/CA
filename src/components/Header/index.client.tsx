@@ -93,6 +93,22 @@ export function HeaderClient({ header }: Props) {
               Shop
             </Link>
             <Link
+              href="/models"
+              className={cn('nav-link', {
+                'text-white bg-white/10': pathname.includes('/models'),
+              })}
+            >
+              AI Models
+            </Link>
+            <Link
+              href="/datasets"
+              className={cn('nav-link', {
+                'text-white bg-white/10': pathname.includes('/datasets'),
+              })}
+            >
+              Datasets
+            </Link>
+            <Link
               href="/research"
               className={cn('nav-link', {
                 'text-white bg-white/10': pathname.includes('/research'),

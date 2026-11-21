@@ -2,6 +2,8 @@ import type { Payload } from 'payload'
 
 /** Collections a logged-in user can read and export (access rules still apply per user). */
 export const DATA_COLLECTIONS = [
+  { slug: 'ai-models', label: 'AI models' },
+  { slug: 'datasets', label: 'Datasets' },
   { slug: 'products', label: 'Products' },
   { slug: 'orders', label: 'Orders' },
   { slug: 'carts', label: 'Carts' },
