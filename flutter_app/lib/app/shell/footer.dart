@@ -46,7 +46,7 @@ class SiteFooter extends ConsumerWidget {
                 onTap: () => _switch(context, ref, l.code),
                 child: MouseRegion(
                   cursor: SystemMouseCursors.click,
-                  child: Text('${l.flag} ${l.name}', style: TextStyle(fontSize: 12, color: context.lang == l.code ? c.fg : c.muted, fontWeight: context.lang == l.code ? FontWeight.w600 : FontWeight.w400)),
+                  child: Text(l.name, style: TextStyle(fontSize: 12, color: context.lang == l.code ? c.fg : c.muted, fontWeight: context.lang == l.code ? FontWeight.w600 : FontWeight.w400)),
                 ),
               ),
           ]),

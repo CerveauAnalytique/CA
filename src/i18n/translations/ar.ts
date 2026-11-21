@@ -62,7 +62,6 @@ const t: Record<string, string> = {
   "Choose Hobby": "اختر Hobby",
   "Choose Pro": "اختر Pro",
   "Choose your pack": "اختر باقتك",
-  "Click here to reset it": "انقر هنا لإعادة تعيينها",
   "Close menu": "إغلاق القائمة",
   "Colleagues keep asking the same questions about systems and data.": "يطرح الزملاء الأسئلة نفسها باستمرار حول الأنظمة والبيانات.",
   "Column": "العمود",
@@ -248,6 +247,7 @@ const t: Record<string, string> = {
   "your databases": "قواعد بياناتك",
   "your sensors": "أجهزة الاستشعار لديك",
   "{n} rows": "{n} صفًا",
+  "Show": "إظهار",
+  "Hide": "إخفاء"
 }
-
 export default t

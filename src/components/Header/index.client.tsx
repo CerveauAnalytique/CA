@@ -5,7 +5,6 @@ import { Cart } from '@/components/Cart'
 import { OpenCartButton } from '@/components/Cart/OpenCart'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import Link, { useT } from '@/i18n/client'
-import { LanguageSwitcher } from './LanguageSwitcher'
 import React, { Suspense, useEffect, useRef, useState } from 'react'
 
 import { MobileMenu } from './MobileMenu'
@@ -212,7 +211,6 @@ export function HeaderClient({ header }: Props) {
           <ThemeToggle />
         </div>
 
-        <LanguageSwitcher />
       </div>
 
       <SearchModal

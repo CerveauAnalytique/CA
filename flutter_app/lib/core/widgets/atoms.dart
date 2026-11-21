@@ -3,11 +3,11 @@ import '../../app/theme/colors.dart';
 
 /// Pill / rounded buttons used across the website.
 class CaButton extends StatelessWidget {
-  const CaButton(this.label, {super.key, this.onPressed, this.outlined = false, this.blue = false, this.small = false, this.icon, this.busy = false, this.link = false});
+  const CaButton(this.label, {super.key, this.onPressed, this.outlined = false, this.blue = false, this.small = false, this.icon, this.busy = false, this.link = false, this.expand = false});
   final String label;
   final VoidCallback? onPressed;
   /// Look of a button only: the tap is handled by a surrounding link.
-  final bool outlined, blue, small, busy, link;
+  final bool outlined, blue, small, busy, link, expand;
   final IconData? icon;
 
   @override
@@ -25,7 +25,7 @@ class CaButton extends StatelessWidget {
           onTap: busy ? null : onPressed,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: small ? 16 : 20, vertical: small ? 7 : 11),
-            child: Row(mainAxisSize: MainAxisSize.min, children: [
+            child: Row(mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: [
               if (busy) SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2, color: fg)) else if (icon != null) Icon(icon, size: 15, color: fg),
               if (busy || icon != null) const SizedBox(width: 6),
               Text(label, style: TextStyle(color: fg, fontSize: small ? 13 : 14, fontWeight: FontWeight.w500)),

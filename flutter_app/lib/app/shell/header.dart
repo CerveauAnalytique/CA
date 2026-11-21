@@ -115,7 +115,6 @@ class SiteHeader extends ConsumerWidget implements PreferredSizeWidget {
         if (!mobile) ...[
           const SizedBox(width: 8),
           iconBtn(Theme.of(context).brightness == Brightness.dark ? Icons.light_mode_outlined : Icons.dark_mode_outlined, context.t('Appearance'), () => ref.read(themeModeProvider.notifier).state = Theme.of(context).brightness == Brightness.dark ? ThemeMode.light : ThemeMode.dark),
-          const _LanguageMenu(),
         ],
         if (mobile) ...[
           const SizedBox(width: 8),
@@ -183,29 +182,6 @@ class _ExploreMenuState extends State<_ExploreMenu> {
   }
 }
 
-
-/// Flag button with the seven languages (the website's LanguageSwitcher). Keeps the page: /nl/pricing -> /de/pricing.
-class _LanguageMenu extends ConsumerWidget {
-  const _LanguageMenu();
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final lang = context.lang;
-    final cur = languages.firstWhere((l) => l.code == lang);
-    return PopupMenuButton<String>(
-      tooltip: 'Language',
-      offset: const Offset(0, 40),
-      onSelected: (code) {
-        final m = RegExp(r'^/[a-z]{2}(/.*)?$').firstMatch(GoRouterState.of(context).uri.path);
-        final rest = m?.group(1) ?? '';
-        final q = GoRouterState.of(context).uri.hasQuery ? '?${GoRouterState.of(context).uri.query}' : '';
-        ref.read(i18nProvider).setLang(code);
-        context.go('/$code$rest$q');
-      },
-      itemBuilder: (_) => [for (final l in languages) PopupMenuItem(value: l.code, child: Row(children: [Text(l.flag), const SizedBox(width: 8), Text(l.name, style: TextStyle(fontWeight: l.code == lang ? FontWeight.w600 : FontWeight.w400))]))],
-      child: Padding(padding: const EdgeInsets.symmetric(horizontal: 8), child: Text(cur.flag, style: const TextStyle(fontSize: 20))),
-    );
-  }
-}
 
 /// Cart icon with the number of items (the website's CART button).
 class _CartButton extends ConsumerWidget {

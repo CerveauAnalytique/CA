@@ -3,28 +3,43 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/i18n/i18n.dart';
 import '../../core/providers.dart';
+import '../../app/theme/colors.dart';
 import '../../core/widgets/atoms.dart';
+import '../../core/widgets/dot_icon.dart';
 import '../../core/widgets/lnk.dart';
 import '../../core/widgets/responsive.dart';
 
-Widget _frame(BuildContext context, String title, String intro, Widget form) => Container1280(
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 576),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 48),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(title, style: const TextStyle(fontSize: 28.8, height: 1.2)),
-              const SizedBox(height: 16),
-              Text(intro, style: const TextStyle(fontSize: 16, height: 1.5)),
-              const SizedBox(height: 32),
-              form,
-            ]),
+/// Centered card with the CA7 logo, like the website's login page.
+Widget _frame(BuildContext context, String title, String intro, Widget form) {
+  final c = context.ca;
+  return Container1280(
+    padding: EdgeInsets.symmetric(horizontal: 24, vertical: context.isDesktop ? 64 : 32),
+    child: Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 440),
+        child: Container(
+          padding: EdgeInsets.all(context.isDesktop ? 40 : 24),
+          decoration: BoxDecoration(
+            color: c.bg,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: Neutral.c200),
+            boxShadow: const [BoxShadow(color: Color(0x0D000000), blurRadius: 25, offset: Offset(0, 20), spreadRadius: -5)],
           ),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            const Center(child: Ca7Logo()),
+            const SizedBox(height: 24),
+            Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w300, letterSpacing: -.5)),
+            const SizedBox(height: 8),
+            Text(intro, textAlign: TextAlign.center, style: TextStyle(fontSize: 14, height: 1.5, color: c.muted)),
+            const SizedBox(height: 28),
+            form,
+          ]),
         ),
       ),
-    );
+    ),
+  );
+}
 
 String? _target(BuildContext context) => GoRouterState.of(context).uri.queryParameters['redirect'];
 
@@ -38,7 +53,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _form = GlobalKey<FormState>();
   final _email = TextEditingController(), _pw = TextEditingController();
   String? _error;
-  bool _busy = false;
+  bool _busy = false, _show = false;
 
   Future<void> _submit() async {
     if (!_form.currentState!.validate()) return;
@@ -69,19 +84,28 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       context.t('Log in to manage your account and review your order history.'),
       Form(
         key: _form,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           if (_error != null) _Message(_error!),
           CaField(controller: _email, label: context.t('Email'), keyboard: TextInputType.emailAddress, autofill: const [AutofillHints.email], validator: (v) => (v ?? '').trim().isEmpty ? context.t('Email is required.') : null),
-          const SizedBox(height: 32),
-          CaField(controller: _pw, label: context.t('Password'), obscure: true, autofill: const [AutofillHints.password], onSubmitted: (_) => _submit(), validator: (v) => (v ?? '').isEmpty ? context.t('Please provide a password.') : null),
-          const SizedBox(height: 24),
-          Wrap(children: [Text('${context.t('Forgot your password?')} ', style: const TextStyle(fontSize: 14)), Lnk(to: '/forgot-password$extra', child: Text(context.t('Click here to reset it'), style: const TextStyle(fontSize: 14, decoration: TextDecoration.underline)))]),
-          const SizedBox(height: 24),
-          Row(children: [
-            Lnk(to: '/create-account$extra', child: CaButton(context.t('Create an account'), outlined: true, link: true)),
-            const Spacer(),
-            CaButton(_busy ? context.t('Processing') : context.t('Continue'), onPressed: _submit, busy: _busy),
+          const SizedBox(height: 20),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(context.t('Password'), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: context.ca.muted)),
+            Lnk(to: '/forgot-password$extra', child: Text(context.t('Forgot your password?'), style: TextStyle(fontSize: 12, color: context.ca.muted, decoration: TextDecoration.underline))),
           ]),
+          const SizedBox(height: 6),
+          TextFormField(
+            controller: _pw,
+            obscureText: !_show,
+            autofillHints: const [AutofillHints.password],
+            onFieldSubmitted: (_) => _submit(),
+            validator: (v) => (v ?? '').isEmpty ? context.t('Please provide a password.') : null,
+            style: const TextStyle(fontSize: 14),
+            decoration: InputDecoration(suffixIcon: TextButton(onPressed: () => setState(() => _show = !_show), child: Text(_show ? context.t('Hide') : context.t('Show'), style: TextStyle(fontSize: 12, color: context.ca.muted)))),
+          ),
+          const SizedBox(height: 24),
+          CaButton(_busy ? context.t('Processing') : context.t('Continue'), onPressed: _submit, busy: _busy, expand: true),
+          const SizedBox(height: 24),
+          Center(child: Lnk(to: '/create-account$extra', child: Text(context.t('Create an account'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, decoration: TextDecoration.underline)))),
         ]),
       ),
     );
@@ -140,7 +164,7 @@ class _CreateAccountPageState extends ConsumerState<CreateAccountPage> {
       context.t('Create an account to save your orders and your language.'),
       Form(
         key: _form,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           if (_error != null) _Message(_error!),
           CaField(controller: _email, label: context.t('Email address'), keyboard: TextInputType.emailAddress, validator: (v) => (v ?? '').trim().isEmpty ? context.t('Email is required.') : null),
           const SizedBox(height: 24),
@@ -157,9 +181,9 @@ class _CreateAccountPageState extends ConsumerState<CreateAccountPage> {
             decoration: const InputDecoration(),
           ),
           const SizedBox(height: 24),
-          CaButton(_busy ? context.t('Processing') : context.t('Create account'), onPressed: _submit, busy: _busy),
+          CaButton(_busy ? context.t('Processing') : context.t('Create account'), onPressed: _submit, busy: _busy, expand: true),
           const SizedBox(height: 24),
-          Wrap(children: [Text('${context.t('Already have an account?')} ', style: const TextStyle(fontSize: 14)), Lnk(to: '/login${qp.isEmpty ? '' : '?$qp'}', child: Text(context.t('Log in'), style: const TextStyle(fontSize: 14, decoration: TextDecoration.underline)))]),
+          Wrap(alignment: WrapAlignment.center, children: [Text('${context.t('Already have an account?')} ', style: const TextStyle(fontSize: 14)), Lnk(to: '/login${qp.isEmpty ? '' : '?$qp'}', child: Text(context.t('Log in'), style: const TextStyle(fontSize: 14, decoration: TextDecoration.underline)))]),
         ]),
       ),
     );
@@ -197,11 +221,11 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
         context.t('Enter your email address. You will receive an email with a link to reset your password.'),
         _sent
             ? _Message(context.t('Check your email for a link that will allow you to securely reset your password.'), ok: true)
-            : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            : Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                 if (_error != null) _Message(_error!),
                 CaField(controller: _email, label: context.t('Email'), keyboard: TextInputType.emailAddress, onSubmitted: (_) => _submit()),
                 const SizedBox(height: 24),
-                CaButton(_busy ? context.t('Processing') : context.t('Forgot password'), onPressed: _submit, busy: _busy),
+                Center(child: CaButton(_busy ? context.t('Processing') : context.t('Forgot password'), onPressed: _submit, busy: _busy)),
               ]),
       );
 }

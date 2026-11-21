@@ -8,6 +8,7 @@ import { headers as getHeaders } from 'next/headers'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { LoginForm } from '@/components/forms/LoginForm'
+import { Ca7Logo } from '@/components/Logo/Ca7Logo'
 import { redirect } from 'next/navigation'
 
 export default async function Login() {
@@ -22,11 +23,15 @@ export default async function Login() {
 
   return (
     <div className="container">
-      <div className="max-w-xl mx-auto my-12">
+      <div className="mx-auto my-12 w-full max-w-[440px] rounded-3xl border border-neutral-200 bg-white p-8 shadow-xl shadow-black/5 dark:border-neutral-800 dark:bg-neutral-950 md:p-10">
         <RenderParams />
-
-        <h1 className="mb-4 text-[1.8rem]">{t('Log in')}</h1>
-        <p className="mb-8">{t('Log in to manage your account and review your order history.')}</p>
+        <div className="mb-6 flex justify-center">
+          <Ca7Logo />
+        </div>
+        <h1 className="text-center text-[28px] font-light tracking-tight">{t('Log in')}</h1>
+        <p className="mb-8 mt-2 text-center text-[14px] text-neutral-500 dark:text-neutral-400">
+          {t('Log in to manage your account and review your order history.')}
+        </p>
         <LoginForm />
       </div>
     </div>
