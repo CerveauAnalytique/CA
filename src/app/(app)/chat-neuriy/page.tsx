@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Bot, Send, User, Sparkles } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { Bot, Send, User, Sparkles, Copy, ExternalLink } from 'lucide-react'
 
 interface Message {
   id: string
@@ -9,7 +9,7 @@ interface Message {
   content: string
 }
 
-export default function ChatNeuriyPage() {
+function FallbackChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
@@ -138,6 +138,67 @@ export default function ChatNeuriyPage() {
           </button>
         </form>
       </footer>
+    </div>
+  )
+}
+
+const LOBEHUB_URL = process.env.NEXT_PUBLIC_LOBEHUB_URL
+
+/** Neuriy AI chat: embeds the self-hosted LobeHub when configured, otherwise the built-in demo chat. */
+export default function ChatNeuriyPage() {
+  const [question, setQuestion] = useState('')
+  const [copied, setCopied] = useState(false)
+
+  useEffect(() => {
+    setQuestion(new URLSearchParams(window.location.search).get('q') || '')
+  }, [])
+
+  if (!LOBEHUB_URL) return <FallbackChat />
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(question)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      /* clipboard blocked: the text stays visible to copy by hand */
+    }
+  }
+
+  return (
+    <div className="flex flex-col" style={{ height: 'calc(100vh - 56px)' }}>
+      <div className="flex items-center justify-between gap-4 border-b border-neutral-200 px-4 py-2 text-sm dark:border-neutral-800">
+        <div className="flex min-w-0 items-center gap-2">
+          <Sparkles className="h-4 w-4 shrink-0" />
+          <span className="font-semibold">Neuriy AI</span>
+          {question && (
+            <span className="flex min-w-0 items-center gap-2 text-neutral-500">
+              <span className="truncate">Your question: “{question}”</span>
+              <button
+                type="button"
+                onClick={copy}
+                className="inline-flex shrink-0 items-center gap-1 rounded-md border border-neutral-200 px-2 py-0.5 text-xs hover:bg-neutral-100 dark:border-neutral-700 dark:hover:bg-neutral-800"
+              >
+                <Copy className="h-3 w-3" /> {copied ? 'Copied' : 'Copy'}
+              </button>
+            </span>
+          )}
+        </div>
+        <a
+          href={LOBEHUB_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex shrink-0 items-center gap-1 text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+        >
+          Open in new tab <ExternalLink className="h-3.5 w-3.5" />
+        </a>
+      </div>
+      <iframe
+        src={LOBEHUB_URL}
+        title="Neuriy AI chat"
+        className="w-full flex-1 border-0"
+        allow="clipboard-read; clipboard-write; microphone"
+      />
     </div>
   )
 }
