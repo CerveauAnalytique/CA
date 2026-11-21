@@ -14,8 +14,8 @@ export function LogoStrip() {
     <div className="bg-white">
       <div className="mx-auto grid max-w-[1280px] grid-cols-2 md:grid-cols-5">
         {ITEMS.map(({ name, icon }) => (
-          <div key={name} className="flex h-[92px] items-center justify-center gap-3 text-neutral-600">
-            <DotIcon name={icon} size={44} />
+          <div key={name} className="flex h-[104px] items-center justify-center gap-3 text-neutral-600">
+            <DotIcon name={icon} size={60} />
             <span className="text-[17px] font-semibold tracking-tight">{name}</span>
           </div>
         ))}

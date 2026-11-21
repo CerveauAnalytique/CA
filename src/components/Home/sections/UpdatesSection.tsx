@@ -60,7 +60,7 @@ export function UpdatesSection() {
             }}
           >
             <div className="h-[260px] w-full max-w-[380px]">
-              <DotIcon name="camera" size={220} />
+              <DotIcon name="camera" size={260} />
             </div>
           </div>
 

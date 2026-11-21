@@ -59,7 +59,7 @@ export function FeatureCards() {
                 i < CARDS.length - 1 ? 'border-b md:border-b-0 md:border-r border-neutral-200' : ''
               }`}
             >
-              <DotIcon name={icon} size={96} />
+              <DotIcon name={icon} size={112} />
               <h3 className="mt-8 font-mono text-[18px] font-medium text-neutral-900">{title}</h3>
               <p className="mt-3 max-w-[250px] text-[13px] leading-relaxed text-neutral-500">{text}</p>
             </div>

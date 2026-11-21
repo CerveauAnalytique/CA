@@ -43,7 +43,7 @@ export function ProblemsSection() {
       <div className="relative mx-auto mt-16 grid max-w-[1040px] gap-4 px-6 md:grid-cols-2">
         {PROBLEMS.map((p) => (
           <div key={p.title} className="flex gap-5 rounded-2xl bg-neutral-50 p-6">
-            <DotIcon name={p.icon} size={72} className="shrink-0" />
+            <DotIcon name={p.icon} size={96} className="shrink-0" />
             <div>
               <h3 className="font-mono text-[17px] font-medium text-neutral-900">{p.title}</h3>
               <p className="mt-2 text-[13px] leading-relaxed text-neutral-400">{p.problem}</p>
