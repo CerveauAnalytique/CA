@@ -99,3 +99,13 @@ export function parseCsv(text: string): Record<string, unknown>[] {
     return [h.trim(), v !== '' && !Number.isNaN(Number(v)) ? Number(v) : v]
   })))
 }
+
+/** Syncs a source of any pull type (REST, OpenRemote, ThingsBoard). */
+export async function syncSource(payload: Payload, user: User, source: { id: string | number; type: string; url?: string | null; headers?: unknown; recordsPath?: string | null; realm?: string | null; clientId?: string | null; assetId?: string | null; credentials?: string | null }) {
+  if (source.type === 'rest') return syncRest(payload, user, source)
+  if (source.type === 'openremote' || source.type === 'thingsboard') {
+    const { pullIot } = await import('@/lib/iot')
+    return saveRecords(payload, user, source.id, await pullIot(source))
+  }
+  throw new Error('This source type is not pulled; it receives data.')
+}

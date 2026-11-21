@@ -26,9 +26,10 @@ The page **Dashboard → Platform** (Enterprise pack and admins) shows whether e
 
 - **Not tested:** this setup was written without a Docker daemon available, so the install script has not been run. Run it on a
   server with Docker and check each tool's own documentation for changes.
-- **No single sign-on yet:** every tool has its own login. Change all default passwords right away.
+- **Passwords:** `install.sh` replaces the default passwords of ThingsBoard, OpenRemote and Airbyte with generated ones (written to `platform/vendor/passwords.txt`). Not run here, so check the result. Dify has no default password.
+- **Single sign-on:** one CA7 account can open ThingsBoard and OpenRemote (OpenID Connect), see [SSO.md](SSO.md). Dify and Airbyte (open source) have no OIDC login.
 - **OpenRemote and ThingsBoard overlap** (both manage IoT devices). Choose OpenRemote for tenants, users and rules; use ThingsBoard
   when you want ready-made dashboards. Running both is possible but doubles the maintenance.
-- **Not connected to the CA7 data yet:** Airbyte, Dify and the IoT tools do not yet write into or read from the CA7 data sources
-  (Data Connect). Next steps: an Airbyte destination into TimescaleDB, a Dify tool that reads CA7 data, OpenRemote data sent to `/api/ca/ingest`.
+- **Data connected (first part):** OpenRemote and ThingsBoard are Data Connect sources (Enterprise/admin): CA7 pulls the latest values and stores them; use "Sync now" or call `POST /api/ca/sync` (header `Authorization: Bearer $CA7_CRON_SECRET`) every few minutes from a scheduler. Pulled and tested only against a fake server.
+  Still open: Airbyte into TimescaleDB, a Dify tool that reads CA7 data.
 - Put every tool behind HTTPS and a firewall; do not expose them to the internet without a reverse proxy and strong passwords.

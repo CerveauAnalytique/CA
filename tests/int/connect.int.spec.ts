@@ -66,3 +66,20 @@ describe('limits in the database', () => {
     expect((await countApiCall(payload, user)).ok).toBe(false)
   })
 })
+
+describe('platform sources keep their password encrypted', () => {
+  it('stores the secret encrypted and never returns it', async () => {
+    const payload = await getPayload({ config: await config })
+    const admin = await payload.create({ collection: 'users', data: { email: `adm-${Date.now()}@example.com`, password: 'test-password-123', roles: ['admin'] }, overrideAccess: true })
+    const src = await payload.create({ collection: 'data-sources', data: { owner: admin.id, name: 'OR', type: 'openremote', realm: 'master', clientId: 'ca7', secret: 'plain-secret' } as never, overrideAccess: true })
+    const asUser = await payload.findByID({ collection: 'data-sources', id: src.id, user: { ...admin, collection: 'users' }, overrideAccess: false })
+    expect(JSON.stringify(asUser)).not.toContain('plain-secret')
+    expect((asUser as unknown as { credentials?: string }).credentials).toBeUndefined()
+    const full = (await payload.findByID({ collection: 'data-sources', id: src.id, overrideAccess: true })) as unknown as { credentials?: string; secret?: string }
+    expect(full.credentials).toMatch(/^v1\./)
+    expect(full.credentials).not.toContain('plain-secret')
+    expect(full.secret).toBeUndefined()
+    await payload.delete({ collection: 'data-sources', id: src.id, overrideAccess: true })
+    await payload.delete({ collection: 'users', id: admin.id, overrideAccess: true })
+  })
+})

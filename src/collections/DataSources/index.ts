@@ -3,6 +3,7 @@ import { APIError } from 'payload'
 import { randomBytes } from 'node:crypto'
 import { checkRole } from '@/access/utilities'
 import { limitsOf } from '@/lib/limits'
+import { encryptSecret } from '@/lib/secrets'
 
 /** Admin sees all; a customer sees only what they own. */
 const ownOrAdmin: Access = ({ req: { user } }) => {
@@ -30,7 +31,17 @@ const onCreateSource: CollectionBeforeChangeHook = async ({ data, req, operation
     const { totalDocs } = await req.payload.count({ collection: 'data-sources', where: { owner: { equals: owner } }, overrideAccess: true })
     if (totalDocs >= max) throw new APIError(`Your pack allows ${max} data sources. Upgrade your pack at /pricing.`, 402)
   }
+  if (data.type === 'openremote' || data.type === 'thingsboard') {
+    if (user && !checkRole(['admin'], user) && (user as { plan?: string }).plan !== 'enterprise') throw new APIError('Platform sources are part of the Enterprise pack.', 402)
+  }
   if (data.type === 'push' || data.type === 'camera') data.ingestToken = `cs_${randomBytes(20).toString('hex')}`
+  return data
+}
+
+/** The secret is encrypted into `credentials` and then dropped, so it is never stored in plain text. */
+const encryptCredentials: CollectionBeforeChangeHook = ({ data }) => {
+  if (typeof data.secret === 'string' && data.secret) data.credentials = encryptSecret(data.secret)
+  delete data.secret
   return data
 }
 
@@ -48,7 +59,7 @@ export const DataSources: CollectionConfig = {
   slug: 'data-sources',
   admin: { group: 'Data', useAsTitle: 'name', defaultColumns: ['name', 'type', 'owner', 'lastSyncAt', 'recordCount'] },
   access: { read: ownOrAdmin, update: ownOrAdmin, delete: ownOrAdmin, create: loggedIn },
-  hooks: { beforeValidate: [forceOwner], beforeChange: [onCreateSource] },
+  hooks: { beforeValidate: [forceOwner], beforeChange: [onCreateSource, encryptCredentials] },
   fields: [
     ownerField,
     { name: 'name', type: 'text', required: true },
@@ -61,8 +72,21 @@ export const DataSources: CollectionConfig = {
         { label: 'CSV file', value: 'csv' },
         { label: 'Push (IoT, MQTT bridge, scripts)', value: 'push' },
         { label: 'Camera (desktop agent)', value: 'camera' },
+        { label: 'OpenRemote (platform)', value: 'openremote' },
+        { label: 'ThingsBoard (platform)', value: 'thingsboard' },
       ],
     },
+    { name: 'realm', type: 'text', admin: { description: 'OpenRemote: the realm.', condition: (d) => d?.type === 'openremote' } },
+    { name: 'clientId', type: 'text', admin: { description: 'OpenRemote: service user (client id). ThingsBoard: user name.', condition: (d) => d?.type === 'openremote' || d?.type === 'thingsboard' } },
+    { name: 'assetId', type: 'text', admin: { description: 'OpenRemote: asset id (empty = all assets). ThingsBoard: device id.', condition: (d) => d?.type === 'openremote' || d?.type === 'thingsboard' } },
+    {
+      name: 'secret',
+      type: 'text',
+      virtual: true,
+      access: { read: () => false },
+      admin: { description: 'Client secret or password. Stored encrypted, never shown again.', condition: (d) => d?.type === 'openremote' || d?.type === 'thingsboard' },
+    },
+    { name: 'credentials', type: 'text', access: { read: () => false, create: () => false, update: () => false }, admin: { hidden: true } },
     { name: 'url', type: 'text', admin: { description: 'REST: the URL that returns JSON.' } },
     { name: 'headers', type: 'json', admin: { description: 'REST: extra request headers, e.g. {"Authorization":"Bearer ..."}' } },
     { name: 'recordsPath', type: 'text', admin: { description: 'REST: where the list is in the JSON, e.g. data.items' } },

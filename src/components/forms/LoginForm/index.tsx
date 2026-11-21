@@ -39,6 +39,11 @@ export const LoginForm: React.FC = () => {
       try {
         const user = await login(data)
         const target = redirect?.current || '/dashboard'
+        // sign-in for another tool (/api/ca/oidc/authorize) is a server route, not a page
+        if (target.startsWith('/api/')) {
+          window.location.assign(target)
+          return
+        }
         // the account remembers the customer's language: open the site in it
         const lang = (user as { language?: string } | undefined)?.language
         if (isLocale(lang) && lang !== locale) {

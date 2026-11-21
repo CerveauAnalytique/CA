@@ -5218,6 +5218,30 @@
           "primaryKey": false,
           "notNull": true
         },
+        "realm": {
+          "name": "realm",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "client_id": {
+          "name": "client_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "asset_id": {
+          "name": "asset_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "credentials": {
+          "name": "credentials",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "url": {
           "name": "url",
           "type": "varchar",
@@ -14351,7 +14375,9 @@
         "rest",
         "csv",
         "push",
-        "camera"
+        "camera",
+        "openremote",
+        "thingsboard"
       ]
     },
     "public.enum_automations_operator": {
@@ -14620,6 +14646,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "fcb8cb0a-b4c0-4f35-b085-0c3aeb4e5661",
+  "id": "e814ddc4-e64b-4ef6-84a3-14579d996fc4",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

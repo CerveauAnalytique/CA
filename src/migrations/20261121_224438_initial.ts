@@ -39,7 +39,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TYPE "public"."enum_ai_models_stage" AS ENUM('development', 'staging', 'production', 'archived');
   CREATE TYPE "public"."enum_datasets_source" AS ENUM('cameras', 'sensors', 'logs', 'business', 'other');
   CREATE TYPE "public"."enum_datasets_format" AS ENUM('csv', 'parquet', 'jsonl', 'json', 'images', 'other');
-  CREATE TYPE "public"."enum_data_sources_type" AS ENUM('rest', 'csv', 'push', 'camera');
+  CREATE TYPE "public"."enum_data_sources_type" AS ENUM('rest', 'csv', 'push', 'camera', 'openremote', 'thingsboard');
   CREATE TYPE "public"."enum_automations_operator" AS ENUM('gt', 'lt', 'eq', 'anomaly');
   CREATE TYPE "public"."enum_automations_action" AS ENUM('email', 'webhook');
   CREATE TYPE "public"."enum_forms_confirmation_type" AS ENUM('message', 'redirect');
@@ -528,6 +528,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"owner_id" integer NOT NULL,
   	"name" varchar NOT NULL,
   	"type" "enum_data_sources_type" NOT NULL,
+  	"realm" varchar,
+  	"client_id" varchar,
+  	"asset_id" varchar,
+  	"credentials" varchar,
   	"url" varchar,
   	"headers" jsonb,
   	"records_path" varchar,

@@ -1199,7 +1199,24 @@ export interface DataSource {
   id: number;
   owner: number | User;
   name: string;
-  type: 'rest' | 'csv' | 'push' | 'camera';
+  type: 'rest' | 'csv' | 'push' | 'camera' | 'openremote' | 'thingsboard';
+  /**
+   * OpenRemote: the realm.
+   */
+  realm?: string | null;
+  /**
+   * OpenRemote: service user (client id). ThingsBoard: user name.
+   */
+  clientId?: string | null;
+  /**
+   * OpenRemote: asset id (empty = all assets). ThingsBoard: device id.
+   */
+  assetId?: string | null;
+  /**
+   * Client secret or password. Stored encrypted, never shown again.
+   */
+  secret?: string | null;
+  credentials?: string | null;
   /**
    * REST: the URL that returns JSON.
    */
@@ -1766,6 +1783,11 @@ export interface DataSourcesSelect<T extends boolean = true> {
   owner?: T;
   name?: T;
   type?: T;
+  realm?: T;
+  clientId?: T;
+  assetId?: T;
+  secret?: T;
+  credentials?: T;
   url?: T;
   headers?: T;
   recordsPath?: T;

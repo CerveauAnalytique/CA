@@ -5,6 +5,7 @@ import React from 'react'
 import Link from '@/i18n/client'
 import { planOf } from '@/lib/limits'
 import { PLATFORM, checkService, serviceUrl } from '@/lib/platform'
+import { enabled as oidcEnabled, issuer } from '@/lib/oidc'
 
 export const metadata = { title: 'Platform' }
 
@@ -59,7 +60,19 @@ export default async function PlatformPage() {
         <h2 className="text-[15px] font-semibold text-neutral-900 dark:text-white">TimescaleDB (business data and storage)</h2>
         <p className="mt-1">PostgreSQL with time-series storage for sensor data and business data. Started by <code>platform/docker-compose.yml</code> on port 5433. Not a web page; connect with a database tool or from Airbyte and Dify.</p>
       </section>
-      <p className="text-xs text-neutral-400">The tools have their own logins and are not yet signed in through your CA7 account (single sign-on is not built).</p>
+      <section className="rounded-2xl bg-neutral-50 p-5 text-sm text-neutral-600 dark:bg-neutral-900 dark:text-neutral-300">
+        <h2 className="text-[15px] font-semibold text-neutral-900 dark:text-white">Sign in with your CA7 account</h2>
+        {oidcEnabled() ? (
+          <div className="mt-2 space-y-1">
+            <p>CA7 is an OpenID Connect provider. Add it as a login provider in ThingsBoard and in OpenRemote (Keycloak). Then one CA7 account opens both.</p>
+            <p>Issuer: <code>{issuer()}</code></p>
+            <p>Discovery: <code>{issuer()}/.well-known/openid-configuration</code></p>
+            <p>Steps per tool: <code>platform/SSO.md</code>. Dify and Airbyte (open-source editions) have no OIDC login: they keep their own login.</p>
+          </div>
+        ) : (
+          <p className="mt-2">Not switched on. Set <code>CA7_OIDC_PRIVATE_KEY</code> and <code>CA7_OIDC_CLIENTS</code> (see <code>platform/SSO.md</code>).</p>
+        )}
+      </section>
     </div>
   )
 }

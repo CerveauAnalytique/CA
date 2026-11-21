@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 export type SourceRow = {
   id: string | number
   name: string
-  type: 'rest' | 'csv' | 'push' | 'camera'
+  type: 'rest' | 'csv' | 'push' | 'camera' | 'openremote' | 'thingsboard'
   url?: string | null
   ingestToken?: string | null
   lastSyncAt?: string | null
@@ -19,6 +19,8 @@ const TYPES = [
   { v: 'csv', l: 'CSV file' },
   { v: 'push', l: 'Push (IoT, MQTT bridge, scripts)' },
   { v: 'camera', l: 'Camera (desktop agent)' },
+  { v: 'openremote', l: 'OpenRemote (Enterprise)' },
+  { v: 'thingsboard', l: 'ThingsBoard (Enterprise)' },
 ]
 
 const input = 'w-full rounded-xl border border-neutral-200 bg-white px-3 py-2 text-sm dark:border-neutral-700 dark:bg-neutral-950'
@@ -39,6 +41,10 @@ export function ConnectPanel({ sources, base, defaultType }: { sources: SourceRo
   const [url, setUrl] = useState('')
   const [headers, setHeaders] = useState('')
   const [path, setPath] = useState('')
+  const [realm, setRealm] = useState('master')
+  const [clientId, setClientId] = useState('')
+  const [assetId, setAssetId] = useState('')
+  const [secret, setSecret] = useState('')
   const [msg, setMsg] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
@@ -66,9 +72,9 @@ export function ConnectPanel({ sources, base, defaultType }: { sources: SourceRo
       await call('/api/data-sources', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, type, url: url || undefined, headers: parsedHeaders, recordsPath: path || undefined }),
+        body: JSON.stringify({ name, type, url: url || undefined, headers: parsedHeaders, recordsPath: path || undefined, ...(type === 'openremote' || type === 'thingsboard' ? { realm: type === 'openremote' ? realm : undefined, clientId, assetId: assetId || undefined, secret } : {}) }),
       })
-      setName(''); setUrl(''); setHeaders(''); setPath('')
+      setName(''); setUrl(''); setHeaders(''); setPath(''); setClientId(''); setAssetId(''); setSecret('')
     }, 'Data source added.')
   }
 
@@ -85,6 +91,15 @@ export function ConnectPanel({ sources, base, defaultType }: { sources: SourceRo
             <input className={input} required type="url" placeholder="https://api.example.com/readings" value={url} onChange={(e) => setUrl(e.target.value)} />
             <input className={input} placeholder="Where the list is, e.g. data.items (optional)" value={path} onChange={(e) => setPath(e.target.value)} />
             <input className={input} placeholder='Headers as JSON (optional)' value={headers} onChange={(e) => setHeaders(e.target.value)} />
+          </>
+        )}
+        {(type === 'openremote' || type === 'thingsboard') && (
+          <>
+            {type === 'openremote' && <input className={input} required placeholder="Realm, e.g. master" value={realm} onChange={(e) => setRealm(e.target.value)} />}
+            <input className={input} required placeholder={type === 'openremote' ? 'Service user (client id)' : 'ThingsBoard user name'} value={clientId} onChange={(e) => setClientId(e.target.value)} autoComplete="off" />
+            <input className={input} required type="password" placeholder={type === 'openremote' ? 'Client secret' : 'Password'} value={secret} onChange={(e) => setSecret(e.target.value)} autoComplete="new-password" />
+            <input className={input} required={type === 'thingsboard'} placeholder={type === 'openremote' ? 'Asset id (empty = all assets)' : 'Device id'} value={assetId} onChange={(e) => setAssetId(e.target.value)} />
+            <p className="text-xs text-neutral-500">The address of the tool is set on the server. The password is stored encrypted and never shown again.</p>
           </>
         )}
         <button disabled={busy} className={btnPrimary}>Add source</button>
@@ -104,7 +119,7 @@ export function ConnectPanel({ sources, base, defaultType }: { sources: SourceRo
                 </p>
               </div>
               <div className="flex flex-wrap gap-2">
-                {s.type === 'rest' && <button disabled={busy} className={btn} onClick={() => run(() => call(`/api/ca/sources/${s.id}/sync`, { method: 'POST' }))}>Sync now</button>}
+                {(s.type === 'rest' || s.type === 'openremote' || s.type === 'thingsboard') && <button disabled={busy} className={btn} onClick={() => run(() => call(`/api/ca/sources/${s.id}/sync`, { method: 'POST' }))}>Sync now</button>}
                 {s.type === 'csv' && (
                   <label className={`${btn} cursor-pointer`}>
                     Upload CSV
