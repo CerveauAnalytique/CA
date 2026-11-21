@@ -1,6 +1,7 @@
 import { AuthProvider } from '@/providers/Auth'
 import { EcommerceProvider } from '@payloadcms/plugin-ecommerce/client/react'
 import { stripeAdapterClient } from '@payloadcms/plugin-ecommerce/payments/stripe'
+import { mollieAdapterClient } from '@/payments/mollie'
 import React from 'react'
 
 import { HeaderThemeProvider } from './HeaderTheme'
@@ -38,6 +39,7 @@ export const Providers: React.FC<{
               stripeAdapterClient({
                 publishableKey: process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
               }),
+              mollieAdapterClient(),
             ]}
           >
             {children}

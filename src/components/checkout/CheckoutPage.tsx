@@ -88,6 +88,11 @@ export const CheckoutPage: React.FC = () => {
         })) as Record<string, unknown>
 
         if (paymentData) {
+          // Mollie: send the shopper to Mollie's hosted payment page
+          if (typeof paymentData['checkoutUrl'] === 'string' && paymentData['checkoutUrl']) {
+            window.location.href = paymentData['checkoutUrl'] as string
+            return
+          }
           setPaymentData(paymentData)
         }
       } catch (error) {
@@ -270,16 +275,31 @@ export const CheckoutPage: React.FC = () => {
         )}
 
         {!paymentData && (
-          <Button
-            className="self-start"
-            disabled={!canGoToPayment}
-            onClick={(e) => {
-              e.preventDefault()
-              void initiatePaymentIntent('stripe')
-            }}
-          >
-            Go to payment
-          </Button>
+          <div className="flex flex-wrap gap-3">
+            <Button
+              className="self-start"
+              disabled={!canGoToPayment}
+              onClick={(e) => {
+                e.preventDefault()
+                void initiatePaymentIntent('stripe')
+              }}
+            >
+              Pay by card
+            </Button>
+            {process.env.NEXT_PUBLIC_MOLLIE_ENABLED === 'true' && (
+              <Button
+                className="self-start"
+                variant="outline"
+                disabled={!canGoToPayment}
+                onClick={(e) => {
+                  e.preventDefault()
+                  void initiatePaymentIntent('mollie')
+                }}
+              >
+                iDEAL / Bancontact / more
+              </Button>
+            )}
+          </div>
         )}
 
         {!paymentData?.['clientSecret'] && error && (

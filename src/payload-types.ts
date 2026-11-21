@@ -908,10 +908,13 @@ export interface Transaction {
         id?: string | null;
       }[]
     | null;
-  paymentMethod?: 'stripe' | null;
+  paymentMethod?: ('stripe' | 'mollie') | null;
   stripe?: {
     customerID?: string | null;
     paymentIntentID?: string | null;
+  };
+  mollie?: {
+    paymentID?: string | null;
   };
   billingAddress?: {
     title?: string | null;
@@ -1957,6 +1960,11 @@ export interface TransactionsSelect<T extends boolean = true> {
     | {
         customerID?: T;
         paymentIntentID?: T;
+      };
+  mollie?:
+    | T
+    | {
+        paymentID?: T;
       };
   billingAddress?:
     | T
