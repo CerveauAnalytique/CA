@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { HomeChatInput } from './HomeChatInput'
+import { DotCameraCanvas } from './DotCameraCanvas'
 
 const WORDS = ['your property', 'every entrance', 'day and night']
 
@@ -58,14 +59,7 @@ export function CameraHero() {
       <div className="relative mx-auto grid min-h-[inherit] max-w-[1280px] grid-cols-1 px-6 md:grid-cols-12">
         {/* Camera */}
         <div className="pointer-events-none order-2 col-span-12 mt-4 flex items-center justify-center md:absolute md:right-[1%] md:top-[9%] md:bottom-0 md:order-none md:mt-0 md:w-[52%]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/camera-transparent.svg"
-            alt="Security camera made of dots"
-            className="h-auto w-full"
-            width={1536}
-            height={1024}
-          />
+          <DotCameraCanvas className="w-full" />
         </div>
 
         {/* Left copy */}
