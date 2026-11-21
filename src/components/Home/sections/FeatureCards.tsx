@@ -23,13 +23,13 @@ const CARDS = [
 ]
 
 const Corner = ({ className }: { className: string }) => (
-  <span className={`absolute h-[7px] w-[7px] rotate-45 bg-neutral-300 ${className}`} />
+  <span className={`absolute h-[7px] w-[7px] rotate-45 bg-neutral-300 ${className} dark:bg-neutral-700`} />
 )
 
 export async function FeatureCards() {
   const t = await getT()
   return (
-    <section className="relative overflow-hidden bg-white py-24">
+    <section className="relative overflow-hidden bg-white py-24 dark:bg-neutral-950">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-60"
@@ -50,7 +50,7 @@ export async function FeatureCards() {
       />
 
       <div className="relative mx-auto mt-20 max-w-[1040px] px-6">
-        <div className="relative grid grid-cols-1 border border-neutral-200 md:grid-cols-3">
+        <div className="relative grid grid-cols-1 border border-neutral-200 md:grid-cols-3 dark:border-neutral-800">
           <Corner className="-left-1 -top-1" />
           <Corner className="-right-1 -top-1" />
           <Corner className="-bottom-1 -left-1" />
@@ -59,12 +59,12 @@ export async function FeatureCards() {
             <div
               key={title}
               className={`flex flex-col items-center px-8 py-12 text-center ${
-                i < CARDS.length - 1 ? 'border-b md:border-b-0 md:border-r border-neutral-200' : ''
+                i < CARDS.length - 1 ? 'border-b md:border-b-0 md:border-e border-neutral-200' : ''
               }`}
             >
               <DotIcon name={icon} size={112} />
-              <h3 className="mt-8 font-mono text-[18px] font-medium text-neutral-900">{t(title)}</h3>
-              <p className="mt-3 max-w-[250px] text-[13px] leading-relaxed text-neutral-500">{t(text)}</p>
+              <h3 className="mt-8 font-mono text-[18px] font-medium text-neutral-900 dark:text-white">{t(title)}</h3>
+              <p className="mt-3 max-w-[250px] text-[13px] leading-relaxed text-neutral-500 dark:text-neutral-400">{t(text)}</p>
             </div>
           ))}
         </div>

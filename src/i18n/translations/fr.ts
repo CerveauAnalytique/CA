@@ -1,5 +1,7 @@
 // fr: keyed by the English text. `pnpm test:int` fails when a text used with t() / tr() is missing here.
 const t: Record<string, string> = {
+  "Sort by": "Trier par",
+  "Hardware and products": "Matériel et produits",
   "1 project": "1 projet",
   "1,000 API calls per month": "1 000 appels d'API par mois",
   "10 IoT devices": "10 appareils IoT",

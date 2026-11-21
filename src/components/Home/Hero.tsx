@@ -45,7 +45,7 @@ export function Hero() {
       <div className="relative z-20 max-w-[1280px] mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start pt-2">
           {/* Left Column: Title & Chat Bar aligned left together */}
-          <div className="col-span-1 md:col-span-7 space-y-4 text-center md:text-left">
+          <div className="col-span-1 md:col-span-7 space-y-4 text-center md:text-start">
             <span className="inline-flex items-center gap-2 px-3.5 py-1 bg-black text-white dark:bg-white dark:text-black text-[11px] font-bold rounded-full tracking-widest uppercase">
               <Sparkles size={12} className="text-gold" />
               AGI Evolution
@@ -77,7 +77,7 @@ export function Hero() {
               <span className="flex items-center rotate-90">
                 <Battery size={16} />
               </span>
-              <span className="font-semibold text-[11.5px] ml-1">{time || 'Wed, Aug 19 8:43 PM'}</span>
+              <span className="font-semibold text-[11.5px] ms-1">{time || 'Wed, Aug 19 8:43 PM'}</span>
             </div>
 
             {/* CA7 Face Desktop Widget */}

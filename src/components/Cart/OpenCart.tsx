@@ -24,7 +24,7 @@ export function OpenCartButton({
       <span className="max-md:hidden">{t('Cart')}</span>
 
       {quantity ? (
-        <span className="ml-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-semibold text-black">
+        <span className="ms-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-semibold text-black">
           {quantity}
         </span>
       ) : null}

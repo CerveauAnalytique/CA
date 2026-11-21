@@ -69,7 +69,7 @@ export default async function ModelsPage({ searchParams }: Props) {
 
       <div className="mt-8">
         {res.docs.length === 0 ? (
-          <div className="rounded-2xl bg-neutral-50 p-10 text-center text-[14px] text-neutral-500">
+          <div className="rounded-2xl bg-neutral-50 p-10 text-center text-[14px] text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
             {t('No models found.')}
           </div>
         ) : (
@@ -78,7 +78,7 @@ export default async function ModelsPage({ searchParams }: Props) {
               <Link
                 key={m.id}
                 href={`/models/${m.slug}`}
-                className="flex flex-col rounded-2xl bg-neutral-50 p-5 transition hover:bg-neutral-100"
+                className="flex flex-col rounded-2xl bg-neutral-50 p-5 transition hover:bg-neutral-100 dark:bg-neutral-900 dark:hover:bg-neutral-800"
               >
                 <div className="flex flex-wrap items-center gap-1.5">
                   <Pill>{m.framework}</Pill>
@@ -89,8 +89,8 @@ export default async function ModelsPage({ searchParams }: Props) {
                 <p className="mt-0.5 text-[12px] text-neutral-400">
                   {m.publisher} · {m.version}
                 </p>
-                <p className="mt-3 line-clamp-3 text-[13px] leading-relaxed text-neutral-500">{m.summary}</p>
-                <div className="mt-5 flex items-center justify-between text-[12px] text-neutral-500">
+                <p className="mt-3 line-clamp-3 text-[13px] leading-relaxed text-neutral-500 dark:text-neutral-400">{m.summary}</p>
+                <div className="mt-5 flex items-center justify-between text-[12px] text-neutral-500 dark:text-neutral-400">
                   <span>{m.license}</span>
                   <span className="inline-flex items-center gap-1">
                     <Download size={13} /> {(m.downloads ?? 0).toLocaleString('en-US')}

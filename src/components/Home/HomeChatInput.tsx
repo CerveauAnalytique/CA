@@ -66,7 +66,7 @@ export function HomeChatInput() {
               <span className="flex items-center gap-1.5 bg-red-50 dark:bg-red-950/60 text-red-600 dark:text-red-400 px-3 py-1 rounded-full font-medium animate-pulse">
                 <Mic className="w-3 h-3 text-red-500" />
                 Listening...
-                <button onClick={() => setIsListening(false)} className="hover:text-red-800 ml-1">
+                <button onClick={() => setIsListening(false)} className="hover:text-red-800 ms-1">
                   <X className="w-3 h-3" />
                 </button>
               </span>
@@ -75,7 +75,7 @@ export function HomeChatInput() {
             {attachment && (
               <span className="flex items-center gap-1.5 bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 px-3 py-1 rounded-full font-medium">
                 📎 {attachment}
-                <button onClick={() => setAttachment(null)} className="hover:text-red-500 ml-1">
+                <button onClick={() => setAttachment(null)} className="hover:text-red-500 ms-1">
                   <X className="w-3 h-3" />
                 </button>
               </span>
@@ -85,7 +85,7 @@ export function HomeChatInput() {
               <span className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full font-medium">
                 <Globe className="w-3 h-3" />
                 Web Search Active
-                <button onClick={() => setIsWebSearch(false)} className="hover:text-blue-800 ml-1">
+                <button onClick={() => setIsWebSearch(false)} className="hover:text-blue-800 ms-1">
                   <X className="w-3 h-3" />
                 </button>
               </span>
@@ -95,7 +95,7 @@ export function HomeChatInput() {
               <span className="flex items-center gap-1.5 bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 px-3 py-1 rounded-full font-medium">
                 <Lightbulb className="w-3 h-3" />
                 Deep Reasoning Mode
-                <button onClick={() => setIsDeepThink(false)} className="hover:text-amber-800 ml-1">
+                <button onClick={() => setIsDeepThink(false)} className="hover:text-amber-800 ms-1">
                   <X className="w-3 h-3" />
                 </button>
               </span>

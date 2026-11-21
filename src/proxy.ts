@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { GATE_COOKIE, verifyGateCookie } from '@/lib/adminGate'
 import {
+  LOCALES,
   DEFAULT_LOCALE,
   LOCALE_COOKIE,
   LOCALE_HEADER,
@@ -43,6 +44,12 @@ export async function proxy(request: NextRequest) {
     const headers = new Headers(request.headers)
     headers.set(LOCALE_HEADER, locale)
     const res = NextResponse.rewrite(new URL(`${rest}${search}`, request.url), { request: { headers } })
+    // tell search engines about the other languages of this page
+    const origin = process.env.NEXT_PUBLIC_SERVER_URL?.replace(/\/$/, '') || request.nextUrl.origin
+    const tail = rest === '/' ? '' : rest
+    const alternates = LOCALES.map((l) => `<${origin}/${l}${tail}>; rel="alternate"; hreflang="${l}"`)
+    alternates.push(`<${origin}/${DEFAULT_LOCALE}${tail}>; rel="alternate"; hreflang="x-default"`)
+    res.headers.set('Link', alternates.join(', '))
     if (request.cookies.get(LOCALE_COOKIE)?.value !== locale) {
       res.cookies.set(LOCALE_COOKIE, locale, { path: '/', maxAge: 60 * 60 * 24 * 365, sameSite: 'lax' })
     }

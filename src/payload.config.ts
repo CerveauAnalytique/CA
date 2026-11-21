@@ -25,6 +25,7 @@ import { Header } from '@/globals/Header'
 import { plugins } from './plugins'
 import { AiModels } from './collections/AiModels'
 import { Datasets } from './collections/Datasets'
+import { migrations } from './migrations'
 import { seedCatalogIfEmpty } from './utilities/seedCatalog'
 
 const filename = fileURLToPath(import.meta.url)
@@ -53,6 +54,8 @@ export default buildConfig({
     await seedCatalogIfEmpty(payload)
   },
   db: postgresAdapter({
+    // runs the migrations in src/migrations when the site starts in production
+    prodMigrations: migrations,
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },

@@ -88,7 +88,7 @@ export function MobileMenu({ menu, onSearch }: Props) {
                 close()
                 onSearch()
               }}
-              className="mb-2 flex w-full items-center gap-3 rounded-2xl bg-neutral-100 px-4 py-3 text-left text-[15px] text-neutral-500 dark:bg-neutral-900"
+              className="mb-2 flex w-full items-center gap-3 rounded-2xl bg-neutral-100 px-4 py-3 text-start text-[15px] text-neutral-500 dark:bg-neutral-900"
             >
               <SearchIcon size={18} /> {t('Search docs, research, products…')}
             </button>

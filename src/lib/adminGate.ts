@@ -9,6 +9,8 @@
  * Uses Web Crypto only, so it runs in the proxy and in route handlers.
  */
 
+import { isLocale } from '@/i18n/config'
+
 export const GATE_COOKIE = 'ca_admin_gate'
 export const GATE_MAX_AGE = 60 * 60 * 12 // seconds
 
@@ -42,7 +44,9 @@ export function adminSlug(user: { name?: string | null; email?: string | null })
     .normalize('NFKD')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
-  return base || 'admin'
+  const slug = base || 'admin'
+  // /nl/... is read as a language code, so a name like "nl" gets a suffix
+  return isLocale(slug) ? `${slug}-admin` : slug
 }
 
 export async function adminToken(userId: string | number): Promise<string> {

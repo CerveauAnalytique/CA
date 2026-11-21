@@ -19,7 +19,7 @@ export default async function DashboardOverview() {
     <div className="grid gap-4 lg:grid-cols-[300px_1fr]">
       <div className="space-y-4">
         <Card title="Workspace">
-          <p className="text-xs leading-relaxed text-neutral-500">
+          <p className="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">
             Your data hub. Connect cameras, sensors and apps, then read everything through one API.
           </p>
           <p className="mt-4 text-[11px] text-neutral-400">API endpoint</p>
@@ -34,7 +34,7 @@ export default async function DashboardOverview() {
         </Card>
 
         <Card title="Quick start">
-          <ol className="list-decimal space-y-1.5 pl-4 text-xs text-neutral-600">
+          <ol className="list-decimal space-y-1.5 ps-4 text-xs text-neutral-600 dark:text-neutral-300">
             <li>
               Create an <Link href="/dashboard/api" className="underline">API key</Link>
             </li>
@@ -55,7 +55,7 @@ export default async function DashboardOverview() {
             ['Collections', counts.length],
             ['API key', keyOn ? 'On' : 'Off'],
           ].map(([label, value]) => (
-            <div key={label as string} className="rounded-2xl bg-neutral-50 p-4">
+            <div key={label as string} className="rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-900">
               <p className="text-[11px] text-neutral-400">{label}</p>
               <p className="mt-1 text-2xl font-semibold tracking-tight">{value}</p>
             </div>
@@ -65,27 +65,27 @@ export default async function DashboardOverview() {
         <Card
           title="Data sources"
           action={
-            <Link href="/dashboard/export" className="text-xs text-neutral-500 underline">
+            <Link href="/dashboard/export" className="text-xs text-neutral-500 underline dark:text-neutral-400">
               Export
             </Link>
           }
         >
           <div className="overflow-x-auto">
-          <table className="w-full min-w-[420px] text-left text-[13px]">
+          <table className="w-full min-w-[420px] text-start text-[13px]">
             <thead className="text-[11px] text-neutral-400">
               <tr>
-                <th className="rounded-l-lg bg-white px-3 py-2 font-normal">Collection</th>
-                <th className="bg-white px-3 py-2 font-normal">Records</th>
-                <th className="rounded-r-lg bg-white px-3 py-2 font-normal">API</th>
+                <th className="rounded-s-lg bg-white px-3 py-2 font-normal dark:bg-neutral-950">Collection</th>
+                <th className="bg-white px-3 py-2 font-normal dark:bg-neutral-950">Records</th>
+                <th className="rounded-e-lg bg-white px-3 py-2 font-normal dark:bg-neutral-950">API</th>
               </tr>
             </thead>
             <tbody>
               {counts.map((c) => (
-                <tr key={c.slug} className="border-b border-neutral-100 last:border-0">
+                <tr key={c.slug} className="border-b border-neutral-100 last:border-0 dark:border-neutral-800">
                   <td className="px-3 py-2.5 font-medium">{c.label}</td>
                   <td className="px-3 py-2.5">{c.count}</td>
                   <td className="px-3 py-2.5">
-                    <code className="rounded bg-neutral-100 px-1.5 py-0.5 text-[11px]">
+                    <code className="rounded bg-neutral-100 px-1.5 py-0.5 text-[11px] dark:bg-neutral-800">
                       ?collections={c.slug}
                     </code>
                   </td>

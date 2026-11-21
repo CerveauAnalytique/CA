@@ -129,7 +129,7 @@ export function ChatCa7() {
               setMessages([])
               setBusy(false)
             }}
-            className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-neutral-200"
+            className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
           >
             <Plus size={13} /> {t('New chat')}
           </button>
@@ -143,7 +143,7 @@ export function ChatCa7() {
             <h1 className="mt-6 text-[clamp(30px,4vw,44px)] font-light leading-tight tracking-tight">
               {t('What can CA7 help you with?')}
             </h1>
-            <p className="mt-3 max-w-md text-[15px] text-neutral-500">
+            <p className="mt-3 max-w-md text-[15px] text-neutral-500 dark:text-neutral-400">
               {t('The AI that is very good with data: IoT, sensors, SQL, analytics.')}
             </p>
             <div className="mt-8 grid w-full gap-2.5 sm:grid-cols-2">
@@ -152,7 +152,7 @@ export function ChatCa7() {
                   key={s}
                   type="button"
                   onClick={() => send(t(s), [])}
-                  className="rounded-2xl bg-neutral-100 px-4 py-3 text-left text-[13px] text-neutral-700 transition hover:bg-neutral-200"
+                  className="rounded-2xl bg-neutral-100 px-4 py-3 text-start text-[13px] text-neutral-700 transition hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
                 >
                   {t(s)}
                 </button>
@@ -167,7 +167,7 @@ export function ChatCa7() {
                 <div
                   className={
                     m.role === 'user'
-                      ? 'max-w-[85%] rounded-2xl rounded-br-md bg-neutral-900 px-4 py-2.5 text-[14.5px] text-white'
+                      ? 'max-w-[85%] rounded-2xl rounded-br-md bg-neutral-900 px-4 py-2.5 text-[14.5px] text-white dark:bg-white dark:text-neutral-900'
                       : `min-w-0 max-w-[92%] text-[14.5px] leading-relaxed ${
                           m.error ? 'text-red-600' : 'text-neutral-800'
                         }`
@@ -196,7 +196,7 @@ export function ChatCa7() {
           }}
           className="sticky bottom-0 bg-gradient-to-t from-white via-white to-transparent pb-5 pt-3"
         >
-          <div className="flex items-end gap-2 rounded-[28px] bg-white p-2 pl-5 shadow-xl shadow-black/5 ring-1 ring-neutral-200">
+          <div className="flex items-end gap-2 rounded-[28px] bg-white p-2 ps-5 shadow-xl shadow-black/5 ring-1 ring-neutral-200 dark:bg-neutral-950 dark:ring-neutral-700">
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -215,7 +215,7 @@ export function ChatCa7() {
                 type="button"
                 aria-label={t('Stop')}
                 onClick={() => abortRef.current?.abort()}
-                className="grid h-10 w-10 place-items-center rounded-full bg-neutral-900 text-white"
+                className="grid h-10 w-10 place-items-center rounded-full bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
               >
                 <Square size={14} fill="currentColor" />
               </button>
@@ -224,7 +224,7 @@ export function ChatCa7() {
                 type="submit"
                 aria-label={t('Send')}
                 disabled={!input.trim()}
-                className="grid h-10 w-10 place-items-center rounded-full bg-neutral-900 text-white disabled:opacity-30"
+                className="grid h-10 w-10 place-items-center rounded-full bg-neutral-900 text-white disabled:opacity-30 dark:bg-white dark:text-neutral-900"
               >
                 <ArrowUp size={18} />
               </button>

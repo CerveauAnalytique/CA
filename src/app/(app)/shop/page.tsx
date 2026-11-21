@@ -36,17 +36,17 @@ function AppCard({ app, featuredLabel }: { app: MarketApp; featuredLabel: string
   return (
     <Link
       href={`/shop/${app.id}`}
-      className="group flex flex-col rounded-2xl bg-neutral-50 p-5 transition hover:bg-neutral-100"
+      className="group flex flex-col rounded-2xl bg-neutral-50 p-5 transition hover:bg-neutral-100 dark:bg-neutral-900 dark:hover:bg-neutral-800"
     >
       <div className="flex items-start justify-between">
         {icon ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={icon} alt="" className="h-14 w-14 rounded-2xl bg-white object-contain p-1.5" />
+          <img src={icon} alt="" className="h-14 w-14 rounded-2xl bg-white object-contain p-1.5 dark:bg-neutral-950" />
         ) : (
-          <div className="h-14 w-14 rounded-2xl bg-white" />
+          <div className="h-14 w-14 rounded-2xl bg-white dark:bg-neutral-950" />
         )}
         {app.featured && (
-          <span className="rounded-full bg-neutral-900 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-white">
+          <span className="rounded-full bg-neutral-900 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider text-white dark:bg-white dark:text-neutral-900">
             {featuredLabel}
           </span>
         )}
@@ -55,15 +55,15 @@ function AppCard({ app, featuredLabel }: { app: MarketApp; featuredLabel: string
       <p className="mt-0.5 text-[12px] text-neutral-400">
         {app.developer} · {app.category}
       </p>
-      <p className="mt-3 line-clamp-2 text-[13px] leading-relaxed text-neutral-500">{app.description}</p>
-      <div className="mt-5 flex items-center justify-between text-[12px] text-neutral-500">
+      <p className="mt-3 line-clamp-2 text-[13px] leading-relaxed text-neutral-500 dark:text-neutral-400">{app.description}</p>
+      <div className="mt-5 flex items-center justify-between text-[12px] text-neutral-500 dark:text-neutral-400">
         <span className="inline-flex items-center gap-1">
           <Star size={13} className="fill-amber-400 text-amber-400" /> {app.rating.toFixed(1)}
         </span>
         <span className="inline-flex items-center gap-1">
           <Download size={13} /> {app.downloads.toLocaleString('en-US')}
         </span>
-        <span className="font-semibold text-neutral-900">{app.price}</span>
+        <span className="font-semibold text-neutral-900 dark:text-white">{app.price}</span>
       </div>
     </Link>
   )
@@ -86,21 +86,29 @@ export default async function ShopPage({ searchParams }: Props) {
           <h1 className="mt-3 text-[clamp(30px,4vw,48px)] font-light leading-tight tracking-tight">
             {t('Apps and tools for CA7')}
           </h1>
-          <p className="mt-3 max-w-xl text-[15px] text-neutral-500">
+          <p className="mt-3 max-w-xl text-[15px] text-neutral-500 dark:text-neutral-400">
             {t('Install ready-made apps for your IoT, sensors and data, or publish your own.')}
           </p>
         </div>
+        <div className="flex shrink-0 flex-wrap gap-2">
+        <Link
+          href="/products"
+          className="inline-flex h-11 items-center rounded-full bg-neutral-100 px-6 text-[14px] font-medium dark:bg-neutral-800"
+        >
+          {t('Hardware and products')}
+        </Link>
         <a
           href={`${MARKETPLACE_WEB_URL}/Apps/Upload`}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex h-11 shrink-0 items-center rounded-full bg-neutral-900 px-6 text-[14px] font-medium text-white"
+          className="inline-flex h-11 shrink-0 items-center rounded-full bg-neutral-900 px-6 text-[14px] font-medium text-white dark:bg-white dark:text-neutral-900"
         >
           {t('Publish an app')}
         </a>
+        </div>
       </div>
 
-      <form action="/shop" className="mt-8 flex items-center gap-2 rounded-full bg-neutral-100 px-4 py-1.5">
+      <form action="/shop" className="mt-8 flex items-center gap-2 rounded-full bg-neutral-100 px-4 py-1.5 dark:bg-neutral-800">
         <Search size={16} className="text-neutral-400" />
         <input
           name="q"
@@ -119,8 +127,8 @@ export default async function ShopPage({ searchParams }: Props) {
               key={c}
               href={href(q, c, sort)}
               className={`rounded-full px-3.5 py-1.5 text-[13px] ${
-                c === category ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
-              }`}
+                c === category ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
+              } dark:text-neutral-300`}
             >
               {c}
             </Link>
@@ -132,7 +140,7 @@ export default async function ShopPage({ searchParams }: Props) {
               key={s}
               href={href(q, category, s)}
               className={`rounded-full px-3 py-1.5 ${
-                sort === s ? 'bg-neutral-100 font-medium text-neutral-900' : 'text-neutral-500'
+                sort === s ? 'bg-neutral-100 font-medium text-neutral-900 dark:bg-neutral-800 dark:text-white' : 'text-neutral-500 dark:text-neutral-400'
               }`}
             >
               {s === 'popular' ? t('Popular') : t('New')}
@@ -143,12 +151,12 @@ export default async function ShopPage({ searchParams }: Props) {
 
       <div className="mt-8">
         {apps === null ? (
-          <div className="rounded-2xl bg-neutral-50 p-10 text-center">
+          <div className="rounded-2xl bg-neutral-50 p-10 text-center dark:bg-neutral-900">
             <p className="text-[15px] font-medium">{t('The shop is offline right now.')}</p>
-            <p className="mt-1 text-[13px] text-neutral-500">{t('Please try again in a moment.')}</p>
+            <p className="mt-1 text-[13px] text-neutral-500 dark:text-neutral-400">{t('Please try again in a moment.')}</p>
           </div>
         ) : apps.length === 0 ? (
-          <div className="rounded-2xl bg-neutral-50 p-10 text-center text-[14px] text-neutral-500">
+          <div className="rounded-2xl bg-neutral-50 p-10 text-center text-[14px] text-neutral-500 dark:bg-neutral-900 dark:text-neutral-400">
             {t('No apps found. Try a different search or category.')}
           </div>
         ) : (

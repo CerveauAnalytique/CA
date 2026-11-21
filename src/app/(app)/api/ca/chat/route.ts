@@ -1,4 +1,14 @@
+import configPromise from '@payload-config'
+import { getPayload } from 'payload'
+import { clientKey, rateLimit } from '@/lib/rateLimit'
+
 export const dynamic = 'force-dynamic'
+
+// requests per 10 minutes: visitors without an account and customers who are logged in
+const LIMIT_ANON = Number(process.env.CA7_CHAT_LIMIT_ANON || 10)
+const LIMIT_USER = Number(process.env.CA7_CHAT_LIMIT_USER || 60)
+const WINDOW = 10 * 60 * 1000
+const MAX_BODY = 200_000
 
 type Msg = { role: 'user' | 'assistant'; content: string }
 
@@ -14,6 +24,28 @@ const MAX_CHARS = 12000
  * server (CA7_API_URL, default http://127.0.0.1:11434) - see ai/ca7/README.md.
  */
 export async function POST(request: Request) {
+  if (Number(request.headers.get('content-length') || 0) > MAX_BODY) {
+    return Response.json({ error: 'That message is too long.' }, { status: 413 })
+  }
+
+  // logged-in customers get a higher limit; everyone else is limited per address
+  let user: { id: string | number } | null = null
+  try {
+    const payload = await getPayload({ config: configPromise })
+    user = (await payload.auth({ headers: request.headers })).user
+  } catch {
+    /* treated as a visitor */
+  }
+  const limited = user
+    ? rateLimit(`u:${user.id}`, LIMIT_USER, WINDOW)
+    : rateLimit(`ip:${clientKey(request)}`, LIMIT_ANON, WINDOW)
+  if (!limited.ok) {
+    return Response.json(
+      { error: user ? 'You have reached the limit for now. Try again in a few minutes.' : 'You have reached the limit for visitors. Log in for more messages, or try again in a few minutes.' },
+      { status: 429, headers: { 'Retry-After': String(limited.retryAfter) } },
+    )
+  }
+
   let messages: Msg[]
   try {
     const body = await request.json()

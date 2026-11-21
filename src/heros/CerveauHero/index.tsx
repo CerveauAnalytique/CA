@@ -35,7 +35,7 @@ export const CerveauHero: React.FC<Page['hero']> = ({ links, richText }) => {
             onSubmit={(e) => {
               e.preventDefault()
               if (searchValue) {
-                window.location.href = `/shop?q=${encodeURIComponent(searchValue)}`
+                window.location.href = `/products?q=${encodeURIComponent(searchValue)}`
               }
             }}
             className="hero-search-wrap"

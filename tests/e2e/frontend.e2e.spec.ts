@@ -29,11 +29,11 @@ test.describe('Frontend', () => {
   test('can go on homepage', async ({ page }) => {
     await page.goto(baseURL)
 
-    await expect(page).toHaveTitle(/Payload Ecommerce Template/)
+    await expect(page).toHaveTitle(/CA7/)
 
     const heading = page.locator('h1').first()
 
-    await expect(heading).toHaveText('Payload Ecommerce Template')
+    await expect(heading).toContainText('Create your own')
   })
 
   test('can sign up and subsequently login', async ({ page }) => {
@@ -110,7 +110,7 @@ test.describe('Frontend', () => {
   })
 
   test('can view and sort via search page', async ({ page }) => {
-    await page.goto(`${baseURL}/search`)
+    await page.goto(`${baseURL}/products`)
 
     const productCard = page.locator(`a[href="/products/test-product"]`)
     await productCard.waitFor({ state: 'visible' })
@@ -122,7 +122,7 @@ test.describe('Frontend', () => {
 
     const priceSort = page.getByText('Price: Low to high')
     await priceSort.click()
-    await expect(page).toHaveURL(/\/search\?sort=priceInUSD/)
+    await expect(page).toHaveURL(/\/products\?sort=priceInUSD/)
 
     await expect(title).toHaveText('Hoodie')
   })
@@ -306,7 +306,7 @@ test.describe('Frontend', () => {
     const publishChangesButton = page.getByRole('button', { name: 'Publish changes' })
     await publishChangesButton.click()
 
-    await page.goto(`${baseURL}/shop`)
+    await page.goto(`${baseURL}/products`)
     const newProductCard = page.locator(`a[href="/products/new-product-with-variants"]`).first()
     await newProductCard.waitFor({ state: 'visible' })
     await expect(newProductCard).toBeVisible()
@@ -536,7 +536,7 @@ test.describe('Frontend', () => {
     await emailInput.fill(email)
     await passwordInput.fill(password)
     await submitButton.click()
-    await page.waitForURL(/\/account/)
+    await page.waitForURL(/\/(account|dashboard)/)
   }
 
   async function addToCartAndConfirm(
@@ -551,8 +551,8 @@ test.describe('Frontend', () => {
       variant?: string
     },
   ) {
-    await page.goto(`${baseURL}/shop`)
-    await expect(page).toHaveURL(/\/shop/)
+    await page.goto(`${baseURL}/products`)
+    await expect(page).toHaveURL(/\/products/)
 
     const productCard = page.locator(`a[href="/products/${productSlug}"]`).first()
     await productCard.waitFor({ state: 'visible' })

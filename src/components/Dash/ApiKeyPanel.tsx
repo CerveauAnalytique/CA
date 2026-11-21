@@ -43,7 +43,7 @@ export function ApiKeyPanel({ enabled: initial, base }: { enabled: boolean; base
               <button
                 disabled={busy}
                 onClick={() => call('DELETE')}
-                className="rounded-lg bg-white px-3 py-1.5 text-xs hover:bg-neutral-100"
+                className="rounded-lg bg-white px-3 py-1.5 text-xs hover:bg-neutral-100 dark:bg-neutral-950 dark:hover:bg-neutral-800"
               >
                 Disable
               </button>
@@ -51,14 +51,14 @@ export function ApiKeyPanel({ enabled: initial, base }: { enabled: boolean; base
             <button
               disabled={busy}
               onClick={() => call('POST')}
-              className="rounded-lg bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white disabled:opacity-60"
+              className="rounded-lg bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white disabled:opacity-60 dark:bg-white dark:text-neutral-900"
             >
               {enabled ? 'Regenerate' : 'Create API key'}
             </button>
           </div>
         }
       >
-        <p className="text-xs text-neutral-500">
+        <p className="text-xs text-neutral-500 dark:text-neutral-400">
           Status:{' '}
           <span className={enabled ? 'font-semibold text-emerald-600' : 'font-semibold text-neutral-400'}>
             {enabled ? 'Active' : 'Not created'}
@@ -76,19 +76,19 @@ export function ApiKeyPanel({ enabled: initial, base }: { enabled: boolean; base
       </Card>
 
       <Card title="Use the API">
-        <p className="mb-2 text-xs text-neutral-500">Read all your data with one request:</p>
+        <p className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">Read all your data with one request:</p>
         <pre className="overflow-x-auto rounded-xl bg-neutral-900 p-3.5 text-[12px] leading-relaxed text-neutral-200">
 {`curl ${base}/api/ca/export \\
   -H "Authorization: users API-Key ${shown}"`}
         </pre>
-        <p className="mb-2 mt-4 text-xs text-neutral-500">Only some collections:</p>
+        <p className="mb-2 mt-4 text-xs text-neutral-500 dark:text-neutral-400">Only some collections:</p>
         <pre className="overflow-x-auto rounded-xl bg-neutral-900 p-3.5 text-[12px] text-neutral-200">
 {`curl "${base}/api/ca/export?collections=orders,products" \\
   -H "Authorization: users API-Key ${shown}"`}
         </pre>
-        <p className="mt-4 text-xs text-neutral-500">
+        <p className="mt-4 text-xs text-neutral-500 dark:text-neutral-400">
           The same header works on the standard Payload REST API, for example{' '}
-          <code className="rounded bg-neutral-100 px-1">{base}/api/posts</code>.
+          <code className="rounded bg-neutral-100 px-1 dark:bg-neutral-800">{base}/api/posts</code>.
         </p>
       </Card>
     </div>

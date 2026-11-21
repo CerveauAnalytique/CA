@@ -40,7 +40,7 @@ export function CameraHero() {
 
   return (
     <section
-      className="relative w-full overflow-hidden bg-white text-neutral-900"
+      className="relative w-full overflow-hidden bg-white text-neutral-900 dark:bg-neutral-950 dark:text-white"
       style={{ minHeight: 'calc(100vh - 56px)' }}
     >
       {/* soft blue glow behind the camera */}
@@ -55,7 +55,7 @@ export function CameraHero() {
       {/* blurred giant brand text at the bottom */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-[3vw] left-0 right-0 select-none text-center font-black uppercase leading-none tracking-tighter text-neutral-900/[0.06] blur-[10px]"
+        className="pointer-events-none absolute -bottom-[3vw] left-0 right-0 select-none text-center font-black uppercase leading-none tracking-tighter text-neutral-900/[0.06] dark:text-white/[0.07] blur-[10px]"
         style={{ fontSize: '17vw' }}
       >
         Cerveau
@@ -74,7 +74,7 @@ export function CameraHero() {
               {t('Create your own digital brain for')}
               <br />
               <span className="text-neutral-400">{typed}</span>
-              <span className="ml-0.5 inline-block h-[0.9em] w-[2px] translate-y-[0.12em] animate-pulse bg-neutral-700" />
+              <span className="ms-0.5 inline-block h-[0.9em] w-[2px] translate-y-[0.12em] animate-pulse bg-neutral-700" />
             </h1>
 
             <div className="mt-10">
@@ -83,15 +83,15 @@ export function CameraHero() {
           </div>
 
           <div className="mt-16 flex items-end gap-10 md:mt-0">
-            <ul className="text-[13px] font-light uppercase leading-[1.45] tracking-wide text-neutral-700">
+            <ul className="text-[13px] font-light uppercase leading-[1.45] tracking-wide text-neutral-700 dark:text-neutral-300">
               <li>{t('AI models')}</li>
               <li>{t('Datasets')}</li>
               <li>{t('Data API')}</li>
               <li>{t('Internal support')}</li>
             </ul>
             <div className="flex gap-3">
-              <span className="mt-[-48px] hidden h-24 w-px bg-neutral-300 md:block" />
-              <p className="max-w-[210px] text-[12px] font-light leading-snug text-neutral-600">
+              <span className="mt-[-48px] hidden h-24 w-px bg-neutral-300 md:block dark:bg-neutral-700" />
+              <p className="max-w-[210px] text-[12px] font-light leading-snug text-neutral-600 dark:text-neutral-300">
                 {t('Connect a data source, choose an AI model and let your teams, and your support desk, work with answers instead of raw data.')}
               </p>
             </div>
@@ -99,7 +99,7 @@ export function CameraHero() {
         </div>
 
         {/* Top-right blurb */}
-        <p className="relative z-10 order-3 col-span-12 hidden max-w-[230px] justify-self-end pt-10 text-[12px] font-light leading-snug text-neutral-700 md:col-span-3 md:col-start-10 md:block md:pt-16">
+        <p className="relative z-10 order-3 col-span-12 hidden max-w-[230px] justify-self-end pt-10 text-[12px] font-light leading-snug text-neutral-700 md:col-span-3 md:col-start-10 md:block md:pt-16 dark:text-neutral-300">
           {t('CA7 helps companies turn IoT and company data into answers: build your own AI models, use datasets and one API, and support your teams. No code needed.')}
         </p>
       </div>

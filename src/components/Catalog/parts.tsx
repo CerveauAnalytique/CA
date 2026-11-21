@@ -14,7 +14,7 @@ export function CatalogHead({
     <div>
       <p className="text-[11px] font-medium uppercase tracking-[0.14em] text-neutral-400">{eyebrow}</p>
       <h1 className="mt-3 text-[clamp(30px,4vw,48px)] font-light leading-tight tracking-tight">{title}</h1>
-      <p className="mt-3 max-w-xl text-[15px] text-neutral-500">{text}</p>
+      <p className="mt-3 max-w-xl text-[15px] text-neutral-500 dark:text-neutral-400">{text}</p>
     </div>
   )
 }
@@ -31,7 +31,7 @@ export function SearchBox({
   placeholder: string
 }) {
   return (
-    <form action={action} className="mt-8 flex items-center gap-2 rounded-full bg-neutral-100 px-5 py-1.5">
+    <form action={action} className="mt-8 flex items-center gap-2 rounded-full bg-neutral-100 px-5 py-1.5 dark:bg-neutral-800">
       <input
         name="q"
         defaultValue={q}
@@ -61,8 +61,8 @@ export function Chips({
           key={i.value}
           href={hrefFor(i.value)}
           className={`rounded-full px-3.5 py-1.5 text-[13px] ${
-            i.value === active ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
-          }`}
+            i.value === active ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
+          } dark:text-neutral-300`}
         >
           {i.label}
         </Link>
@@ -73,7 +73,7 @@ export function Chips({
 
 export function Pill({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-full bg-white px-2.5 py-1 text-[11px] font-medium text-neutral-600">{children}</span>
+    <span className="rounded-full bg-white px-2.5 py-1 text-[11px] font-medium text-neutral-600 dark:bg-neutral-950 dark:text-neutral-300">{children}</span>
   )
 }
 
@@ -85,7 +85,7 @@ export function Specs({ rows }: { rows: [string, React.ReactNode][] }) {
         .map(([k, v]) => (
           <div key={k} className="flex items-start justify-between gap-4">
             <dt className="text-neutral-400">{k}</dt>
-            <dd className="text-right font-medium">{v}</dd>
+            <dd className="text-end font-medium">{v}</dd>
           </div>
         ))}
     </dl>

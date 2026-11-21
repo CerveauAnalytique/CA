@@ -14,10 +14,10 @@ const ITEMS: { name: string; icon: DotIconName }[] = [
 export async function LogoStrip() {
   const t = await getT()
   return (
-    <div className="bg-white">
+    <div className="bg-white dark:bg-neutral-950">
       <div className="mx-auto grid max-w-[1280px] grid-cols-2 md:grid-cols-5">
         {ITEMS.map(({ name, icon }) => (
-          <div key={name} className="flex h-[104px] items-center justify-center gap-3 text-neutral-600">
+          <div key={name} className="flex h-[104px] items-center justify-center gap-3 text-neutral-600 dark:text-neutral-300">
             <DotIcon name={icon} size={60} />
             <span className="text-[17px] font-semibold tracking-tight">{t(name)}</span>
           </div>

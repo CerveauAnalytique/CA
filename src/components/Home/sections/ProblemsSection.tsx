@@ -35,7 +35,7 @@ const PROBLEMS: { icon: DotIconName; title: string; problem: string; solution: s
 export async function ProblemsSection() {
   const t = await getT()
   return (
-    <section className="relative bg-white py-24">
+    <section className="relative bg-white py-24 dark:bg-neutral-950">
       <SectionHead
         index="03/04"
         label={t('Solve problems')}
@@ -45,25 +45,25 @@ export async function ProblemsSection() {
 
       <div className="relative mx-auto mt-16 grid max-w-[1040px] gap-4 px-6 md:grid-cols-2">
         {PROBLEMS.map((p) => (
-          <div key={t(p.title)} className="flex gap-5 rounded-2xl bg-neutral-50 p-6">
+          <div key={t(p.title)} className="flex gap-5 rounded-2xl bg-neutral-50 p-6 dark:bg-neutral-900">
             <DotIcon name={p.icon} size={96} className="shrink-0" />
             <div>
-              <h3 className="font-mono text-[17px] font-medium text-neutral-900">{t(p.title)}</h3>
+              <h3 className="font-mono text-[17px] font-medium text-neutral-900 dark:text-white">{t(p.title)}</h3>
               <p className="mt-2 text-[13px] leading-relaxed text-neutral-400">{t(p.problem)}</p>
-              <p className="mt-2 text-[14px] leading-relaxed text-neutral-600">{t(p.solution)}</p>
+              <p className="mt-2 text-[14px] leading-relaxed text-neutral-600 dark:text-neutral-300">{t(p.solution)}</p>
             </div>
           </div>
         ))}
       </div>
 
       <div className="mt-10 flex flex-wrap justify-center gap-3 px-6">
-        <Link href="/models" className="inline-flex h-11 items-center rounded-full bg-neutral-900 px-6 text-[14px] font-medium text-white">
+        <Link href="/models" className="inline-flex h-11 items-center rounded-full bg-neutral-900 px-6 text-[14px] font-medium text-white dark:bg-white dark:text-neutral-900">
           {t('Browse AI models')}
         </Link>
-        <Link href="/datasets" className="inline-flex h-11 items-center rounded-full bg-neutral-100 px-6 text-[14px] font-medium">
+        <Link href="/datasets" className="inline-flex h-11 items-center rounded-full bg-neutral-100 px-6 text-[14px] font-medium dark:bg-neutral-800">
           {t('Explore datasets')}
         </Link>
-        <Link href="/api" className="inline-flex h-11 items-center rounded-full bg-neutral-100 px-6 text-[14px] font-medium">
+        <Link href="/api" className="inline-flex h-11 items-center rounded-full bg-neutral-100 px-6 text-[14px] font-medium dark:bg-neutral-800">
           {t('Use the API')}
         </Link>
       </div>

@@ -31,7 +31,9 @@ export default async function PricingPage() {
           <section
             key={p.id}
             className={`relative flex flex-col rounded-3xl p-7 ${
-              p.highlight ? 'bg-neutral-900 text-white' : 'bg-neutral-50 text-neutral-900'
+              p.highlight
+                ? 'bg-neutral-900 text-white dark:bg-neutral-800 dark:ring-1 dark:ring-white/25'
+                : 'bg-neutral-50 text-neutral-900 dark:bg-neutral-900 dark:text-white'
             }`}
           >
             {p.highlight && (
@@ -39,18 +41,18 @@ export default async function PricingPage() {
                 {t('Most popular')}
               </span>
             )}
-            <span className={`inline-flex rounded-2xl p-2 ${p.highlight ? 'bg-white' : ''}`}>
+            <span className={`inline-flex self-start rounded-2xl p-2 ${p.highlight ? 'bg-white' : ''}`}>
               <DotIcon name={p.icon} size={72} />
             </span>
             <h2 className="mt-4 text-[22px] font-semibold tracking-tight">{t(p.name)}</h2>
-            <p className={`mt-1 text-[13px] ${p.highlight ? 'text-neutral-300' : 'text-neutral-500'}`}>
+            <p className={`mt-1 text-[13px] ${p.highlight ? 'text-neutral-300' : 'text-neutral-500 dark:text-neutral-400'}`}>
               {t(p.tagline)}
             </p>
 
             <p className="mt-6 flex items-baseline gap-2">
               <span className="text-[44px] font-light leading-none tracking-tight">€{p.price}</span>
               {p.price > 0 && (
-                <span className={`text-[13px] ${p.highlight ? 'text-neutral-300' : 'text-neutral-500'}`}>
+                <span className={`text-[13px] ${p.highlight ? 'text-neutral-300' : 'text-neutral-500 dark:text-neutral-400'}`}>
                   {t('per month')}
                 </span>
               )}
@@ -62,7 +64,7 @@ export default async function PricingPage() {
             <Link
               href={p.href}
               className={`mt-5 flex h-12 items-center justify-center rounded-full text-[14px] font-medium ${
-                p.highlight ? 'bg-white text-neutral-900' : 'bg-neutral-900 text-white'
+                p.highlight ? 'bg-white text-neutral-900' : 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900'
               }`}
             >
               {t(p.cta)}
@@ -72,7 +74,7 @@ export default async function PricingPage() {
               {p.features.map((f) => (
                 <li key={f} className="flex items-start gap-2.5">
                   <Check size={16} className="mt-0.5 shrink-0 text-[#1a3df0]" />
-                  <span className={p.highlight ? 'text-neutral-200' : 'text-neutral-700'}>{t(f)}</span>
+                  <span className={p.highlight ? 'text-neutral-200' : 'text-neutral-700 dark:text-neutral-300'}>{t(f)}</span>
                 </li>
               ))}
             </ul>
@@ -80,7 +82,7 @@ export default async function PricingPage() {
         ))}
       </div>
 
-      <p className="mt-8 text-center text-[13px] text-neutral-500">
+      <p className="mt-8 text-center text-[13px] text-neutral-500 dark:text-neutral-400">
         {t('Hobby prices include VAT. Company prices are excluded VAT.')}{' '}
         <Link href="/contact" className="underline">
           {t('Need something different? Contact us.')}

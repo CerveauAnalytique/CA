@@ -117,7 +117,7 @@ export function BlogCards({ stories, business }: BlogCardsProps) {
               href="/blog?category=Stories"
               className="text-xs font-semibold text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition flex items-center"
             >
-              View all <ArrowUpRight size={13} className="ml-0.5" />
+              View all <ArrowUpRight size={13} className="ms-0.5" />
             </Link>
           </div>
 
@@ -179,7 +179,7 @@ export function BlogCards({ stories, business }: BlogCardsProps) {
               href="/blog?category=Business"
               className="text-xs font-semibold text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition flex items-center"
             >
-              View all <ArrowUpRight size={13} className="ml-0.5" />
+              View all <ArrowUpRight size={13} className="ms-0.5" />
             </Link>
           </div>
 

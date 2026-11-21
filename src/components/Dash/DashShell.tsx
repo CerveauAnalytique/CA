@@ -26,7 +26,7 @@ export function DashShell({ user, children }: Props) {
       <h1 className="mt-3 text-[clamp(30px,4vw,44px)] font-light leading-tight tracking-tight">
         Your data, {name}
       </h1>
-      <p className="mt-3 max-w-xl text-[15px] text-neutral-500">
+      <p className="mt-3 max-w-xl text-[15px] text-neutral-500 dark:text-neutral-400">
         Manage your API key and export everything you saved in CA7.
       </p>
 
@@ -39,8 +39,8 @@ export function DashShell({ user, children }: Props) {
               href={t.href}
               aria-current={active ? 'page' : undefined}
               className={`rounded-full px-4 py-2 text-[13px] font-medium transition ${
-                active ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
-              }`}
+                active ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'
+              } dark:text-neutral-300`}
             >
               {t.label}
             </Link>
@@ -63,7 +63,7 @@ export function Card({
   children: React.ReactNode
 }) {
   return (
-    <section className="rounded-2xl bg-neutral-50 p-5">
+    <section className="rounded-2xl bg-neutral-50 p-5 dark:bg-neutral-900">
       <div className="mb-3 flex items-center justify-between">
         <h2 className="text-[14px] font-semibold">{title}</h2>
         {action}
