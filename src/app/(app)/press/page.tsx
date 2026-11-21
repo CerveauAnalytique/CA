@@ -21,8 +21,8 @@ export default function PressPage() {
           <h1 className="static-title">In the news</h1>
           <p className="static-subtitle">
             For media inquiries, please contact{' '}
-            <a href="mailto:press@cerveauanalytique.com" className="inline-link">
-              press@cerveauanalytique.com
+            <a href="mailto:press@ca7.io" className="inline-link">
+              press@ca7.io
             </a>
           </p>
         </div>

@@ -53,7 +53,7 @@ export default async function BlogIndexPage({ searchParams }: PageProps) {
     <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 py-12 transition-colors">
       <div className="max-w-[1280px] mx-auto px-6 space-y-10">
         <div className="space-y-4 max-w-2xl">
-          <h1 className="text-4xl md:text-6xl font-black tracking-tighter">
+          <h1 className="text-4xl md:text-6xl font-light tracking-tight">
             Cerveau <span className="text-neutral-400">Stories & Blog</span>
           </h1>
           <p className="text-base md:text-lg text-neutral-600 dark:text-neutral-400">
@@ -62,7 +62,7 @@ export default async function BlogIndexPage({ searchParams }: PageProps) {
         </div>
 
         {/* Category Filter Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 border-b border-neutral-200 dark:border-neutral-800">
+        <div className="flex items-center gap-2 overflow-x-auto">
           <Filter size={16} className="text-neutral-400 mr-2 shrink-0" />
           {categories.map((cat) => {
             const isActive =

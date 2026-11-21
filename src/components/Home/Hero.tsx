@@ -34,7 +34,7 @@ export function Hero() {
   }, [])
 
   return (
-    <section className="relative w-full pt-2 md:pt-4 pb-8 md:pb-12 bg-neutral-50 dark:bg-neutral-950 border-b border-neutral-200 dark:border-neutral-800 transition-colors overflow-hidden">
+    <section className="relative w-full pt-2 md:pt-4 pb-8 md:pb-12 bg-neutral-50 dark:bg-neutral-950 transition-colors overflow-hidden">
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
 
       {/* Soft clean background */}
@@ -50,7 +50,7 @@ export function Hero() {
               <Sparkles size={12} className="text-gold" />
               AGI Evolution
             </span>
-            <h1 className="text-4xl md:text-[72px] font-black tracking-tighter text-neutral-900 dark:text-white leading-[0.92]">
+            <h1 className="text-4xl md:text-[72px] font-light tracking-tight text-neutral-900 dark:text-white leading-[0.92]">
               Cerveau <span className="text-neutral-400 dark:text-neutral-500">Intelligence</span>
             </h1>
 

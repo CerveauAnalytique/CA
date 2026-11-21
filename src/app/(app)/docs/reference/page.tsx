@@ -39,7 +39,7 @@ export default function ReferenceDocsPage() {
       toc={TOC}
     >
       <h2 id="base-url">Base URL</h2>
-      <pre className="docs-code-block"><code>https://api.cerveauanalytique.com</code></pre>
+      <pre className="docs-code-block"><code>https://api.ca7.io</code></pre>
 
       <h2 id="versioning">Versioning</h2>
       <p>

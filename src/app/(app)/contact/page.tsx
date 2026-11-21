@@ -24,26 +24,26 @@ export default function ContactPage() {
           <div className="contact-info">
             <div className="contact-item">
               <span className="contact-label">General</span>
-              <a href="mailto:hello@cerveauanalytique.com" className="contact-email">
-                hello@cerveauanalytique.com
+              <a href="mailto:hello@ca7.io" className="contact-email">
+                hello@ca7.io
               </a>
             </div>
             <div className="contact-item">
               <span className="contact-label">Sales</span>
-              <a href="mailto:sales@cerveauanalytique.com" className="contact-email">
-                sales@cerveauanalytique.com
+              <a href="mailto:sales@ca7.io" className="contact-email">
+                sales@ca7.io
               </a>
             </div>
             <div className="contact-item">
               <span className="contact-label">Press</span>
-              <a href="mailto:press@cerveauanalytique.com" className="contact-email">
-                press@cerveauanalytique.com
+              <a href="mailto:press@ca7.io" className="contact-email">
+                press@ca7.io
               </a>
             </div>
             <div className="contact-item">
               <span className="contact-label">Security</span>
-              <a href="mailto:security@cerveauanalytique.com" className="contact-email">
-                security@cerveauanalytique.com
+              <a href="mailto:security@ca7.io" className="contact-email">
+                security@ca7.io
               </a>
             </div>
           </div>

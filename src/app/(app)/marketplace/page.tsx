@@ -43,13 +43,13 @@ export default function MarketplacePage() {
     <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 py-12 transition-colors">
       <div className="max-w-[1280px] mx-auto px-6 space-y-12">
         {/* Header Banner */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-neutral-200 dark:border-neutral-800">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-3 max-w-2xl">
             <span className="inline-flex items-center gap-2 px-3.5 py-1 bg-black text-white dark:bg-white dark:text-black text-xs font-bold rounded-full tracking-widest uppercase">
               <Store size={14} />
               Cerveau Marketplace
             </span>
-            <h1 className="text-4xl md:text-6xl font-black tracking-tighter">
+            <h1 className="text-4xl md:text-6xl font-light tracking-tight">
               AI Models, SDKs & <span className="text-neutral-400">Tools</span>
             </h1>
             <p className="text-neutral-600 dark:text-neutral-400 text-base md:text-lg">

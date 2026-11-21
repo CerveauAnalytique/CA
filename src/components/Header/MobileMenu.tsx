@@ -56,7 +56,7 @@ export function MobileMenu({ menu }: Props) {
 
       <SheetContent side="left" className="px-5">
         <SheetHeader className="px-0 pt-4 pb-2">
-          <SheetTitle className="text-lg font-serif">Cerveau Analytique</SheetTitle>
+          <SheetTitle className="text-lg font-serif">CA7</SheetTitle>
           <SheetDescription />
         </SheetHeader>
 

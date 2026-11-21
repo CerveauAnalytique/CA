@@ -41,7 +41,7 @@ export default function QuickstartPage() {
 
       <h2 id="step-3">3. Make your first request</h2>
       <p>Run the following with your terminal:</p>
-      <pre className="docs-code-block"><code>{`curl https://api.cerveauanalytique.com/v1/carbon/calculate \\
+      <pre className="docs-code-block"><code>{`curl https://api.ca7.io/v1/carbon/calculate \\
   -H "Authorization: Bearer sk-ca-YOUR_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{

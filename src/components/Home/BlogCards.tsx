@@ -87,7 +87,7 @@ export function BlogCards({ stories, business }: BlogCardsProps) {
   const displayBusiness = business && business.length > 0 ? business : []
 
   return (
-    <section className="w-full py-12 md:py-20 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans border-b border-neutral-200 dark:border-neutral-800 transition-colors">
+    <section className="w-full py-12 md:py-20 bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 font-sans transition-colors">
       <div className="max-w-[1280px] mx-auto px-6 space-y-16">
         {/* Section 1: Explore More */}
         <div className="space-y-6">

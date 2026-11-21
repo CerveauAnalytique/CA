@@ -87,7 +87,7 @@ export default buildConfig({
     },
   }),
   email: nodemailerAdapter({
-    defaultFromAddress: process.env.SMTP_FROM_ADDRESS || 'info@payloadcms.com',
+    defaultFromAddress: process.env.SMTP_FROM_ADDRESS || 'info@ca7.io',
     defaultFromName: process.env.SMTP_FROM_NAME || 'Payload',
     ...(process.env.SMTP_HOST
       ? {

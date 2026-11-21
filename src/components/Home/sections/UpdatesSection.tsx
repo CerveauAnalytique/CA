@@ -32,7 +32,7 @@ export function UpdatesSection() {
   const [open, setOpen] = useState(1)
 
   return (
-    <section className="relative overflow-hidden border-t border-neutral-200 bg-neutral-50 py-24">
+    <section className="relative overflow-hidden bg-neutral-50 py-24">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-50"

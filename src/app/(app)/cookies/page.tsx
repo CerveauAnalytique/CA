@@ -53,7 +53,7 @@ export default function CookiesPage() {
         <p>You can control cookies through your browser settings. Note that disabling essential cookies will impact the functionality of the platform.</p>
 
         <h2>Contact</h2>
-        <p>For questions about our use of cookies, contact <a href="mailto:privacy@cerveauanalytique.com" className="inline-link">privacy@cerveauanalytique.com</a>.</p>
+        <p>For questions about our use of cookies, contact <a href="mailto:privacy@ca7.io" className="inline-link">privacy@ca7.io</a>.</p>
       </div>
     </div>
   )

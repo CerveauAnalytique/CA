@@ -11,14 +11,12 @@ const ITEMS = [
 
 export function LogoStrip() {
   return (
-    <div className="border-y border-neutral-200 bg-white">
+    <div className="bg-white">
       <div className="mx-auto grid max-w-[1280px] grid-cols-2 md:grid-cols-5">
-        {ITEMS.map(({ name, Icon }, i) => (
+        {ITEMS.map(({ name, Icon }) => (
           <div
             key={name}
-            className={`flex h-[84px] items-center justify-center gap-2.5 text-neutral-500 ${
-              i < ITEMS.length - 1 ? 'md:border-r border-neutral-200' : ''
-            } ${i % 2 === 0 ? 'border-r md:border-r-0' : ''}`}
+            className="flex h-[84px] items-center justify-center gap-2.5 text-neutral-500"
           >
             <Icon size={22} strokeWidth={2} />
             <span className="text-[18px] font-semibold tracking-tight">{name}</span>

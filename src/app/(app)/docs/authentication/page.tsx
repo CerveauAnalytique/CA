@@ -37,7 +37,7 @@ export default function AuthPage() {
       <pre className="docs-code-block"><code>Authorization: Bearer sk-ca-YOUR_KEY</code></pre>
 
       <p>Example:</p>
-      <pre className="docs-code-block"><code>{`curl https://api.cerveauanalytique.com/v1/carbon/calculate \\
+      <pre className="docs-code-block"><code>{`curl https://api.ca7.io/v1/carbon/calculate \\
   -H "Authorization: Bearer sk-ca-YOUR_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{ "country": "UK", "daily_commute_km": 15, ... }'`}</code></pre>
@@ -58,7 +58,7 @@ export default function AuthPage() {
       <p>
         Rotate keys regularly or immediately if compromised. Revoke old keys from the dashboard or via:
       </p>
-      <pre className="docs-code-block"><code>{`curl -X DELETE https://api.cerveauanalytique.com/v1/keys/{key_id} \\
+      <pre className="docs-code-block"><code>{`curl -X DELETE https://api.ca7.io/v1/keys/{key_id} \\
   -H "Authorization: Bearer sk-ca-ADMIN_KEY"`}</code></pre>
 
       <h2 id="errors">Auth Errors</h2>

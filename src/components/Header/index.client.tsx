@@ -22,7 +22,7 @@ type Props = {
   header: Header
 }
 
-import { BrainIcon } from '@/components/Logo/BrainIcon'
+import { Ca7Logo } from '@/components/Logo/Ca7Logo'
 
 export function HeaderClient({ header }: Props) {
   const { user, logout } = useAuth()
@@ -35,12 +35,6 @@ export function HeaderClient({ header }: Props) {
 
   const username = formatUserDisplayName(user)
   const userAvatar = (user as any)?.avatar?.url || (user as any)?.avatar || (user as any)?.image?.url
-
-  // Dynamically formatted title from Payload CMS
-  const rawTitle = header.siteTitle || 'Cerveau Analytique'
-  const titleParts = rawTitle.split(' ')
-  const firstTitlePart = titleParts[0]
-  const secondTitlePart = titleParts.slice(1).join(' ')
 
   const searchPlaceholder = header.searchPlaceholder || 'Search docs, research, products…'
   const loginLabel = header.loginLabel || 'Log in'
@@ -66,11 +60,9 @@ export function HeaderClient({ header }: Props) {
 
   return (
     <nav className="site-header">
-      {/* Brand Title connected to Payload CMS siteTitle field */}
+      {/* CA7 logo (brain icon + wordmark) */}
       <Link href="/" className="nav-logo">
-        <BrainIcon className="nav-logo-icon" />
-        <b>{firstTitlePart}</b>
-        {secondTitlePart ? <span>{secondTitlePart}</span> : null}
+        <Ca7Logo />
       </Link>
 
       {/* Dynamic Nav Links connected to Payload CMS header.navItems */}

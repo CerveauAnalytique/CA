@@ -170,7 +170,7 @@ export default function ChatCA7Page() {
       className="mx-auto flex w-full max-w-[1280px] flex-col px-6 py-4"
       style={{ height: 'calc(100vh - 56px)' }}
     >
-      <div className="flex items-center justify-between gap-4 rounded-t-2xl border border-b-0 border-neutral-200 px-4 py-2 text-sm dark:border-neutral-800">
+      <div className="flex items-center justify-between gap-4 rounded-t-2xl bg-neutral-50 px-4 py-2 text-sm dark:bg-neutral-900">
         <div className="flex min-w-0 items-center gap-2">
           <Sparkles className="h-4 w-4 shrink-0" />
           <span className="font-semibold">CA7</span>
@@ -199,7 +199,7 @@ export default function ChatCA7Page() {
       <iframe
         src={LOBEHUB_URL}
         title="CA7 chat"
-        className="w-full flex-1 rounded-b-2xl border border-neutral-200 dark:border-neutral-800"
+        className="w-full flex-1 rounded-b-2xl"
         allow="clipboard-read; clipboard-write; microphone"
       />
     </div>
