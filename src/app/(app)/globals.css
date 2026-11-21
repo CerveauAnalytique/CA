@@ -283,6 +283,7 @@ nav.site-header {
   background: rgba(10,10,10,0.92);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .nav-logo {
@@ -668,8 +669,9 @@ footer {
     margin-left: auto;
   }
   /* Mobile navbar: logo left; search, cart and menu icons right. Everything else lives in the menu. */
-  .btn-login,
-  .btn-start { display: none; }
+  .btn-login { display: none; }
+  .nav-search { display: none; }
+  .btn-start { height: 32px; padding: 0 12px; }
   .nav-right .nav-link {
     width: 32px; height: 32px; padding: 0;
     justify-content: center;
@@ -728,6 +730,7 @@ footer {
 }
 [data-theme='light'] nav.site-header {
   background: rgba(255,255,255,0.94);
+  border-bottom-color: rgba(0,0,0,0.1);
 }
 [data-theme='light'] .nav-logo { color: #111; }
 [data-theme='light'] .nav-link { color: #555; }

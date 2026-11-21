@@ -6,7 +6,7 @@ import { CMSLink } from '@/components/Link'
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { useAuth } from '@/providers/Auth'
-import { ArrowUpRight, MenuIcon, XIcon } from 'lucide-react'
+import { ArrowUpRight, MenuIcon, SearchIcon, XIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -15,6 +15,7 @@ import { formatUserDisplayName } from '@/utilities/formatUserDisplayName'
 
 interface Props {
   menu: Header['navItems']
+  onSearch?: () => void
 }
 
 const LINKS = [
@@ -25,7 +26,7 @@ const LINKS = [
   { href: '/marketplace', label: 'Marketplace' },
 ]
 
-export function MobileMenu({ menu }: Props) {
+export function MobileMenu({ menu, onSearch }: Props) {
   const { user, logout } = useAuth()
   const username = formatUserDisplayName(user)
 
@@ -67,6 +68,18 @@ export function MobileMenu({ menu }: Props) {
         <SheetDescription className="sr-only">Site navigation</SheetDescription>
 
         <nav className="flex-1 overflow-y-auto">
+          {onSearch && (
+            <button
+              type="button"
+              onClick={() => {
+                close()
+                onSearch()
+              }}
+              className="mb-2 flex w-full items-center gap-3 rounded-2xl bg-neutral-100 px-4 py-3 text-left text-[15px] text-neutral-500 dark:bg-neutral-900"
+            >
+              <SearchIcon size={18} /> Search docs, research, products…
+            </button>
+          )}
           <ul>
             {menu?.length
               ? menu.map((item) => (

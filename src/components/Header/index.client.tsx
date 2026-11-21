@@ -189,21 +189,9 @@ export function HeaderClient({ header }: Props) {
           </Link>
         )}
 
-        <Link href={startURL} className="btn-start hidden md:inline-flex">
+        <Link href={startURL} className="btn-start">
           {startLabel}
         </Link>
-
-        {/* Mobile Search Trigger Button */}
-        <button
-          onClick={() => setIsSearchOpen(true)}
-          className="md:hidden relative flex h-8 w-8 items-center justify-center rounded-md border border-neutral-200 dark:border-neutral-800 text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:border-neutral-300 transition-colors"
-          aria-label="Search"
-        >
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-            <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" strokeWidth="1.3" />
-            <path d="M8.5 8.5l3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-          </svg>
-        </button>
 
         <Suspense fallback={<OpenCartButton />}>
           <Cart />
@@ -212,7 +200,7 @@ export function HeaderClient({ header }: Props) {
         {/* Right-aligned Mobile Sidebar Drawer Button */}
         <div className="block md:hidden">
           <Suspense fallback={null}>
-            <MobileMenu menu={menu} />
+            <MobileMenu menu={menu} onSearch={() => setIsSearchOpen(true)} />
           </Suspense>
         </div>
 
