@@ -5,18 +5,18 @@ import { AccessIcon, ProtectionIcon, ThreatIcon } from './icons'
 const CARDS = [
   {
     Icon: ProtectionIcon,
-    title: 'Smart Protection',
-    text: 'Stop breaches early with adaptive security that learns from new attack patterns.',
+    title: 'Save Your Data',
+    text: 'Store camera footage, events and files securely in the cloud, searchable in seconds.',
   },
   {
     Icon: AccessIcon,
-    title: 'Access Control',
-    text: 'Control permissions and authentication with enterprise security and zero-trust access.',
+    title: 'Analytique Insights',
+    text: 'Turn raw data into clear answers with AI analytics, live dashboards and smart alerts.',
   },
   {
     Icon: ThreatIcon,
-    title: 'Threat Detection',
-    text: 'Spot suspicious activity instantly with AI-powered monitoring across all systems.',
+    title: 'Data Share API',
+    text: 'Share datasets with your team, partners or apps through one secure and easy API.',
   },
 ]
 
@@ -41,9 +41,9 @@ export function FeatureCards() {
       />
       <SectionHead
         index="01/04"
-        label="Fabulous Features"
-        title="Security built for the AI era"
-        text="Protect sensitive data, monitor threats in real time, and automate security workflows across your entire infrastructure."
+        label="Everything you need"
+        title="One digital brain for your data"
+        text="Cerveau Analytique saves your data, analyzes it with AI and shares it through a simple API — all in one place, built for everyone."
       />
 
       <div className="relative mx-auto mt-20 max-w-[1040px] px-6">

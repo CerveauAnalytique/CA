@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { HomeChatInput } from './HomeChatInput'
 import { DotCameraCanvas } from './DotCameraCanvas'
 
-const WORDS = ['your property', 'every entrance', 'day and night']
+const WORDS = ['smart cameras', 'your data', 'your business', 'everyone']
 
 function useTyping(words: string[]) {
   const [text, setText] = useState('')
@@ -66,11 +66,11 @@ export function CameraHero() {
         <div className="relative z-10 order-1 col-span-12 flex flex-col justify-between py-10 md:col-span-5 md:py-16">
           <div>
             <h1 className="text-[clamp(34px,4.3vw,58px)] font-light leading-[1.08] tracking-tight">
-              Complete visibility
+              Create your own
               <br />
-              across every corner
+              digital brain for
               <br />
-              of <span className="text-neutral-400">{typed}</span>
+              <span className="text-neutral-400">{typed}</span>
               <span className="ml-0.5 inline-block h-[0.9em] w-[2px] translate-y-[0.12em] animate-pulse bg-neutral-700" />
             </h1>
 
@@ -81,16 +81,16 @@ export function CameraHero() {
 
           <div className="mt-16 flex items-end gap-10 md:mt-0">
             <ul className="text-[13px] font-light uppercase leading-[1.45] tracking-wide text-neutral-700">
-              <li>24/7</li>
-              <li>AI Detect</li>
-              <li>Night Vision</li>
-              <li>Cloud Backup</li>
+              <li>Save data</li>
+              <li>AI Analytique</li>
+              <li>Data Share API</li>
+              <li>Apps Marketplace</li>
             </ul>
             <div className="flex gap-3">
               <span className="mt-[-48px] hidden h-24 w-px bg-neutral-300 md:block" />
               <p className="max-w-[210px] text-[12px] font-light leading-snug text-neutral-600">
-                Every camera reports motion, presence and vehicle activity 24/7 — footage stored
-                securely in the cloud.
+                Connect a camera, store every event securely and turn raw data into insights. Share
+                it through the API or publish it in the marketplace.
               </p>
             </div>
           </div>
@@ -98,8 +98,8 @@ export function CameraHero() {
 
         {/* Top-right blurb */}
         <p className="relative z-10 order-3 col-span-12 hidden max-w-[230px] justify-self-end pt-10 text-[12px] font-light leading-snug text-neutral-700 md:col-span-3 md:col-start-10 md:block md:pt-16">
-          Real-time motion detection, night vision and instant alerts — all monitored from a single
-          dashboard built for security teams.
+          Cerveau Analytique is the AI tool that saves, analyzes and shares your data — so anyone
+          can build smart cameras and apps, no code needed.
         </p>
       </div>
     </section>

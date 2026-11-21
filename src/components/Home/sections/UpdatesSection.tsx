@@ -8,23 +8,23 @@ import { LockIllustration } from './icons'
 const ITEMS = [
   {
     n: '1.0',
-    title: 'Smart Threat Monitoring',
-    text: 'Detect unusual behavior and security risks in real time with continuous AI-powered analysis across every camera and device.',
+    title: 'Create a Digital Brain',
+    text: 'Train your own AI brain on your data and tell it what to watch for, in plain language.',
   },
   {
     n: '2.0',
-    title: 'Realtime Anomaly Notification',
-    text: 'Get instant alerts the moment motion, presence or vehicle activity looks out of the ordinary, on web, iOS and Android.',
+    title: 'Connect Any Camera',
+    text: 'Turn any camera into a smart camera that detects motion, people and vehicles and sends instant alerts to your phone.',
   },
   {
     n: '3.0',
-    title: 'Automated Response Workflows',
-    text: 'Trigger lights, locks and alarms automatically, and hand incidents to your security team with full footage attached.',
+    title: 'Apps Marketplace',
+    text: 'Install ready-made apps or publish your own and share them with everyone.',
   },
   {
     n: '4.0',
-    title: 'Secure Cloud Backup',
-    text: 'Every recording is encrypted and stored in the cloud, so footage stays safe and searchable for as long as you need it.',
+    title: 'Share with the Data API',
+    text: 'Open your data to other tools and teams through the API, with full control over who can see what.',
   },
 ]
 
@@ -45,9 +45,9 @@ export function UpdatesSection() {
       />
       <SectionHead
         index="02/04"
-        label="New Features"
-        title="Smarter security updates"
-        text="Stay informed with AI-powered monitoring, instant alerts, and automated actions designed to keep your infrastructure protected 24/7."
+        label="Build your brain"
+        title="Make your own smart camera"
+        text="No code and no experts needed. Connect a camera, teach your digital brain what to look for, and add apps from the marketplace."
       />
 
       <div className="relative mx-auto mt-16 max-w-[1040px] px-6">
