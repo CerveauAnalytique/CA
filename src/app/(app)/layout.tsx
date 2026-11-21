@@ -39,8 +39,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           <LivePreviewListener />
 
           <Header />
-          <main className="pt-[56px]">{children}</main>
-          <Footer />
+          <div className="mx-auto w-full max-w-[1280px] min-h-screen bg-white dark:bg-neutral-950 shadow-sm">
+            <main className="pt-[56px]">{children}</main>
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>
