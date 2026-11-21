@@ -154,7 +154,6 @@ const t: Record<string, string> = {
   "No code and no experts needed. Connect your data, ask CA7 in plain language, and let AI act on what it finds.": "Pas de code ni d'experts. Connectez vos données, interrogez CA7 en langage simple et laissez l'IA agir sur ce qu'elle trouve.",
   "No datasets found.": "Aucun jeu de données trouvé.",
   "No models found.": "Aucun modèle trouvé.",
-  "Notifications & System Alerts": "Notifications et alertes système",
   "Open menu": "Ouvrir le menu",
   "Operations": "Opérations",
   "Orders": "Commandes",

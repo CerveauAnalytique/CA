@@ -17,14 +17,13 @@ export function OpenCartButton({
     <Button
       variant="nav"
       size="clear"
-      className={clsx("nav-link relative flex items-center gap-1.5 hover:cursor-pointer", className)}
+      className={clsx("nav-link relative flex h-9 w-9 items-center justify-center !rounded-full !p-0 hover:cursor-pointer", className)}
       {...rest}
     >
-      <ShoppingCart className="h-4 w-4" />
-      <span className="max-md:hidden">{t('Cart')}</span>
+      <ShoppingCart className="h-[18px] w-[18px]" aria-label={t('Cart')} />
 
       {quantity ? (
-        <span className="ms-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-semibold text-black">
+        <span className="absolute -end-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-blue-600 px-1 text-[10px] font-semibold text-white">
           {quantity}
         </span>
       ) : null}

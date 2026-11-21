@@ -13,7 +13,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { cn } from '@/utilities/cn'
 
 import { useAuth } from '@/providers/Auth'
-import { User as UserIcon, LogOut, Bell, Store } from 'lucide-react'
+import { User as UserIcon, LogOut, LifeBuoy, Store } from 'lucide-react'
 import { formatUserDisplayName } from '@/utilities/formatUserDisplayName'
 
 import { SearchModal } from '@/components/SearchModal'
@@ -149,19 +149,20 @@ export function HeaderClient({ header }: Props) {
         <Link
           href="/marketplace"
           title={t('Marketplace & Enterprise Models')}
-          className="relative hidden h-8 w-8 items-center justify-center rounded-md text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-white transition-colors md:flex"
+          aria-label={t('Marketplace & Enterprise Models')}
+          className="relative hidden h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-white md:flex"
         >
-          <Store className="h-4 w-4" />
+          <Store className="h-[18px] w-[18px]" />
         </Link>
 
-        {/* Notification Bell Icon Button */}
+        {/* Help center (was a bell that led nowhere) */}
         <Link
-          href="/notifications"
-          title={t('Notifications & System Alerts')}
-          className="relative hidden h-8 w-8 items-center justify-center rounded-md text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-white transition-colors md:flex"
+          href="/support"
+          title={t('Help center')}
+          aria-label={t('Help center')}
+          className="relative hidden h-9 w-9 items-center justify-center rounded-full text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-white md:flex"
         >
-          <Bell className="h-4 w-4" />
-          <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-red-500" />
+          <LifeBuoy className="h-[18px] w-[18px]" />
         </Link>
 
         {/* Desktop-only User Badge (u***@ca.com) & Log out close together */}

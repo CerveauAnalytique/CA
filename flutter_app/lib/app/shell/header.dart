@@ -59,7 +59,7 @@ class SiteHeader extends ConsumerWidget implements PreferredSizeWidget {
 
     Widget iconBtn(IconData i, String tip, VoidCallback onTap) => Tooltip(
           message: tip,
-          child: InkWell(borderRadius: BorderRadius.circular(6), onTap: onTap, child: SizedBox(width: 32, height: 32, child: Icon(i, size: 16, color: c.muted))),
+          child: InkWell(borderRadius: BorderRadius.circular(18), onTap: onTap, child: SizedBox(width: 36, height: 36, child: Icon(i, size: 18, color: c.muted))),
         );
 
     return Container(
@@ -97,7 +97,7 @@ class SiteHeader extends ConsumerWidget implements PreferredSizeWidget {
         const Spacer(),
         if (!mobile) ...[
           iconBtn(Icons.storefront_outlined, context.t('Marketplace & Enterprise Models'), () => context.goL('/marketplace')),
-          Stack(children: [iconBtn(Icons.notifications_none, context.t('Notifications & System Alerts'), () => context.goL('/notifications')), Positioned(top: 6, right: 6, child: Container(width: 6, height: 6, decoration: const BoxDecoration(color: Brand.red, shape: BoxShape.circle)))]),
+          iconBtn(Icons.support_outlined, context.t('Help center'), () => context.goL('/support')),
           const SizedBox(width: 4),
           if (user != null) ...[
             Lnk(to: '/dashboard/settings', child: Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Row(children: [
