@@ -8,12 +8,12 @@ const CARDS = [
   {
     icon: 'database' as DotIconName,
     title: tr('Save Your Data'),
-    text: tr('Store camera footage, sensor readings, logs and files securely in the cloud, searchable in seconds.'),
+    text: tr('Store sensor readings, device data, logs and files securely in the cloud, searchable in seconds.'),
   },
   {
     icon: 'analytics' as DotIconName,
     title: tr('Analytique Insights'),
-    text: tr('Turn raw data from cameras and sensors into clear answers with AI analytics, live dashboards and smart alerts.'),
+    text: tr('Turn raw IoT and company data into clear answers with AI analytics, live dashboards and smart alerts.'),
   },
   {
     icon: 'api' as DotIconName,
@@ -46,7 +46,7 @@ export async function FeatureCards() {
         index="01/04"
         label={t('Everything you need')}
         title={t('One platform for your company data')}
-        text={t('CA7 saves data from smart cameras, sensors and any other source, analyzes it with AI models and shares it through one API, so your teams solve real problems with it.')}
+        text={t('CA7 saves data from your IoT devices, sensors and any other source, analyzes it with AI models you build yourself and shares it through one API, so your teams solve real problems with it.')}
       />
 
       <div className="relative mx-auto mt-20 max-w-[1040px] px-6">

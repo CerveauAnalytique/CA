@@ -62,7 +62,7 @@ export default async function ModelsPage({ searchParams }: Props) {
       <CatalogHead
         eyebrow={t('AI Models')}
         title={t('AI models for your data')}
-        text={t('Ready-to-run models for cameras, sensors and analytics. Pick one, install it and connect it to CA7.')}
+        text={t('Ready-to-run models for IoT, sensors and analytics. Pick one, or build your own, and connect it to CA7.')}
       />
       <SearchBox placeholder={t('Search…')} action="/models" q={q} extra={framework !== 'all' ? { framework } : undefined} />
       <Chips items={FRAMEWORKS.map((f) => ({ ...f, label: t(f.label) }))} active={framework} hrefFor={hrefFor} />

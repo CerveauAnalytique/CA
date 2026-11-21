@@ -10,7 +10,7 @@ const PROBLEMS: { icon: DotIconName; title: string; problem: string; solution: s
     icon: 'ops',
     title: tr('Operations'),
     problem: tr('Machines, rooms and sites generate data nobody has time to read.'),
-    solution: tr('Sensors and cameras feed an AI model that spots faults and sends an alert before work stops.'),
+    solution: tr('Sensors and devices feed an AI model that spots faults and sends an alert before work stops.'),
   },
   {
     icon: 'helpdesk',
@@ -21,8 +21,8 @@ const PROBLEMS: { icon: DotIconName; title: string; problem: string; solution: s
   {
     icon: 'security',
     title: tr('Safety and security'),
-    problem: tr('Cameras record everything, but nobody watches every hour.'),
-    solution: tr('Smart cameras detect motion, people and vehicles and report events to the right team.'),
+    problem: tr('Sites and devices run day and night, but nobody watches every hour.'),
+    solution: tr('Your AI model watches sensors and cameras and reports events to the right team.'),
   },
   {
     icon: 'analytics',

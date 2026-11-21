@@ -60,7 +60,7 @@ export default async function DatasetsPage({ searchParams }: Props) {
       <CatalogHead
         eyebrow={t('Datasets')}
         title={t('Datasets for your models')}
-        text={t('Find data from cameras, sensors and logs, see its structure, and use it to train or test your models.')}
+        text={t('Find data from IoT devices, sensors and logs, see its structure, and use it to train or test your models.')}
       />
       <SearchBox placeholder={t('Search…')} action="/datasets" q={q} extra={source !== 'all' ? { source } : undefined} />
       <Chips items={SOURCES.map((f) => ({ ...f, label: t(f.label) }))} active={source} hrefFor={hrefFor} />

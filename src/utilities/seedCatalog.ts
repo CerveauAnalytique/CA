@@ -72,7 +72,7 @@ export async function seedCatalogIfEmpty(payload: Payload) {
         data: {
           name: 'Camera events (example)',
           publisher: 'CA7',
-          summary: 'Example structure for events detected by smart cameras.',
+          summary: 'Example structure for events detected by cameras and other devices.',
           source: 'cameras',
           format: 'jsonl',
           version: 'v1.0',

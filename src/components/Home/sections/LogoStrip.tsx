@@ -8,7 +8,7 @@ const ITEMS: { name: string; icon: DotIconName }[] = [
   { name: tr('AI models'), icon: 'models' },
   { name: tr('Datasets'), icon: 'datasets' },
   { name: tr('Data API'), icon: 'api' },
-  { name: tr('Cameras & sensors'), icon: 'camera' },
+  { name: tr('IoT devices'), icon: 'camera' },
 ]
 
 export async function LogoStrip() {

@@ -87,7 +87,7 @@ export default async function ShopPage({ searchParams }: Props) {
             {t('Apps and tools for CA7')}
           </h1>
           <p className="mt-3 max-w-xl text-[15px] text-neutral-500">
-            {t('Install ready-made apps for your cameras, sensors and data, or publish your own.')}
+            {t('Install ready-made apps for your IoT, sensors and data, or publish your own.')}
           </p>
         </div>
         <a

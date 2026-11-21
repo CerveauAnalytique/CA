@@ -15,8 +15,8 @@ const ITEMS = [
   },
   {
     n: '2.0',
-    title: tr('Connect Cameras & Sensors'),
-    text: tr('Turn any camera into a smart camera, and add sensors for motion, temperature, sound, air quality, GPS, energy and more. Get instant alerts on your phone.'),
+    title: tr('Connect your IoT devices'),
+    text: tr('Connect sensors, machines, cameras and any other device. Track motion, temperature, sound, air quality, GPS, energy and more, and get instant alerts on your phone.'),
   },
   {
     n: '3.0',
@@ -49,8 +49,8 @@ export function UpdatesSection() {
       <SectionHead
         index="02/04"
         label={t('Build your brain')}
-        title={t('Make your own smart camera')}
-        text={t('No code and no experts needed. Connect a camera or sensor, teach your digital brain what to look for, and add apps from the marketplace.')}
+        title={t('Build your own AI model for your IoT')}
+        text={t('No code and no experts needed. Connect your IoT devices, train your own AI model on your data, and add apps from the marketplace.')}
       />
 
       <div className="relative mx-auto mt-16 max-w-[1040px] px-6">
@@ -63,7 +63,7 @@ export function UpdatesSection() {
             }}
           >
             <div className="h-[260px] w-full max-w-[380px]">
-              <DotIcon name="camera" size={260} />
+              <DotIcon name="models" size={240} />
             </div>
           </div>
 

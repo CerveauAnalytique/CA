@@ -8,8 +8,8 @@ import { tr } from '@/i18n/translate'
 
 const ITEMS = [
   { href: '/shop', title: tr('Shop'), text: tr('Apps and tools for CA7'), img: '/nav/shop.svg' },
-  { href: '/models', title: tr('AI Models'), text: tr('Models for your data and cameras'), img: '/nav/models.svg' },
-  { href: '/datasets', title: tr('Datasets'), text: tr('Data from cameras, sensors and logs'), img: '/nav/datasets.svg' },
+  { href: '/models', title: tr('AI Models'), text: tr('Models for your IoT and company data'), img: '/nav/models.svg' },
+  { href: '/datasets', title: tr('Datasets'), text: tr('Data from IoT devices, sensors and logs'), img: '/nav/datasets.svg' },
 ]
 
 /** One "Explore" entry in the navbar that holds Shop, AI Models and Datasets. */

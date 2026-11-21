@@ -10,7 +10,7 @@ type Msg = { id: string; role: 'user' | 'assistant'; content: string; error?: bo
 
 const SUGGESTIONS = [
   tr('Summarise these sensor readings: 21.4, 21.6, 35.2, 21.5'),
-  tr('Write a SQL query for daily camera motion events'),
+  tr('Write a SQL query for daily device events'),
   tr('How do I share my data through the API?'),
   tr('Which anomalies matter in temperature data?'),
 ]
@@ -144,7 +144,7 @@ export function ChatCa7() {
               {t('What can CA7 help you with?')}
             </h1>
             <p className="mt-3 max-w-md text-[15px] text-neutral-500">
-              {t('The AI that is very good with data: sensors, cameras, SQL, analytics.')}
+              {t('The AI that is very good with data: IoT, sensors, SQL, analytics.')}
             </p>
             <div className="mt-8 grid w-full gap-2.5 sm:grid-cols-2">
               {SUGGESTIONS.map((s) => (

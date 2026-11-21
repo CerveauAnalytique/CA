@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { useAuth } from '@/providers/Auth'
 import Link, { setLanguageCookie, useLocale, useT } from '@/i18n/client'
 import { LANGUAGES, LOCALES, isLocale, localizePath } from '@/i18n/config'
-import { translate } from '@/i18n/translate'
+import { tr, translate } from '@/i18n/translate'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useCallback, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -66,7 +66,7 @@ export const CreateAccountForm: React.FC = () => {
       try {
         await login(data)
         clearTimeout(timer)
-        const target = redirect || `/account?success=${encodeURIComponent(translate(isLocale(data.language) ? data.language : locale, 'Account created successfully'))}`
+        const target = redirect || `/account?success=${encodeURIComponent(translate(isLocale(data.language) ? data.language : locale, tr('Account created successfully')))}`
         // the language chosen here is saved on the account and used from now on
         if (isLocale(data.language) && data.language !== locale) {
           setLanguageCookie(data.language)

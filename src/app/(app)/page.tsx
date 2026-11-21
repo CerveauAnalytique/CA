@@ -21,5 +21,5 @@ export default function HomePage() {
 export const metadata: Metadata = {
   title: 'CA7 — Create your own digital brain for your IoT',
   description:
-    'Solve company problems with AI models, datasets and one API: smart cameras, sensors and internal support.',
+    'Turn IoT and company data into answers: build your own AI models, use datasets and one API, and support your teams.',
 }

@@ -6,7 +6,7 @@ import { DotCameraCanvas } from './DotCameraCanvas'
 import { useT } from '@/i18n/client'
 import { tr } from '@/i18n/translate'
 
-const WORDS = [tr('your IoT'), tr('smart cameras'), tr('your sensors'), tr('all your data')]
+const WORDS = [tr('your IoT'), tr('your devices'), tr('your sensors'), tr('your company data')]
 
 function useTyping(words: string[]) {
   // Start with the first word fully shown so the headline reads correctly from the first paint.
@@ -100,7 +100,7 @@ export function CameraHero() {
 
         {/* Top-right blurb */}
         <p className="relative z-10 order-3 col-span-12 hidden max-w-[230px] justify-self-end pt-10 text-[12px] font-light leading-snug text-neutral-700 md:col-span-3 md:col-start-10 md:block md:pt-16">
-          {t('CA7 helps companies solve real problems with AI models, datasets and one API: from smart cameras and sensors to internal support. No code needed.')}
+          {t('CA7 helps companies turn IoT and company data into answers: build your own AI models, use datasets and one API, and support your teams. No code needed.')}
         </p>
       </div>
     </section>
