@@ -51,7 +51,7 @@ export default async function BlogIndexPage({ searchParams }: PageProps) {
 
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 py-12 transition-colors">
-      <div className="max-w-[1400px] mx-auto px-6 space-y-10">
+      <div className="max-w-[1280px] mx-auto px-6 space-y-10">
         <div className="space-y-4 max-w-2xl">
           <h1 className="text-4xl md:text-6xl font-black tracking-tighter">
             Cerveau <span className="text-neutral-400">Stories & Blog</span>

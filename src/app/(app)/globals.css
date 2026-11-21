@@ -51,7 +51,7 @@
   .container {
     width: 100%;
     margin-inline: auto;
-    padding-inline: 1rem;
+    padding-inline: 1.5rem;
   }
 
   @variant sm {
@@ -63,7 +63,7 @@
   @variant md {
     .container {
       max-width: var(--breakpoint-md);
-      padding-inline: 2rem;
+      padding-inline: 1.5rem;
     }
   }
 
@@ -81,7 +81,7 @@
 
   @variant 2xl {
     .container {
-      max-width: var(--breakpoint-2xl);
+      max-width: 80rem;
     }
   }
 }
@@ -1753,6 +1753,8 @@ footer {
   display: flex;
   min-height: calc(100vh - 60px);
   padding-top: 0;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 .docs-sidebar {

@@ -25,16 +25,9 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: {
-        '2xl': '2rem',
-        DEFAULT: '1rem',
-        lg: '2rem',
-        md: '2rem',
-        sm: '1rem',
-        xl: '2rem',
-      },
+      padding: '1.5rem',
       screens: {
-        '2xl': '86rem',
+        '2xl': '80rem',
         lg: '64rem',
         md: '48rem',
         sm: '40rem',

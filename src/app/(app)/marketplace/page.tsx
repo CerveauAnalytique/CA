@@ -41,7 +41,7 @@ const MARKETPLACE_ITEMS = [
 export default function MarketplacePage() {
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 py-12 transition-colors">
-      <div className="max-w-[1400px] mx-auto px-6 space-y-12">
+      <div className="max-w-[1280px] mx-auto px-6 space-y-12">
         {/* Header Banner */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-neutral-200 dark:border-neutral-800">
           <div className="space-y-3 max-w-2xl">
