@@ -2,6 +2,9 @@
 
 One command starts the whole project: database, backend, website and scheduler.
 
+**Easiest:** `./start-docker.sh` (on a Mac you can also double-click `Start CA7.command`). It makes `.env` with random secrets, builds, starts, waits until the backend answers and opens http://localhost:8080. `./start-docker.sh stop` stops it, `./start-docker.sh logs` shows the logs.
+The manual steps:
+
 ```bash
 cp .env.docker.example .env        # fill in DB_PASSWORD, PAYLOAD_SECRET, PUBLIC_URL, CA7_CRON_SECRET (and mail / payment keys when you have them)
 docker compose up -d --build       # the first build takes a while (Node and Flutter are built inside the images)
