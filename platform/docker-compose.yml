@@ -1,0 +1,32 @@
+# TimescaleDB: PostgreSQL with time-series storage for sensor and business data.
+# Start: docker compose -f platform/docker-compose.yml up -d     (port 5433, so it does not clash with the CA7 database)
+services:
+  timescaledb:
+    image: timescale/timescaledb:latest-pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ca7
+      POSTGRES_PASSWORD: ${TIMESCALE_PASSWORD:?set TIMESCALE_PASSWORD}
+      POSTGRES_DB: ca7_data
+    ports:
+      - '127.0.0.1:5433:5432'
+    volumes:
+      - timescale-data:/var/lib/postgresql/data
+
+  # ThingsBoard (IoT dashboards, telemetry). Login after start: tenant@thingsboard.org / tenant - change it at once.
+  thingsboard:
+    image: thingsboard/tb-postgres:latest
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:8085:9090'
+      - '127.0.0.1:1883:1883'
+    environment:
+      TB_QUEUE_TYPE: in-memory
+    volumes:
+      - tb-data:/data
+      - tb-logs:/var/log/thingsboard
+
+volumes:
+  timescale-data:
+  tb-data:
+  tb-logs:

@@ -1,0 +1,42 @@
+{
+  "openapi": "3.0.1",
+  "info": { "title": "CA7 API", "description": "Read and write your CA7 data, products and orders.", "version": "1" },
+  "servers": [{ "url": "https://cloud.ca7.io" }],
+  "paths": {
+    "/api/ca/v1/me": { "get": { "operationId": "me", "summary": "Your pack, limits and usage this month", "responses": { "200": { "description": "ok" } } } },
+    "/api/ca/v1/products": {
+      "get": {
+        "operationId": "listProducts", "summary": "Search shop products",
+        "parameters": [
+          { "name": "q", "in": "query", "required": false, "schema": { "type": "string" }, "description": "Words in the title" },
+          { "name": "limit", "in": "query", "required": false, "schema": { "type": "integer", "default": 10 } }
+        ],
+        "responses": { "200": { "description": "ok" } }
+      }
+    },
+    "/api/ca/v1/records": {
+      "get": {
+        "operationId": "getRecords", "summary": "Newest records of your data sources (sensor readings, camera counts, ...)",
+        "parameters": [
+          { "name": "source", "in": "query", "required": false, "schema": { "type": "integer" }, "description": "Id of a data source" },
+          { "name": "since", "in": "query", "required": false, "schema": { "type": "string", "format": "date-time" } },
+          { "name": "limit", "in": "query", "required": false, "schema": { "type": "integer", "default": 50 } }
+        ],
+        "responses": { "200": { "description": "ok" } }
+      },
+      "post": {
+        "operationId": "addRecords", "summary": "Store records in one of your data sources",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "required": ["source", "records"], "properties": { "source": { "type": "integer" }, "records": { "type": "array", "items": { "type": "object" } } } } } } },
+        "responses": { "200": { "description": "ok" } }
+      }
+    },
+    "/api/ca/v1/orders": {
+      "get": { "operationId": "listOrders", "summary": "Your paid orders", "responses": { "200": { "description": "ok" } } },
+      "post": {
+        "operationId": "createOrder", "summary": "Create an order and get a payment link for the customer",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "required": ["items"], "properties": { "items": { "type": "array", "items": { "type": "object", "required": ["product"], "properties": { "product": { "type": "integer" }, "quantity": { "type": "integer", "default": 1 } } } } } } } } },
+        "responses": { "201": { "description": "created; contains checkoutUrl" } }
+      }
+    }
+  }
+}

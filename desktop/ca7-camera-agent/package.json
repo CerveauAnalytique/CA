@@ -1,0 +1,10 @@
+{
+  "name": "ca7-camera-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Reads camera snapshots on your network, measures movement and sends it to CA7.",
+  "bin": { "ca7-camera-agent": "agent.mjs" },
+  "engines": { "node": ">=20" },
+  "dependencies": { "sharp": "^0.33.5" }
+}

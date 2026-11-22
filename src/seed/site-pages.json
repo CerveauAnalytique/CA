@@ -1,0 +1,1144 @@
+[
+ {
+  "slug": "about",
+  "section": "company",
+  "title": "The analytical intelligence layer for teams building the future",
+  "eyebrow": "About Us",
+  "subtitle": "Cerveau Analytique was founded in 2022 with a single belief: that the gap between raw data and actionable intelligence should be milliseconds, not months.",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Our mission"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "We build the intelligence substrate that powers the next generation of data-driven products. From real-time anomaly detection to natural-language querying of petabyte-scale warehouses, Cerveau Analytique compresses the distance between question and answer."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Our values"
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Investors & backers"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Backed by leading technology investors who share our long-term vision for intelligent systems in enterprise software."
+   },
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "Research-first",
+      "text": "Every feature starts as a research question. We publish openly and hold ourselves to academic rigour.",
+      "meta": ""
+     },
+     {
+      "title": "Trust by default",
+      "text": "Security, privacy, and interpretability are built in — not bolted on.",
+      "meta": ""
+     },
+     {
+      "title": "Collaborative",
+      "text": "We work in the open with customers, partners, and the broader AI research community.",
+      "meta": ""
+     },
+     {
+      "title": "Move deliberately",
+      "text": "Speed matters, but not at the cost of correctness or safety.",
+      "meta": ""
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "careers",
+  "section": "company",
+  "title": "Build the future of analytics intelligence",
+  "eyebrow": "Careers",
+  "subtitle": "We are a small, highly-motivated team of researchers and engineers. We move fast, publish openly, and care deeply about doing the right thing.",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Open roles"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Don't see your role? We are always looking for exceptional people."
+   },
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "Senior ML Engineer — Retrieval Systems",
+      "text": "",
+      "meta": "Remote / Paris"
+     },
+     {
+      "title": "Staff Backend Engineer — API Platform",
+      "text": "",
+      "meta": "Remote / New York"
+     },
+     {
+      "title": "Product Designer — Developer Experience",
+      "text": "",
+      "meta": "Remote"
+     },
+     {
+      "title": "Research Scientist — Interpretability",
+      "text": "",
+      "meta": "Remote / London"
+     },
+     {
+      "title": "Developer Advocate",
+      "text": "",
+      "meta": "Remote"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "press",
+  "section": "company",
+  "title": "In the news",
+  "eyebrow": "Press",
+  "subtitle": "For media inquiries, please contact press@ca7.io",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Recent coverage"
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Press kit"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Download our brand assets including logos, screenshots, and executive headshots."
+   }
+  ]
+ },
+ {
+  "slug": "community",
+  "section": "company",
+  "title": "Join builders like you",
+  "eyebrow": "Community",
+  "subtitle": "Connect with developers building intelligent products on the Cerveau Analytique platform.",
+  "blocks": [
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "Discord",
+      "text": "4,200+ developers sharing tips, asking questions, and building together.",
+      "meta": "Join Discord · https://discord.gg/cerveauanalytique"
+     },
+     {
+      "title": "GitHub",
+      "text": "Browse open-source SDKs, examples, and contribute to our tooling.",
+      "meta": "View GitHub · https://github.com/cerveauanalytique"
+     },
+     {
+      "title": "X / Twitter",
+      "text": "Follow for product updates, research drops, and team thoughts.",
+      "meta": "Follow us · https://x.com/cerveauanalytique"
+     },
+     {
+      "title": "Newsletter",
+      "text": "Monthly digest of research highlights and platform updates.",
+      "meta": "Subscribe"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "contact",
+  "section": "company",
+  "title": "Get in touch",
+  "eyebrow": "Contact",
+  "subtitle": "Sales, partnerships, press, or just want to say hello — we read every message.",
+  "blocks": [
+   {
+    "blockType": "list",
+    "items": [
+     {
+      "text": "General: hello@ca7.io"
+     },
+     {
+      "text": "Sales: sales@ca7.io"
+     },
+     {
+      "text": "Press: press@ca7.io"
+     },
+     {
+      "text": "Security: security@ca7.io"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "status",
+  "section": "company",
+  "title": "System Status",
+  "eyebrow": "System Status",
+  "subtitle": "Last updated: Aug 19, 2026 — 13:00 UTC",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Active incidents"
+   },
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "API (REST)",
+      "text": "",
+      "meta": "operational"
+     },
+     {
+      "title": "API (GraphQL)",
+      "text": "",
+      "meta": "operational"
+     },
+     {
+      "title": "Streaming Endpoint",
+      "text": "",
+      "meta": "operational"
+     },
+     {
+      "title": "Admin Dashboard",
+      "text": "",
+      "meta": "operational"
+     },
+     {
+      "title": "Documentation Site",
+      "text": "",
+      "meta": "operational"
+     },
+     {
+      "title": "Authentication",
+      "text": "",
+      "meta": "operational"
+     },
+     {
+      "title": "Webhooks",
+      "text": "",
+      "meta": "degraded"
+     },
+     {
+      "title": "CDN / Asset Delivery",
+      "text": "",
+      "meta": "operational"
+     }
+    ]
+   },
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "Elevated webhook delivery latency",
+      "text": "We are seeing elevated p99 latency on webhook deliveries. API calls are unaffected. Our team is investigating.",
+      "meta": "Aug 18, 2026 · Investigating"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "privacy",
+  "section": "legal",
+  "title": "Privacy Policy",
+  "eyebrow": "Legal",
+  "subtitle": "Last updated: August 19, 2026",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "1. Information We Collect"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "We collect information you provide directly to us (such as account registration details, payment information, and communications with us) and information collected automatically when you use our services (such as usage data, log files, and cookies)."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "2. How We Use Your Information"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "We use the information we collect to provide, maintain, and improve our services, process transactions, send transactional and promotional communications, and comply with legal obligations."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "3. Data Retention"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "We retain personal data for as long as necessary to provide our services and comply with our legal obligations. You may request deletion of your data at any time by contacting privacy@ca7.io."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "4. Data Sharing"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "We do not sell your personal data. We may share data with service providers who assist us in operating our platform, subject to confidentiality agreements."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "5. Your Rights"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Depending on your jurisdiction, you may have rights including access, correction, deletion, portability, and the right to object to certain processing of your personal data."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "6. Contact"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "For privacy-related inquiries, contact us at privacy@ca7.io ."
+   }
+  ]
+ },
+ {
+  "slug": "terms",
+  "section": "legal",
+  "title": "Terms of Service",
+  "eyebrow": "Legal",
+  "subtitle": "Last updated: August 19, 2026",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "1. Acceptance of Terms"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "By accessing or using the Cerveau Analytique platform and APIs, you agree to be bound by these Terms of Service and our Privacy Policy."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "2. Use of Services"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "You may use our services only as permitted by law and in accordance with these terms. You must not misuse our services, attempt to circumvent usage limits, or use them in a way that could harm other users."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "3. API Usage"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "API access is subject to the rate limits and quotas described in your subscription plan. Exceeding limits may result in temporary throttling or suspension of access."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "4. Intellectual Property"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "All intellectual property rights in our platform belong to Cerveau Analytique, Inc. You retain all rights to data you submit to our services."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "5. Limitation of Liability"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "To the maximum extent permitted by law, Cerveau Analytique shall not be liable for indirect, incidental, or consequential damages arising from your use of the platform."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "6. Governing Law"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "These terms are governed by the laws of the State of Delaware, United States, without regard to conflict of law provisions."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "7. Contact"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Questions about these terms? Contact us at legal@ca7.io ."
+   }
+  ]
+ },
+ {
+  "slug": "cookies",
+  "section": "legal",
+  "title": "Cookie Policy",
+  "eyebrow": "Legal",
+  "subtitle": "Last updated: August 19, 2026",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "What are cookies?"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Cookies are small text files stored on your device by your browser. They help us recognise returning visitors, maintain sessions, and understand how our platform is used."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Types of cookies we use"
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Managing cookies"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "You can control cookies through your browser settings. Note that disabling essential cookies will impact the functionality of the platform."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Contact"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "For questions about our use of cookies, contact privacy@ca7.io ."
+   },
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "Essential",
+      "text": "Required for the platform to function. Cannot be disabled.",
+      "meta": ""
+     },
+     {
+      "title": "Analytics",
+      "text": "Help us understand how visitors interact with our platform.",
+      "meta": ""
+     },
+     {
+      "title": "Preferences",
+      "text": "Remember your settings and customisations.",
+      "meta": ""
+     },
+     {
+      "title": "Marketing",
+      "text": "Used to show relevant ads and measure campaign performance.",
+      "meta": ""
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "security",
+  "section": "legal",
+  "title": "Security is built in, not bolted on",
+  "eyebrow": "Security",
+  "subtitle": "Responsible disclosure, security measures, and our commitment to keeping your data safe.",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Responsible Disclosure"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "If you believe you have found a security vulnerability, please report it to security@ca7.io . We will acknowledge your report within 24 hours and keep you informed as we work to resolve it. We ask that you give us a reasonable time to address the issue before public disclosure."
+   },
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "Data Encryption",
+      "text": "All data is encrypted at rest (AES-256) and in transit (TLS 1.3+).",
+      "meta": ""
+     },
+     {
+      "title": "SOC 2 Type II",
+      "text": "We maintain SOC 2 Type II certification, audited annually by an independent third party.",
+      "meta": ""
+     },
+     {
+      "title": "Zero-trust Access",
+      "text": "Internal systems follow a zero-trust architecture. No standing privilege.",
+      "meta": ""
+     },
+     {
+      "title": "Penetration Testing",
+      "text": "External penetration tests are conducted twice per year.",
+      "meta": ""
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "sdks",
+  "section": "product",
+  "title": "Your language, our intelligence",
+  "eyebrow": "SDKs",
+  "subtitle": "Official SDKs with first-class TypeScript types, async streaming, and automatic retries.",
+  "blocks": [
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "JavaScript / TypeScript",
+      "text": "npm install @cerveauanalytique/sdk",
+      "meta": "Stable"
+     },
+     {
+      "title": "Python",
+      "text": "pip install cerveauanalytique",
+      "meta": "Stable"
+     },
+     {
+      "title": "Go",
+      "text": "go get github.com/cerveauanalytique/sdk-go",
+      "meta": "Stable"
+     },
+     {
+      "title": "Rust",
+      "text": "cargo add cerveauanalytique",
+      "meta": "Beta"
+     },
+     {
+      "title": "Java / Kotlin",
+      "text": "implementation \"io.cerveauanalytique:sdk:3.0.0\"",
+      "meta": "Stable"
+     },
+     {
+      "title": "Swift",
+      "text": ".package(url: \"https://github.com/cerveauanalytique/sdk-swift\", ...)",
+      "meta": "Beta"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "api",
+  "section": "product",
+  "title": "Hello, developer. Here's what you can build.",
+  "eyebrow": "",
+  "subtitle": "The Cerveau Analytique API gives you programmatic access to carbon footprint analysis, semantic search, predictive models, and document intelligence — all from a single, consistent interface.",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "What you can do"
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Try it in 60 seconds"
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Authentication"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "All requests require a Bearer token in the Authorization header. Generate a key from your dashboard or create an account to get started."
+   },
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "Carbon Footprint Analysis",
+      "text": "POST emission parameters (country, transport, electricity, diet, waste) and receive a detailed CO₂ breakdown, country comparisons, and reduction tips — powered by our CNN model.",
+      "meta": ""
+     },
+     {
+      "title": "Semantic Search",
+      "text": "Natural-language queries over your structured or unstructured data. Returns ranked results with relevance scores and optional snippet highlights.",
+      "meta": ""
+     },
+     {
+      "title": "Predictive Analytics",
+      "text": "Submit time-series data and receive multi-step forecasts, anomaly scores, and confidence intervals in one call.",
+      "meta": ""
+     },
+     {
+      "title": "Intelligence Q&A",
+      "text": "Ask questions in natural language about your data or our research corpus. Streaming responses supported.",
+      "meta": ""
+     },
+     {
+      "title": "Document Intelligence",
+      "text": "Extract structured information from PDFs, reports, and HTML documents — entities, tables, summaries, and more.",
+      "meta": ""
+     },
+     {
+      "title": "Streaming Responses",
+      "text": "All inference endpoints support Server-Sent Events for real-time token streaming. Add `stream: true` to any request body.",
+      "meta": ""
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "research",
+  "section": "research",
+  "title": "Intelligence, examined.",
+  "eyebrow": "",
+  "subtitle": "Cutting-edge research publications from Cerveau Analytique on AI, analytics, and intelligent systems.",
+  "blocks": [
+   {
+    "blockType": "paragraph",
+    "text": "Research & Insights"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Discoveries, product updates, and thinking from the Cerveau Analytique team."
+   },
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "Advances in Sparse Neural Architectures for Real-Time Market Analysis",
+      "text": "We present a new class of sparse transformer architectures that achieve state-of-the-art accuracy on financial time-series forecasting while reducing inference latency by 4×.",
+      "meta": "RESEARCH · Aug 15, 2026 · 12 min read"
+     },
+     {
+      "title": "Cerveau Analytique API v3: Unified Intelligence Layer",
+      "text": "Our third major API release unifies structured data queries, unstructured document analysis, and predictive modelling behind a single, coherent interface.",
+      "meta": "PRODUCT · Jul 30, 2026 · 8 min read"
+     },
+     {
+      "title": "Interpretability Tooling for High-Stakes Decision Systems",
+      "text": "We open-source a suite of interpretability probes designed for auditing model decisions in regulated industries such as healthcare, finance, and public infrastructure.",
+      "meta": "SAFETY · Jul 12, 2026 · 15 min read"
+     },
+     {
+      "title": "Chain-of-Thought Distillation for Compact Analytics Models",
+      "text": "Distilling reasoning chains from large models into compact, deployable analytics models while preserving performance on complex multi-step queries.",
+      "meta": "RESEARCH · Jun 28, 2026 · 10 min read"
+     },
+     {
+      "title": "Announcing Our Series B: Building the Intelligence Substrate",
+      "text": "We have raised $120M to accelerate development of our real-time analytics platform and expand our research team globally.",
+      "meta": "COMPANY · Jun 10, 2026 · 5 min read"
+     },
+     {
+      "title": "Semantic Search Across Structured Data Warehouses",
+      "text": "Natural-language querying over petabyte-scale columnar stores using a fine-tuned retrieval-augmented generation pipeline built on the Cerveau platform.",
+      "meta": "PRODUCT · May 22, 2026 · 11 min read"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "docs",
+  "section": "docs",
+  "title": "Introduction",
+  "eyebrow": "",
+  "subtitle": "Welcome to the Cerveau Analytique platform documentation.",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "About this documentation"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "This documentation covers all public-facing APIs, SDKs, and integrations for the Cerveau Analytique platform. Whether you are running a carbon footprint analysis, performing semantic search, or forecasting time-series data, you will find everything you need here."
+   },
+   {
+    "blockType": "paragraph",
+    "text": "The docs are structured in two levels: a top-level category (e.g. Carbon API) and a topic within it (e.g. Calculate Footprint). Use the sidebar to navigate."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "What you can build"
+   },
+   {
+    "blockType": "list",
+    "items": [
+     {
+      "text": "Carbon footprint tools — Integrate CNN-powered emission analysis into sustainability dashboards, ESG reporting, or consumer apps."
+     },
+     {
+      "text": "Intelligent search — Add semantic, relevance-ranked search over any text corpus using a single API call."
+     },
+     {
+      "text": "Predictive analytics — Embed multi-step forecasting and anomaly detection into your data pipelines."
+     },
+     {
+      "text": "Document intelligence — Extract tables, entities, and summaries from PDFs and HTML documents at scale."
+     }
+    ]
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Core APIs"
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Prerequisites"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "To get started you need:"
+   },
+   {
+    "blockType": "list",
+    "items": [
+     {
+      "text": "A Cerveau Analytique account — sign up here"
+     },
+     {
+      "text": "An API key — generate one from your dashboard"
+     },
+     {
+      "text": "Basic familiarity with HTTP and JSON"
+     }
+    ]
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Ready? Head to the Quickstart →"
+   },
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "About this documentation",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "What you can build",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Core APIs",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Prerequisites",
+      "text": "",
+      "meta": ""
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "docs/quickstart",
+  "section": "docs",
+  "title": "Quickstart",
+  "eyebrow": "",
+  "subtitle": "",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "1. Create an account"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Sign up for a free account . No credit card is required for the Starter plan (10,000 API calls/month)."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "2. Generate an API key"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "After signing in, navigate to your Dashboard → API Keys and click Generate New Key . Copy the key immediately — it will only be shown once."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "3. Make your first request"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Run the following with your terminal:"
+   },
+   {
+    "blockType": "code",
+    "code": "curl https://api.ca7.io/v1/carbon/calculate \\\\\n  -H \"Authorization: Bearer sk-ca-YOUR_KEY\" \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -d '{\n    \"country\": \"Germany\",\n    \"daily_commute_km\": 20,\n    \"monthly_electricity_kwh\": 300,\n    \"weekly_waste_kg\": 8,\n    \"meals_per_day\": 3\n  }'"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Or using our JavaScript SDK:"
+   },
+   {
+    "blockType": "code",
+    "code": "import { CerveauAnalytique } from '@cerveauanalytique/sdk'\n\nconst ca = new CerveauAnalytique({ apiKey: process.env.CA_API_KEY })\n\nconst result = await ca.carbon.calculate({\n  country: 'Germany',\n  dailyCommuteKm: 20,\n  monthlyElectricityKwh: 300,\n  weeklyWasteKg: 8,\n  mealsPerDay: 3,\n})\n\nconsole.log(result.totalTonnesYear) // → 6.12"
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "4. Interpret the response"
+   },
+   {
+    "blockType": "code",
+    "code": "{\n  \"total_tonnes_year\": 6.12,\n  \"country_average\": 8.4,\n  \"verdict\": \"below_average\",\n  \"breakdown\": {\n    \"transportation\": 1.26,\n    \"electricity\": 1.37,\n    \"diet\": 2.74,\n    \"waste\": 0.75\n  },\n  \"reduction_tips\": [\n    \"Switch to an EV or public transport\",\n    \"Reduce meat consumption by 2 meals/week\"\n  ]\n}"
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Next steps"
+   },
+   {
+    "blockType": "list",
+    "items": [
+     {
+      "text": "Authentication — learn about API key rotation and OAuth"
+     },
+     {
+      "text": "Carbon API overview — full parameter reference"
+     },
+     {
+      "text": "JavaScript SDK — typed client with streaming support"
+     }
+    ]
+   },
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "1. Create an account",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "2. Generate an API key",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "3. Make your first request",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "4. Interpret the response",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Next steps",
+      "text": "",
+      "meta": ""
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "docs/authentication",
+  "section": "docs",
+  "title": "Authentication",
+  "eyebrow": "",
+  "subtitle": "",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "API Keys"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "All API requests must be authenticated using an API key. Keys are prefixed with sk-ca- and tied to your account. Generate them from your dashboard ."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Bearer Token Auth"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Pass your key as an HTTP Authorization header:"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Example:"
+   },
+   {
+    "blockType": "code",
+    "code": "curl https://api.ca7.io/v1/carbon/calculate \\\\\n  -H \"Authorization: Bearer sk-ca-YOUR_KEY\" \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -d '{ \"country\": \"UK\", \"daily_commute_km\": 15, ... }'"
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Key Scopes"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Keys generated from the dashboard have admin scope by default. Use the API to create restricted keys for production services."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Key Rotation"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Rotate keys regularly or immediately if compromised. Revoke old keys from the dashboard or via:"
+   },
+   {
+    "blockType": "code",
+    "code": "curl -X DELETE https://api.ca7.io/v1/keys/{key_id} \\\\\n  -H \"Authorization: Bearer sk-ca-ADMIN_KEY\""
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Auth Errors"
+   },
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "API Keys",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Bearer Token Auth",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Key Scopes",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Key Rotation",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Auth Errors",
+      "text": "",
+      "meta": ""
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "docs/carbon",
+  "section": "docs",
+  "title": "Carbon API",
+  "eyebrow": "",
+  "subtitle": "",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Overview"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "The Carbon API exposes our CNN-calibrated emission factor models. Given a set of lifestyle or operational parameters, it returns a detailed breakdown of annual CO₂ emissions, a comparison with the national average, and personalized reduction tips."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "How it works"
+   },
+   {
+    "blockType": "list",
+    "items": [
+     {
+      "text": "You submit emission parameters (commute, electricity, diet, waste) along with a country."
+     },
+     {
+      "text": "The model annualizes inputs and multiplies by country-specific emission factors."
+     },
+     {
+      "text": "Results are returned in metric tonnes CO₂ per year, broken down by category."
+     },
+     {
+      "text": "A comparison with the national per-capita average is included."
+     }
+    ]
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Endpoint reference"
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Parameters"
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Supported countries"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "More countries are added quarterly. Subscribe to the research feed for announcements."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Full example"
+   },
+   {
+    "blockType": "code",
+    "code": "// JavaScript SDK\nimport { CerveauAnalytique } from '@cerveauanalytique/sdk'\n\nconst ca = new CerveauAnalytique({ apiKey: process.env.CA_API_KEY })\n\nconst result = await ca.carbon.calculate({\n  country: 'United States',\n  dailyCommuteKm: 30,\n  monthlyElectricityKwh: 500,\n  weeklyWasteKg: 12,\n  mealsPerDay: 3,\n})\n\n// result.verdict → 'above_average'\n// result.totalTonnesYear → 14.2\n// result.breakdown.transportation → 4.1"
+   },
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "Overview",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "How it works",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Endpoint reference",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Parameters",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Supported countries",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Full example",
+      "text": "",
+      "meta": ""
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "slug": "docs/reference",
+  "section": "docs",
+  "title": "API Reference",
+  "eyebrow": "",
+  "subtitle": "",
+  "blocks": [
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Base URL"
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Versioning"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "The current stable version is v1 . The version is included in every URL path. We follow semantic versioning — breaking changes only in major version bumps with 30 days notice."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Endpoints"
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Rate Limits"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "Rate limit headers are returned on every response: X-RateLimit-Limit , X-RateLimit-Remaining , and X-RateLimit-Reset ."
+   },
+   {
+    "blockType": "heading",
+    "level": 2,
+    "text": "Error Format"
+   },
+   {
+    "blockType": "paragraph",
+    "text": "All errors return a JSON body with the following shape:"
+   },
+   {
+    "blockType": "code",
+    "code": "{\n  \"error\": {\n    \"code\": \"invalid_key\",\n    \"message\": \"The provided API key is invalid or has been revoked.\",\n    \"status\": 401\n  }\n}"
+   },
+   {
+    "blockType": "cards",
+    "items": [
+     {
+      "title": "Base URL",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Versioning",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Endpoints",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Rate Limits",
+      "text": "",
+      "meta": ""
+     },
+     {
+      "title": "Error Format",
+      "text": "",
+      "meta": ""
+     }
+    ]
+   }
+  ]
+ }
+]

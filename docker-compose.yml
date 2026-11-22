@@ -1,0 +1,124 @@
+# CA7 in Docker: database, backend (API + admin), website (Flutter web behind nginx) and a scheduler.
+#   cp .env.docker.example .env         # fill in the secrets
+#   docker compose up -d --build        # open http://localhost (WEB_PORT)
+#   docker compose --profile ai up -d   # also starts Ollama and builds the "ca7" language model (4 GB+ download)
+# See docs/DOCKER.md.
+name: ca7
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ca7
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+      POSTGRES_DB: ca7
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ca7 -d ca7']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://ca7:${DB_PASSWORD}@db:5432/ca7
+      NODE_ENV: production
+      # the site and the API share one address (nginx forwards /api), so the public address is also the app address
+      NEXT_PUBLIC_SERVER_URL: ${PUBLIC_URL:-http://localhost}
+      CA7_APP_URL: ${PUBLIC_URL:-http://localhost}
+      CA7_APP_ORIGINS: ${PUBLIC_URL:-http://localhost}
+      CA7_API_URL: ${CA7_API_URL:-http://ollama:11434}
+    volumes:
+      - media:/app/public/media
+      - logs:/app/storage/logs
+    expose:
+      - '3000'
+
+  web:
+    build:
+      context: ./flutter_app
+      args:
+        CA7_API: ${CA7_API:-}
+        CA7_CHAT_HOSTS: ${CA7_CHAT_HOSTS:-ca7.io,ca7.nl,ca7.be}
+        CA7_CLOUD_HOST: ${CA7_CLOUD_HOST:-cloud.ca7.io}
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      BACKEND_URL: http://backend:3000
+    ports:
+      - '${WEB_PORT:-80}:80'
+
+  # health check and source sync every 5 minutes, clean-up of old security events every day
+  scheduler:
+    image: alpine:3.20
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      CA7_CRON_SECRET: ${CA7_CRON_SECRET:-}
+    command:
+      - sh
+      - -c
+      - |
+        apk add --no-cache curl >/dev/null
+        n=0
+        while true; do
+          curl -fsS -m 20 http://backend:3000/api/ca/health >/dev/null || echo "$$(date -Iseconds) health check FAILED" >&2
+          if [ -n "$$CA7_CRON_SECRET" ]; then
+            curl -fsS -m 120 -X POST -H "Authorization: Bearer $$CA7_CRON_SECRET" http://backend:3000/api/ca/sync >/dev/null || true
+            if [ $$((n % 288)) -eq 0 ]; then curl -fsS -m 60 -X POST -H "Authorization: Bearer $$CA7_CRON_SECRET" http://backend:3000/api/ca/security/cleanup >/dev/null || true; fi
+          fi
+          n=$$((n + 1)); sleep 300
+        done
+
+  # optional language model (profile "ai"): Qwen through Ollama
+  ollama:
+    profiles: ['ai']
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama:/root/.ollama
+    expose:
+      - '11434'
+
+  ollama-setup:
+    profiles: ['ai']
+    image: ollama/ollama:latest
+    depends_on:
+      - ollama
+    restart: 'no'
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      CA7_BASE: ${CA7_BASE:-qwen2.5:3b}
+    volumes:
+      - ./ai/ca7:/ai/ca7
+    entrypoint: ['/bin/bash', '-c']
+    command: ['until ollama list >/dev/null 2>&1; do sleep 2; done; bash /ai/ca7/build.sh']
+
+  # optional: TimescaleDB for sensor and business data (profile "platform"); the other platform tools: platform/README.md
+  timescaledb:
+    profiles: ['platform']
+    image: timescale/timescaledb:latest-pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ca7
+      POSTGRES_PASSWORD: ${TIMESCALE_PASSWORD:-}
+      POSTGRES_DB: ca7_data
+    volumes:
+      - timescale:/var/lib/postgresql/data
+
+volumes:
+  db-data:
+  media:
+  logs:
+  ollama:
+  timescale:

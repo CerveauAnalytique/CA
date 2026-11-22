@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CA7 — how it works and what you have</title>
+<style>
+@font-face{font-family:Geist;font-weight:300;src:url(assets/Geist-Light.woff2)}
+@font-face{font-family:Geist;font-weight:400;src:url(assets/Geist-Regular.woff2)}
+@font-face{font-family:Geist;font-weight:500;src:url(assets/Geist-Medium.woff2)}
+@font-face{font-family:Geist;font-weight:600;src:url(assets/Geist-SemiBold.woff2)}
+:root{--bg:#0b2540;--bg2:#17406a;--fg:#fff;--muted:#a9c3de;--blue:#3b82f6;--dot:#1a3df0;--card:rgba(255,255,255,.08);--line:rgba(255,255,255,.18);--ok:#22c55e;--warn:#f59e0b}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;background:#050f1c;color:var(--fg);font-family:Geist,system-ui,sans-serif}
+#wrap{position:relative;height:100%;display:flex;align-items:center;justify-content:center}
+#stage{position:relative;width:min(100vw,177.78vh);aspect-ratio:16/9;overflow:hidden;background:linear-gradient(180deg,var(--bg),var(--bg2));container-type:size}
+#city{position:absolute;inset:0;background:url(assets/login-city.svg) center bottom/cover;opacity:.22}
+.scene{position:absolute;inset:0;padding:6cqh 7cqw;display:flex;flex-direction:column;justify-content:center;opacity:0;pointer-events:none}
+.scene.on{opacity:1;pointer-events:auto}
+.scene.on .a{animation:in .7s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0)*.18s + .1s)}
+@keyframes in{from{opacity:0;transform:translateY(3cqh)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
+@keyframes grow{from{width:0}to{width:var(--w)}}
+@keyframes flow{from{stroke-dashoffset:40}to{stroke-dashoffset:0}}
+.eyebrow{font-size:1.5cqh;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:500}
+h1{font-size:8.5cqh;font-weight:300;letter-spacing:-.03em;line-height:1.05;margin-top:2cqh}
+h2{font-size:6cqh;font-weight:300;letter-spacing:-.025em;line-height:1.1;margin-top:1.5cqh}
+.sub{font-size:2.6cqh;color:var(--muted);line-height:1.5;max-width:62cqw;margin-top:2cqh}
+.grid{display:grid;gap:2cqh 1.6cqw;margin-top:4cqh}
+.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.g5{grid-template-columns:repeat(5,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:2cqh;padding:2.4cqh 1.6cqw;backdrop-filter:blur(6px)}
+.card b{display:block;font-size:2.6cqh;font-weight:600}
+.card span{display:block;font-size:1.9cqh;color:var(--muted);margin-top:.8cqh;line-height:1.4}
+.card img{height:8cqh;width:8cqh;margin-bottom:1.2cqh}
+.big{font-size:5cqh;font-weight:300;letter-spacing:-.02em}
+.pill{display:inline-block;border-radius:99px;padding:.6cqh 1.4cqh;font-size:1.7cqh;font-weight:500}
+.ok{background:rgba(34,197,94,.18);color:#86efac}.no{background:rgba(245,158,11,.2);color:#fcd34d}
+.row{display:flex;gap:1.6cqw;align-items:center}
+.node{background:var(--card);border:1px solid var(--line);border-radius:2cqh;padding:2.4cqh 1.4cqw;text-align:center;flex:1}
+.node b{display:block;font-size:2.5cqh;font-weight:600}.node span{font-size:1.8cqh;color:var(--muted)}
+.arrow{font-size:4cqh;color:var(--blue)}
+.bar{height:2.2cqh;border-radius:99px;background:var(--blue);animation:grow 1.2s cubic-bezier(.2,.7,.2,1) both;width:var(--w)}
+.lv{display:flex;align-items:center;gap:1.4cqw;margin-top:1.6cqh}
+.lv .tag{width:15cqw;white-space:nowrap;font-weight:600;font-size:2.2cqh}
+.lv .txt{font-size:2cqh;color:var(--muted);flex:1}
+.logo{height:7cqh;margin-bottom:3cqh}
+.cap{position:absolute;left:7cqw;right:7cqw;bottom:4cqh;font-size:2.2cqh;color:#dbeafe;text-align:center;opacity:.9}
+#ui{position:absolute;left:0;right:0;bottom:0;height:5cqh;background:rgba(0,0,0,.35);display:flex;align-items:center;gap:1.4cqw;padding:0 2cqw;z-index:5}
+#ui button{background:none;border:0;color:#fff;font:inherit;font-size:2.4cqh;cursor:pointer}
+#prog{flex:1;height:.8cqh;background:rgba(255,255,255,.2);border-radius:9px;cursor:pointer;position:relative}
+#fill{position:absolute;inset:0 auto 0 0;background:var(--blue);border-radius:9px;width:0}
+#time{font-size:1.8cqh;color:var(--muted);min-width:9cqw;text-align:right}
+body.rec #ui{display:none}
+svg.flow path{stroke:var(--blue);stroke-width:3;fill:none;stroke-dasharray:8 6;animation:flow 1s linear infinite}
+</style>
+</head>
+<body>
+<div id="wrap"><div id="stage"><div id="city"></div><div id="scenes"></div>
+<div id="ui"><button id="pp" aria-label="Play or pause">⏸</button><div id="prog"><div id="fill"></div></div><span id="time">0:00</span><button id="full" aria-label="Full screen">⛶</button></div>
+</div></div>
+<script>
+const logo='<img class="logo" src="assets/ca7-wordmark-white.svg" alt="CA7">';
+const ic=(n)=>`<img src="assets/${n}.svg" alt="">`;
+const card=(i,t,s,n)=>`<div class="card a" style="--i:${n}">${i?ic(i):''}<b>${t}</b><span>${s}</span></div>`;
+const SCENES=[
+{d:7,cap:'CA7 connects your data, builds on it with AI and acts on it — for companies of every size.',h:()=>`${logo}<div class="eyebrow a">Cerveau Analytique · ca7.io</div><h1 class="a" style="--i:1">The AI brain for<br>business data</h1><p class="sub a" style="--i:2">Databases, APIs, IoT devices, sensors and cameras in one platform. Ask questions to your own data, build your own AI models and automate.</p>`},
+{d:11,cap:'How it works: connect → store → understand → act.',h:()=>`<div class="eyebrow a">How it works</div><h2 class="a" style="--i:1">From raw data to answers and actions</h2>
+<div class="row" style="margin-top:6cqh">
+<div class="node a" style="--i:2"><b>1 · Connect</b><span>REST API · CSV · IoT push · OpenRemote · ThingsBoard · camera agent</span></div><div class="arrow a" style="--i:3">→</div>
+<div class="node a" style="--i:4"><b>2 · Store</b><span>PostgreSQL, per customer, limits per pack</span></div><div class="arrow a" style="--i:5">→</div>
+<div class="node a" style="--i:6"><b>3 · Understand</b><span>Statistics, trends, unusual values · CA7 Chat on your data</span></div><div class="arrow a" style="--i:7">→</div>
+<div class="node a" style="--i:8"><b>4 · Act</b><span>E-mail or webhook automations · one API for your apps</span></div></div>
+<p class="sub a" style="--i:9">Example: a logistics company connects 30 cameras, 12 sensors and its warehouse system, then asks “how many pallets today, and any temperature deviations?”</p>`},
+{d:11,cap:'The front end is Flutter. The backend is Next.js + Payload. The database is PostgreSQL.',h:()=>`<div class="eyebrow a">What it is made of</div><h2 class="a" style="--i:1">Flutter front end · Next.js backend</h2>
+<div class="row" style="margin-top:5cqh">
+<div class="node a" style="--i:2"><b>Flutter app</b><span>Website, Android, iOS<br>7 languages · dark mode · RTL</span></div><div class="arrow a" style="--i:3">⇄</div>
+<div class="node a" style="--i:4"><b>Backend: Next.js + Payload</b><span>API · admin panel · security<br>AI engine · payments</span></div><div class="arrow a" style="--i:5">⇄</div>
+<div class="node a" style="--i:6"><b>PostgreSQL</b><span>accounts · data · shop<br>content · logs</span></div></div>
+<div class="grid g4"><div class="card a" style="--i:7"><b>nginx</b><span>serves the site and forwards /api</span></div><div class="card a" style="--i:8"><b>Docker</b><span>one command starts everything</span></div><div class="card a" style="--i:9"><b>Stripe + Mollie</b><span>packs and shop payments</span></div><div class="card a" style="--i:10"><b>Ollama (optional)</b><span>Qwen language model</span></div></div>`},
+{d:10,cap:'Six modules, all in the Dashboard.',h:()=>`<div class="eyebrow a">What you have</div><h2 class="a" style="--i:1">The modules</h2><div class="grid g3">
+${card('integrate','Data Connect','REST, CSV upload, push API for IoT and MQTT bridges, OpenRemote, ThingsBoard',2)}${card('analytics','Data Intelligence','Statistics, trends and unusual values per field',3)}${card('ops','Automation','E-mail or webhook when a value passes a limit or looks unusual',4)}
+${card('chat','CA7 Chat','Streaming AI chat; on Pro it knows your data',5)}${card('api','Data API + gateway','API keys, /api/ca/v1: products, orders, records, one API for your apps',6)}${card('camera','Camera Intelligence','Desktop agent counts people (YOLO) and measures movement',7)}</div>`},
+{d:10,cap:'Five packs. The limits are enforced by the server, not only shown.',h:()=>`<div class="eyebrow a">Packs and billing</div><h2 class="a" style="--i:1">Free to Enterprise</h2><div class="grid g5">
+${card('','Free','€0<br>3 sources<br>1,000 API calls',2)}${card('','Hobby','€20 / month<br>10 sources<br>50,000 calls',3)}${card('','Pro','from €99<br>50 sources · chat on your data · anomaly detection',4)}${card('','Business','€500<br>unlimited sources · automation · team',5)}${card('','Enterprise','from €1,500<br>private environment · SSO · custom connectors',6)}</div>
+<p class="sub a" style="--i:7">Hobby and Pro by card (Stripe subscription). Business and Enterprise by invoice. Usage bars in Dashboard → Pack &amp; billing.</p>`},
+{d:9,cap:'A complete shop with Mollie checkout, orders and addresses.',h:()=>`<div class="eyebrow a">Shop</div><h2 class="a" style="--i:1">Products to paid order</h2><div class="grid g4">
+${card('apps','Products','search, categories, variants, stock',2)}${card('','Cart','guest or account, saved on the server',3)}${card('','Checkout','iDEAL, Bancontact, cards through Mollie; cards also through Stripe',4)}${card('','Orders','find an order, saved addresses',5)}</div>
+<p class="sub a" style="--i:6">The server checks every order against the real product prices, and stock goes down when a payment is confirmed. Orders can also be created through the API, with a payment link.</p>`},
+{d:12,cap:'Security monitoring: fixed rules, 24/7, no AI service needed.',h:()=>`<div class="eyebrow a">Security monitoring</div><h2 class="a" style="--i:1">Every activity is scored</h2>
+<div class="lv a" style="--i:2"><div class="tag" style="color:#cbd5e1">LOW 0–29</div><div class="bar" style="--w:18%;background:#94a3b8"></div><div class="txt">Logged</div></div>
+<div class="lv a" style="--i:3"><div class="tag" style="color:#fcd34d">MEDIUM 30–59</div><div class="bar" style="--w:36%;background:#f59e0b"></div><div class="txt">Flagged for review</div></div>
+<div class="lv a" style="--i:4"><div class="tag" style="color:#fdba74">HIGH 60–79</div><div class="bar" style="--w:48%;background:#f97316"></div><div class="txt">Restricted for a while, admin alerted</div></div>
+<div class="lv a" style="--i:5"><div class="tag" style="color:#fca5a5">CRITICAL 80–100</div><div class="bar" style="--w:60%;background:#ef4444"></div><div class="txt">Blocked, sessions ended, admin alerted</div></div>
+<p class="sub a" style="--i:6">Brute force · credential stuffing · bots · unauthorized API use · privilege escalation · price manipulation · order bursts · failed payments · many networks · admin mass deletes. Accounts are never deleted; money is never touched automatically. IP addresses are stored hashed and masked (GDPR).</p>`},
+{d:12,cap:'CA7 Intelligence: the AI proposes, the Compliance Engine decides.',h:()=>`<div class="eyebrow a">CA7 Intelligence (AI)</div><h2 class="a" style="--i:1">Smart, and checked</h2>
+<div class="row" style="margin-top:4cqh"><div class="node a" style="--i:2"><b>Search · recommendations · offers · “running low?” · assistant</b><span>ranking weights with version and rollback</span></div><div class="arrow a" style="--i:3">→</div><div class="node a" style="--i:4"><b>Compliance Engine</b><span>real price · stock · discount ≤ 30% · consent</span></div><div class="arrow a" style="--i:5">→</div><div class="node a" style="--i:6"><b>Customer</b><span>allowed, corrected or blocked</span></div></div>
+<div class="grid g3"><div class="card a" style="--i:7"><b>Personal data only after opt-in</b><span>own order history, switch in Profile</span></div><div class="card a" style="--i:8"><b>AI Control Center</b><span>decisions, policy rules, flags, rollback</span></div><div class="card a" style="--i:9"><b>Works without the model</b><span>the assistant answers from the catalog; Qwen is optional</span></div></div>`},
+{d:9,cap:'A help center and all content come from the database.',h:()=>`<div class="eyebrow a">Support and content</div><h2 class="a" style="--i:1">Edit it in the admin panel</h2><div class="grid g4">
+${card('support','Help center','topics, articles, “this helped”, request form that suggests articles first',2)}${card('','Content pages','about, docs, research, privacy, cookies, blog and CMS pages',3)}${card('datasets','Smart search','all content, typos allowed, “did you mean”',4)}${card('','Marketing banner','blue banner above the navbar, set in the admin panel',5)}</div>`},
+{d:9,cap:'Platform tools run next to CA7.',h:()=>`<div class="eyebrow a">Platform</div><h2 class="a" style="--i:1">One account, many tools</h2><div class="grid g5">
+${card('','OpenRemote','IoT, devices, tenants, rules',2)}${card('','ThingsBoard','device dashboards',3)}${card('','Dify','AI workflows, agents',4)}${card('','Airbyte','connectors and pipelines',5)}${card('database','TimescaleDB','business data and storage',6)}</div>
+<p class="sub a" style="--i:7">CA7 is an OpenID Connect login provider for ThingsBoard and OpenRemote. OpenRemote and ThingsBoard are also Data Connect sources.</p>`},
+{d:9,cap:'Everything starts with one command.',h:()=>`<div class="eyebrow a">Docker</div><h2 class="a" style="--i:1">docker compose up -d --build</h2><div class="grid g5">
+${card('','db','PostgreSQL 16',2)}${card('','backend','API · admin · security · AI',3)}${card('','web','Flutter site behind nginx',4)}${card('','scheduler','health check, sync, clean-up',5)}${card('','ollama','optional language model',6)}</div>
+<p class="sub a" style="--i:7">Add <b>--profile ai</b> for the Qwen model. Copy .env.docker.example to .env first. Docs: docs/DOCKER.md.</p>`},
+{d:13,cap:'Honest status: what works, and what is still open.',h:()=>`<div class="eyebrow a">Status</div><h2 class="a" style="--i:1">Built, and not yet</h2><div class="grid g2">
+<div class="card a" style="--i:2"><b><span class="pill ok">Built and tested</span></b><span style="font-size:2cqh;color:#e2e8f0;margin-top:1.4cqh">Flutter website · backend and admin · shop with Mollie · packs with enforced limits · Data Connect (REST, CSV, push) · Intelligence · Automation · security monitoring · support center · AI Compliance Engine · Docker files · API gateway with orders · Stripe card page · cookie choice per account · ChatGPT-style dashboard · camera people detection · TimescaleDB sync · 69 backend tests + 18 Flutter tests</span></div>
+<div class="card a" style="--i:3"><b><span class="pill no">Not done or not tested here</span></b><span style="font-size:2cqh;color:#e2e8f0;margin-top:1.4cqh">Qwen model not installed (needs your server) · Docker images not built (no internet inside builds here) · a real Stripe payment · OpenRemote, ThingsBoard, Dify, Airbyte not run · Android and iOS apps not built · SQL and direct MQTT</span></div></div>`},
+{d:7,cap:'github.com/CerveauAnalytique/CA · branch clean/ca7-full-project',h:()=>`${logo}<h2 class="a" style="--i:1">Start it, try it, tell us what is next</h2><p class="sub a" style="--i:2">README.md · docs/DOCKER.md · docs/PRODUCT.md · docs/SECURITY.md · docs/ai/ · docs/FLUTTER_MIGRATION.md</p><p class="sub a" style="--i:3">CA7 — Cerveau Analytique © 2026</p>`}
+];
+const stage=document.getElementById('scenes');
+SCENES.forEach((s,i)=>{const e=document.createElement('div');e.className='scene';e.id='s'+i;stage.appendChild(e)});
+const caps=document.createElement('div');caps.className='cap';document.getElementById('stage').appendChild(caps);
+const starts=[];let total=0;SCENES.forEach(s=>{starts.push(total);total+=s.d});
+let t=0,playing=true,cur=-1,last=performance.now();
+const rec=location.hash.includes('rec');if(rec)document.body.classList.add('rec');
+function show(i){if(i===cur)return;cur=i;document.querySelectorAll('.scene').forEach((e,j)=>{e.classList.remove('on');if(j===i){e.innerHTML=SCENES[i].h();void e.offsetWidth;e.classList.add('on')}});caps.textContent=SCENES[i].cap}
+function fmt(x){x=Math.floor(x);return Math.floor(x/60)+':'+String(x%60).padStart(2,'0')}
+function frame(now){const dt=(now-last)/1000;last=now;if(playing){t+=dt;if(t>=total){t=total-.01;playing=false;window.__done=true;document.getElementById('pp').textContent='↻'}}
+let i=0;while(i<SCENES.length-1&&t>=starts[i+1])i++;show(i);
+document.getElementById('fill').style.width=(t/total*100)+'%';document.getElementById('time').textContent=fmt(t)+' / '+fmt(total);requestAnimationFrame(frame)}
+document.getElementById('pp').onclick=()=>{if(t>=total-.05){t=0;cur=-1;window.__done=false}playing=!playing;document.getElementById('pp').textContent=playing?'⏸':'▶'};
+document.getElementById('prog').onclick=(e)=>{const r=e.currentTarget.getBoundingClientRect();t=(e.clientX-r.left)/r.width*total;cur=-1};
+document.getElementById('full').onclick=()=>document.documentElement.requestFullscreen?.();
+addEventListener('keydown',e=>{if(e.key===' '){e.preventDefault();document.getElementById('pp').click()}if(e.key==='ArrowRight'){t=Math.min(total-.1,(starts.find(x=>x>t)??t));cur=-1}if(e.key==='ArrowLeft'){const p=[...starts].reverse().find(x=>x<t-1.5)??0;t=p;cur=-1}});
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

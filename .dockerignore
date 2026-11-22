@@ -1,0 +1,15 @@
+node_modules
+.next
+.git
+flutter_app
+desktop
+platform/vendor
+test-results
+storage
+public/media
+.env
+.env.*
+!.env.example
+!.env.docker.example
+*.log
+tsconfig.tsbuildinfo
