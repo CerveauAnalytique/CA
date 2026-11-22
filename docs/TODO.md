@@ -31,3 +31,4 @@ Step by step with commands: `docs/SERVER_CHECKLIST.md`.
 - `ca7-overview.mp4`: animated explanation of how CA7 works and what exists.
 - `ca7-overview-en.mp4` / `ca7-overview-nl.mp4`: the overview with a voice.
 - `ca7-site-tour.mp4`: recording of the real site: home, pricing, shop, support, login, dashboard with data, API gateway.
+`docs/video/ca7-home.mp4`: recording of the home page (English, then Dutch).

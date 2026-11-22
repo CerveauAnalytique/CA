@@ -248,7 +248,7 @@ class _ChatInputState extends State<_ChatInput> {
                   child: MouseRegion(
                     cursor: SystemMouseCursors.click,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                      padding: EdgeInsets.symmetric(horizontal: context.isDesktop ? 24 : 12, vertical: 10),
                       decoration: BoxDecoration(color: dark ? Colors.white : Colors.black, borderRadius: BorderRadius.circular(99)),
                       child: Row(mainAxisSize: MainAxisSize.min, children: [
                         Text(context.t('Start chat'), style: TextStyle(color: dark ? Colors.black : Colors.white, fontSize: 14, fontWeight: FontWeight.w600)),
@@ -317,7 +317,7 @@ class SectionHead extends StatelessWidget {
               child: Row(mainAxisSize: MainAxisSize.min, children: [
                 Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2), decoration: BoxDecoration(color: const Color(0xFFF9D84A), borderRadius: BorderRadius.circular(6)), child: Text('[$index]', style: const TextStyle(fontFamily: 'GeistMono', fontSize: 12, color: Colors.black))),
                 const SizedBox(width: 8),
-                Text(label, style: const TextStyle(fontFamily: 'GeistMono', fontSize: 12)),
+                Flexible(child: Text(label, overflow: TextOverflow.ellipsis, style: const TextStyle(fontFamily: 'GeistMono', fontSize: 12))),
               ]),
             ),
             const SizedBox(height: 32),
@@ -430,7 +430,7 @@ class _UpdatesState extends State<_Updates> {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Container(
                 decoration: BoxDecoration(color: c.bg, border: Border.all(color: Neutral.c200)),
-                child: context.isDesktop ? Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: art), Expanded(child: Container(decoration: const BoxDecoration(border: BorderDirectional(start: BorderSide(color: Neutral.c200))), child: list))]) : Column(children: [art, Container(decoration: const BoxDecoration(border: Border(top: BorderSide(color: Neutral.c200))), child: list)]),
+                child: context.isDesktop ? IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: art), Expanded(child: Container(decoration: const BoxDecoration(border: BorderDirectional(start: BorderSide(color: Neutral.c200))), child: list))])) : Column(children: [art, Container(decoration: const BoxDecoration(border: Border(top: BorderSide(color: Neutral.c200))), child: list)]),
               ),
             ),
           ),
@@ -499,7 +499,7 @@ class _Problems extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 context.isDesktop
-                    ? Column(children: [Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: pcard(problems[0])), const SizedBox(width: 16), Expanded(child: pcard(problems[1]))]), const SizedBox(height: 16), Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: pcard(problems[2])), const SizedBox(width: 16), Expanded(child: pcard(problems[3]))])])
+                    ? Column(children: [IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: pcard(problems[0])), const SizedBox(width: 16), Expanded(child: pcard(problems[1]))])), const SizedBox(height: 16), IntrinsicHeight(child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: pcard(problems[2])), const SizedBox(width: 16), Expanded(child: pcard(problems[3]))]))])
                     : Column(children: [for (final p in problems) Padding(padding: const EdgeInsets.only(bottom: 16), child: pcard(p))]),
               ]),
             ),
