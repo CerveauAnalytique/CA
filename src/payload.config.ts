@@ -1,3 +1,4 @@
+import { seedDemoShop } from '@/lib/demoShop'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import {
@@ -64,6 +65,11 @@ export default buildConfig({
     await seedCatalogIfEmpty(payload)
     await seedSitePagesIfEmpty(payload)
     await seedSupportIfEmpty(payload)
+    // CA7_DEMO_SHOP=1 puts a few demo products in an empty shop (docs/SHOP_API.md)
+    if (process.env.CA7_DEMO_SHOP === '1') {
+      const { totalDocs } = await payload.count({ collection: 'products', overrideAccess: true })
+      if (!totalDocs) await seedDemoShop(payload)
+    }
   },
   db: postgresAdapter({
     // tests run on a database that was created by the migrations: do not let the dev schema push change it

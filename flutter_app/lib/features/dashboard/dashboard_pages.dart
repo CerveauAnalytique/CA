@@ -551,6 +551,12 @@ class _ApiKeysPageState extends ConsumerState<ApiKeysPage> {
         const SizedBox(height: 16),
         Muted('The same header works on the standard Payload REST API, for example ${Env.shown}/api/posts.', size: 12),
       ])),
+      const SizedBox(height: 16),
+      CaCard(title: 'API gateway', child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Muted('One address for your shop, your data and your account: ${Env.shown}/api/ca/v1. Press Run to try an endpoint with your current login (your API key works the same way).', size: 12),
+        const SizedBox(height: 12),
+        for (final e in _gateway) _GatewayRow(e.$1, e.$2, e.$3, key: ValueKey(e.$2)),
+      ])),
     ]);
   }
 }
@@ -706,5 +712,64 @@ class PlatformPage extends ConsumerWidget {
             const Muted('The tools have their own logins and are not yet signed in through your CA7 account (single sign-on is not built).', size: 12),
           ]),
         );
+  }
+}
+
+// ---- API gateway: try the endpoints ------------------------------------------------------------------------------------
+
+const _gateway = <(String, String, String)>[
+  ('GET', '/me', 'Your pack, limits and usage this month'),
+  ('GET', '/products?limit=5', 'Shop products (title, price, stock)'),
+  ('GET', '/orders', 'Your own orders'),
+  ('GET', '/sources', 'Your data sources'),
+  ('GET', '/records?limit=5', 'Your newest records'),
+  ('POST', '/records', 'Store records: {"source": <id>, "records": [{...}]}'),
+];
+
+class _GatewayRow extends ConsumerStatefulWidget {
+  const _GatewayRow(this.method, this.path, this.what, {super.key});
+  final String method, path, what;
+  @override
+  ConsumerState<_GatewayRow> createState() => _GatewayRowState();
+}
+
+class _GatewayRowState extends ConsumerState<_GatewayRow> {
+  String? _out;
+  bool _busy = false;
+
+  Future<void> _run() async {
+    setState(() { _busy = true; _out = null; });
+    try {
+      final res = await ref.read(apiClientProvider).get('/api/ca/v1${widget.path}');
+      _out = const JsonEncoder.withIndent('  ').convert(res);
+    } catch (e) {
+      _out = _err(e);
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final get = widget.method == 'GET';
+    final curl = get
+        ? 'curl "${Env.shown}/api/ca/v1${widget.path}" \\\n  -H "Authorization: users API-Key <your-api-key>"'
+        : 'curl -X POST ${Env.shown}/api/ca/v1${widget.path} \\\n  -H "Authorization: users API-Key <your-api-key>" \\\n  -H "Content-Type: application/json" \\\n  -d \'{"source": 1, "records": [{"temperature": 21.5}]}\'';
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          Container(padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2), decoration: BoxDecoration(color: get ? const Color(0xFFD1FAE5) : const Color(0xFFDBEAFE), borderRadius: BorderRadius.circular(4)), child: Text(widget.method, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w700))),
+          const SizedBox(width: 8),
+          Expanded(child: Text(widget.path.split('?').first, style: const TextStyle(fontSize: 13, fontFamily: 'monospace'))),
+          if (get) CaButton('Run', small: true, outlined: true, onPressed: _busy ? null : _run, busy: _busy),
+        ]),
+        const SizedBox(height: 2),
+        Muted(widget.what, size: 12),
+        const SizedBox(height: 6),
+        CodeBox(curl),
+        if (_out != null) Padding(padding: const EdgeInsets.only(top: 6), child: ConstrainedBox(constraints: const BoxConstraints(maxHeight: 220), child: SingleChildScrollView(child: CodeBox(_out!.length > 6000 ? '${_out!.substring(0, 6000)}\n…' : _out!)))),
+      ]),
+    );
   }
 }

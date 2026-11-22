@@ -122,3 +122,5 @@ No license file yet. Add one before publishing.
 ## Video
 
 `docs/video/index.html` is an animated web version (about 2 minutes, 13 scenes) of how CA7 works and what is built; open it in a browser. A recorded copy is `docs/video/ca7-overview.mp4` (also `.webm`). It is silent; captions are on screen.
+
+Shop and API gateway: `docs/SHOP_API.md`.
