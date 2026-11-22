@@ -63,7 +63,7 @@ class OnWebsitePage extends StatelessWidget {
             child: CaCard(title: 'This page is not in the app yet', child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const Muted('It is still part of the website and has not been migrated to Flutter. Open it there:', size: 14),
               const SizedBox(height: 16),
-              CaButton('Open on the website', icon: Icons.open_in_new, onPressed: () => launchUrl(Uri.parse('${Env.api}$path'), webOnlyWindowName: '_self')),
+              CaButton('Open on the website', icon: Icons.open_in_new, onPressed: () => launchUrl(Uri.parse('${Env.shown}$path'), webOnlyWindowName: '_self')),
             ])),
           ),
         ),

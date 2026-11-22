@@ -21,7 +21,7 @@ String money(num? cents, [String currency = 'USD']) {
 String? mediaUrl(dynamic media) {
   if (media is Map && media['url'] is String) {
     final u = media['url'] as String;
-    return u.startsWith('http') ? u : '${Env.api}$u';
+    return u.startsWith('http') ? u : '${Env.shown}$u';
   }
   return null;
 }

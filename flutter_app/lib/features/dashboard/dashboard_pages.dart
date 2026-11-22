@@ -75,7 +75,7 @@ class OverviewPage extends ConsumerWidget {
         const SizedBox(height: 16),
         const Text('API endpoint', style: TextStyle(fontSize: 11, color: Neutral.c400)),
         const SizedBox(height: 4),
-        CopyField('${Env.api}/api/ca/export'),
+        CopyField('${Env.shown}/api/ca/export'),
         const SizedBox(height: 16),
         const Text('API key', style: TextStyle(fontSize: 11, color: Neutral.c400)),
         Wrap(children: [Text('${keyOn ? 'Active' : 'Not created yet'} · ', style: const TextStyle(fontSize: 12)), Lnk(to: '/dashboard/api', child: const Text('manage', style: TextStyle(fontSize: 12, decoration: TextDecoration.underline)))]),
@@ -180,6 +180,17 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           CaField(controller: _pw2, label: 'Repeat password', obscure: true),
           const SizedBox(height: 20),
           Row(children: [CaButton('Save', onPressed: _save, busy: _busy), const SizedBox(width: 12), if (_msg != null) Flexible(child: Text(_msg!, style: TextStyle(fontSize: 12, color: _ok ? Colors.green.shade700 : Brand.red)))]),
+          if (ref.read(authProvider).user!.isAdmin) ...[
+            const Divider(height: 40),
+            CaButton('Open admin panel', outlined: true, icon: Icons.open_in_new, onPressed: () async {
+              try {
+                final r = await ref.read(apiClientProvider).get('/api/ca/admin-link');
+                await launchUrl(Uri.parse('${Env.shown}${r['path']}'), webOnlyWindowName: '_blank');
+              } catch (e) {
+                if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
+              }
+            }),
+          ],
           const Divider(height: 40),
           const Text('Personal AI suggestions', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
           const SizedBox(height: 6),
@@ -328,7 +339,7 @@ class _SourceCard extends ConsumerWidget {
         ]),
         if (s.lastError != null && s.lastError!.isNotEmpty) Padding(padding: const EdgeInsets.only(top: 8), child: Text(s.lastError!, style: const TextStyle(fontSize: 12, color: Brand.red))),
         if ((s.type == 'push' || s.type == 'camera') && s.ingestToken != null)
-          Padding(padding: const EdgeInsets.only(top: 12), child: CodeBox('curl -X POST ${Env.api}/api/ca/ingest \\\n  -H "X-CA7-Token: ${s.ingestToken}" \\\n  -H "Content-Type: application/json" \\\n  -d \'{"records":[{"temperature":21.5,"humidity":48}]}\'')),
+          Padding(padding: const EdgeInsets.only(top: 12), child: CodeBox('curl -X POST ${Env.shown}/api/ca/ingest \\\n  -H "X-CA7-Token: ${s.ingestToken}" \\\n  -H "Content-Type: application/json" \\\n  -d \'{"records":[{"temperature":21.5,"humidity":48}]}\'')),
       ]),
     );
   }
@@ -532,13 +543,13 @@ class _ApiKeysPageState extends ConsumerState<ApiKeysPage> {
       CaCard(title: 'Use the API', child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const Muted('Read all your data with one request:', size: 12),
         const SizedBox(height: 8),
-        CodeBox('curl ${Env.api}/api/ca/export \\\n  -H "Authorization: users API-Key $shown"'),
+        CodeBox('curl ${Env.shown}/api/ca/export \\\n  -H "Authorization: users API-Key $shown"'),
         const SizedBox(height: 16),
         const Muted('Only some collections:', size: 12),
         const SizedBox(height: 8),
-        CodeBox('curl "${Env.api}/api/ca/export?collections=orders,products" \\\n  -H "Authorization: users API-Key $shown"'),
+        CodeBox('curl "${Env.shown}/api/ca/export?collections=orders,products" \\\n  -H "Authorization: users API-Key $shown"'),
         const SizedBox(height: 16),
-        Muted('The same header works on the standard Payload REST API, for example ${Env.api}/api/posts.', size: 12),
+        Muted('The same header works on the standard Payload REST API, for example ${Env.shown}/api/posts.', size: 12),
       ])),
     ]);
   }

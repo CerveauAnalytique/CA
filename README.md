@@ -65,6 +65,10 @@ For AI assistants and new developers working on this repository: read [AGENTS.md
 The **front end is Flutter** (`flutter_app/`, web + Android + iOS). The **backend is Next.js + Payload CMS** (this folder): API, admin panel and database only; it serves no pages
 and redirects every page address to the app (`CA7_APP_URL`). See [docs/FLUTTER_MIGRATION.md](docs/FLUTTER_MIGRATION.md) and [flutter_app/README.md](flutter_app/README.md).
 
+## Docker
+
+`docker compose up -d --build` starts everything (database, backend, website, scheduler; optional AI model). See [docs/DOCKER.md](docs/DOCKER.md).
+
 ## Quick start
 
 Needs Node 22, pnpm and PostgreSQL.

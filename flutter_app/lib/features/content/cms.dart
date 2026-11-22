@@ -175,7 +175,7 @@ class _CmsPageView extends StatelessWidget {
         return Padding(padding: const EdgeInsets.only(top: 24), child: CaCard(color: const Color(0xFFFFFBEB), child: Lexical(b['content'])));
       case 'mediaBlock':
         final m = b['media'];
-        final url = m is Map && m['url'] is String ? ((m['url'] as String).startsWith('http') ? m['url'] as String : '${Env.api}${m['url']}') : null;
+        final url = m is Map && m['url'] is String ? ((m['url'] as String).startsWith('http') ? m['url'] as String : '${Env.shown}${m['url']}') : null;
         return url == null ? const SizedBox() : Padding(padding: const EdgeInsets.only(top: 24), child: ClipRRect(borderRadius: BorderRadius.circular(12), child: Image.network(url, errorBuilder: (_, _, _) => const SizedBox())));
       default:
         return Padding(padding: const EdgeInsets.only(top: 24), child: Muted('(${b['blockType']}) ${context.t('This block is shown on the website.')}', size: 12));

@@ -3,6 +3,9 @@ class Env {
   /// Base URL of the existing CA7 backend (Next.js + Payload). The Flutter app only calls its /api routes.
   static const api = String.fromEnvironment('CA7_API', defaultValue: 'http://localhost:3000');
 
+  /// The address shown in examples (curl ...): the backend, or this site when the API shares its address.
+  static String get shown => api.isEmpty ? Uri.base.origin : api;
+
   /// Domains that only show the chat (the rest opens on the cloud domain).
   static const _chat = String.fromEnvironment('CA7_CHAT_HOSTS', defaultValue: 'ca7.io,ca7.nl,ca7.be');
   static List<String> get chatHosts => _chat.split(',').map((h) => h.trim()).where((h) => h.isNotEmpty).toList();
