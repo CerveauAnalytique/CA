@@ -12,6 +12,7 @@ import '../../core/providers.dart';
 import '../../core/widgets/atoms.dart';
 import '../../core/widgets/lnk.dart';
 import '../../core/widgets/responsive.dart';
+import '../ai/ai_pages.dart';
 import 'dash_repository.dart';
 import 'intelligence.dart';
 import 'limits.dart';
@@ -111,7 +112,8 @@ class OverviewPage extends ConsumerWidget {
         ]);
       },
     );
-    return context.width >= Bp.lg ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [SizedBox(width: 300, child: left), const SizedBox(width: 16), Expanded(child: right)]) : Column(children: [left, const SizedBox(height: 16), right]);
+    final body = context.width >= Bp.lg ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [SizedBox(width: 300, child: left), const SizedBox(width: 16), Expanded(child: right)]) : Column(children: [left, const SizedBox(height: 16), right]);
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [const RunningLowCard(), body]);
   }
 }
 

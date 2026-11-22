@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app/theme/colors.dart';
 import '../../core/providers.dart';
 import '../../core/widgets/atoms.dart';
+import '../ai/ai_pages.dart';
 
 /// Security dashboard and AI Control Center (admins only): the same data and actions as the backend routes
 /// /api/ca/security and /api/ca/ai/admin, which check the admin role themselves.
@@ -101,6 +102,8 @@ class AiCenterPage extends ConsumerWidget {
             final versions = _list(d['versions']), policy = _list(d['policy']), decisions = _list(d['decisions']);
             return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const Padding(padding: EdgeInsets.only(bottom: 16), child: Muted('The Compliance Engine checks everything the AI wants to show against the real prices, stock, discounts and the customer\'s consent, and blocks or corrects what does not match. Personal data is only used after the customer opts in.', size: 14)),
+              CaCard(title: 'Language model', child: Text(ref.watch(aiStatusProvider).value?['mode'] == 'model' ? 'Online: the assistant answers with the model (checked by the Compliance Engine).' : 'Not installed or not reachable. The assistant answers from the product catalog with plain code. Install it with ai/ca7/build.sh (docs/ai/DEPLOYMENT.md).', style: const TextStyle(fontSize: 13))),
+              const SizedBox(height: 12),
               Wrap(spacing: 12, runSpacing: 12, children: [for (final e in {'Checked (7 days)': kpi['total'], 'Allowed': kpi['allowed'], 'Corrected': kpi['corrected'], 'Blocked': kpi['blocked']}.entries) SizedBox(width: 170, child: CaCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(e.key, style: const TextStyle(fontSize: 11, color: Neutral.c400)), const SizedBox(height: 4), Text('${e.value}', style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600))])))]),
               const SizedBox(height: 16),
               LayoutBuilder(builder: (_, box) {

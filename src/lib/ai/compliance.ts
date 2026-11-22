@@ -2,7 +2,7 @@
  * Compliance Engine: everything the AI wants to show a customer is checked against the real prices, stock, discounts and
  * the customer's consent. Plain code (no AI), so it keeps working when the model is down. What does not match is blocked or corrected.
  */
-export type CatalogItem = { id: string; title: string; price: number | null; inventory: number | null; discountPercent?: number }
+export type CatalogItem = { id: string; slug?: string; title: string; price: number | null; inventory: number | null; discountPercent?: number }
 
 export type PolicyRule = { key: string; enabled: boolean; action: 'block' | 'correct' | 'log'; value?: number | null }
 

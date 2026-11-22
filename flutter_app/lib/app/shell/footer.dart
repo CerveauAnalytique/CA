@@ -9,7 +9,7 @@ import '../../core/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 const _columns = <String, List<(String, String)>>{
-  'Products': [('Products Shop', '/shop'), ('Neural Engine', '/research'), ('API Access', '/api'), ('Analytics Workspace', '/dashboard'), ('Pricing', '/pricing')],
+  'Products': [('Products Shop', '/shop'), ('Neural Engine', '/research'), ('API Access', '/api'), ('Analytics Workspace', '/dashboard'), ('Pricing', '/pricing'), ('AI Shopping Assistant', '/assistant')],
   'Platform': [('Carbon API', '/docs/carbon'), ('Search API', '/docs/search'), ('Predictive API', '/docs/predict'), ('SDKs & Libraries', '/sdks')],
   'Resources': [('Documentation', '/docs'), ('Quickstart', '/docs/quickstart'), ('Community', '/community'), ('System Status', '/status'), ('Help center', '/support')],
   'Company': [('About Us', '/about'), ('Careers', '/careers'), ('Privacy Policy', '/privacy'), ('Terms of Service', '/terms')],

@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest'
+import { catalogAnswer } from '@/lib/ai/engine'
 import { checkAnswerText, checkProposal, DEFAULT_POLICY, mergePolicy, type CatalogItem } from '@/lib/ai/compliance'
 
 const catalog: CatalogItem[] = [
@@ -58,5 +59,16 @@ describe('Compliance Engine: answers', () => {
     const r = checkAnswerText('The CA7 Sensor Kit costs $1.00.', catalog, mergePolicy([{ key: 'price_match', action: 'block' }]))
     expect(r.decision).toBe('blocked')
     expect(r.text).toBe('')
+  })
+})
+
+describe('assistant without a language model', () => {
+  it('answers from the catalog with the real price and stock', () => {
+    const r = catalogAnswer('how much is the camera module', catalog)
+    expect(r.count).toBeGreaterThan(0)
+    expect(r.text).toContain('CA7 Camera Module: $129.00, out of stock.')
+  })
+  it('says so when nothing fits', () => {
+    expect(catalogAnswer('xyzzy', catalog).count).toBe(0)
   })
 })

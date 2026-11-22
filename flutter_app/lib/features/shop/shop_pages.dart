@@ -7,6 +7,7 @@ import '../../core/providers.dart';
 import '../../core/widgets/atoms.dart';
 import '../../core/widgets/lnk.dart';
 import '../../core/widgets/responsive.dart';
+import '../ai/ai_pages.dart';
 import 'shop_data.dart';
 
 Widget _page(BuildContext context, List<Widget> children) => Container1280(
@@ -55,6 +56,8 @@ class _ShopPageState extends ConsumerState<ShopPage> {
       Text(context.t('Shop'), style: _h1(context)),
       const SizedBox(height: 8),
       Muted(context.t('Apps and tools for CA7'), size: 15),
+      const SizedBox(height: 12),
+      Lnk(to: '/assistant', child: CaButton(context.t('Ask the AI shopping assistant'), outlined: true, small: true, link: true, icon: Icons.auto_awesome)),
       const SizedBox(height: 24),
       Wrap(spacing: 12, runSpacing: 12, crossAxisAlignment: WrapCrossAlignment.center, children: [
         SizedBox(width: 320, child: TextField(controller: _q, onSubmitted: (v) => setState(() => _query = v.trim()), decoration: InputDecoration(prefixIcon: const Icon(Icons.search, size: 16), hintText: context.t('Search…')))),
@@ -78,6 +81,7 @@ class _ShopPageState extends ConsumerState<ShopPage> {
                 return Wrap(spacing: 16, runSpacing: 24, children: [for (final p in list) SizedBox(width: w, child: _ProductCard(p))]);
               }),
       ),
+      const RecommendationStrip(),
     ]);
   }
 }
@@ -170,6 +174,7 @@ class _ProductPageState extends ConsumerState<ProductPage> {
               if (context.mounted) context.goL('/cart');
             }),
             if (cart.error != null) Padding(padding: const EdgeInsets.only(top: 8), child: Text(cart.error!, style: const TextStyle(fontSize: 12, color: Brand.red))),
+            RecommendationStrip(productIds: p.id, title: 'Bought together with this'),
           ]);
           return context.isDesktop ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [Expanded(child: gallery), const SizedBox(width: 48), Expanded(child: info)]) : Column(children: [gallery, const SizedBox(height: 24), info]);
         },
@@ -216,6 +221,7 @@ class CartPage extends ConsumerWidget {
           ]));
           return box.maxWidth >= 800 ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [Expanded(flex: 2, child: list), const SizedBox(width: 24), SizedBox(width: 320, child: summary)]) : Column(children: [list, summary]);
         }),
+      if (cart != null && cart.items.isNotEmpty) RecommendationStrip(productIds: cart.items.map((i) => i.product.id).join(','), title: 'You may also need'),
     ]);
   }
 }

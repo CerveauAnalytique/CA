@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../core/i18n/i18n.dart';
 import '../core/providers.dart';
 import '../core/widgets/atoms.dart';
+import '../features/ai/ai_pages.dart';
 import '../features/auth/auth_pages.dart';
 import '../features/catalog/catalog.dart';
 import '../features/chat/chat_page.dart';
@@ -88,6 +89,7 @@ GoRouter createRouter(WidgetRef ref) {
               r('support/articles/:slug', (s) => SupportArticlePage(slug: s.pathParameters['slug']!)),
               r('blog', (_) => const BlogPage()),
               r('blog/:slug', (s) => BlogPostPage(slug: s.pathParameters['slug']!)),
+              r('assistant', (_) => const AssistantPage()),
               r('shop', (_) => const ShopPage()),
               r('shop/:slug', (s) => ProductPage(slug: s.pathParameters['slug']!)),
               r('products', (_) => const ShopPage()),
