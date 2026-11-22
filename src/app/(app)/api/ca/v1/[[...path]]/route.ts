@@ -20,6 +20,7 @@ const ENDPOINTS = [
   { method: 'GET', path: '/products', what: 'Shop products. Query: q, limit (max 100), page', },
   { method: 'GET', path: '/products/{slug}', what: 'One product with price, stock and description' },
   { method: 'GET', path: '/orders', what: 'Your own orders. Query: limit, page' },
+  { method: 'POST', path: '/orders', what: 'Create an order and get a payment link. Body: { "items": [ { "product": <id>, "quantity": 1 } ], "billingAddress": {...} }. The order appears under GET /orders once it is paid' },
   { method: 'GET', path: '/sources', what: 'Your data sources (id, name, type, record count)' },
   { method: 'GET', path: '/records', what: 'Records of your data. Query: source (id), limit (max 1000), page, since (ISO date)' },
   { method: 'POST', path: '/records', what: 'Store records. Body: { "source": <id>, "records": [ { ... } ] } (max 1000)' },
@@ -101,6 +102,35 @@ async function route(request: Request, params: { path?: string[] }, method: 'GET
       user,
     })
     return json({ products: found.docs.map((p) => publicProduct(p as never)), page: found.page, totalPages: found.totalPages, total: found.totalDocs })
+  }
+
+  if (method === 'POST' && a === 'orders' && !b) {
+    const body = await request.json().catch(() => null)
+    const wanted = Array.isArray(body?.items) ? body.items.slice(0, 50) : []
+    const items: { product: number; quantity: number }[] = []
+    for (const it of wanted) {
+      const id = Number(it?.product)
+      const quantity = Math.floor(Number(it?.quantity ?? 1))
+      if (!id || !(quantity >= 1 && quantity <= 99)) return fail(400, 'Every item needs a "product" id and a "quantity" from 1 to 99.')
+      const found = await payload.find({ collection: 'products', where: { id: { equals: id } }, limit: 1, depth: 0, overrideAccess: false, user })
+      const prod = found.docs[0] as Record<string, any> | undefined
+      if (!prod) return fail(404, `Product ${id} does not exist or is not for sale.`)
+      if (prod.enableVariants) return fail(400, `Product ${id} has variants; order it in the shop.`)
+      if (typeof prod.priceInUSD !== 'number') return fail(400, `Product ${id} has no price.`)
+      if (typeof prod.inventory === 'number' && prod.inventory < quantity) return fail(409, `Product ${id} is out of stock (${prod.inventory} left).`)
+      items.push({ product: id, quantity })
+    }
+    if (!items.length) return fail(400, 'Send at least one item.')
+    const cart = await payload.create({ collection: 'carts', data: { customer: user.id, currency: 'USD', items } as never, overrideAccess: true })
+    const internal = (process.env.CA7_INTERNAL_URL || `http://127.0.0.1:${process.env.PORT || 3000}`).replace(/\/$/, '')
+    const res = await fetch(`${internal}/api/payments/mollie/initiate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: request.headers.get('authorization') || '', Cookie: request.headers.get('cookie') || '' },
+      body: JSON.stringify({ cartID: cart.id, currency: 'USD', customerEmail: user.email, billingAddress: body?.billingAddress ?? {}, shippingAddress: body?.shippingAddress ?? body?.billingAddress ?? {} }),
+    }).catch(() => null)
+    const out = await res?.json().catch(() => ({}))
+    if (!res || !res.ok) return fail(res?.status && res.status < 500 ? res.status : 502, out?.message || 'The payment could not be started. Try again.')
+    return json({ cartID: cart.id, paymentID: out.paymentID, checkoutUrl: out.checkoutUrl, note: 'Send the customer to checkoutUrl. The order is created when the payment succeeds.' }, 201)
   }
 
   if (method === 'GET' && a === 'orders' && !b) {

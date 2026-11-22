@@ -13,6 +13,7 @@ import '../../core/widgets/atoms.dart';
 import '../../core/widgets/lnk.dart';
 import '../../core/widgets/responsive.dart';
 import '../ai/ai_pages.dart';
+import '../cookies/cookie_banner.dart';
 import 'dash_repository.dart';
 import 'intelligence.dart';
 import 'limits.dart';
@@ -191,6 +192,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               }
             }),
           ],
+          const Divider(height: 40),
+          const CookieSettings(),
           const Divider(height: 40),
           const Text('Session', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
           const SizedBox(height: 6),

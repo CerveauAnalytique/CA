@@ -63,3 +63,38 @@ describe('API gateway /api/ca/v1', () => {
     expect((await call(GET, ['me'], k)).status).toBe(402)
   })
 })
+
+describe('API gateway: create an order', () => {
+  it('validates the items, creates a cart and asks for a payment link', async () => {
+    const payload = await getPayload({ config: await config })
+    await seedDemoShop(payload)
+    const key = `ca_ord_${Date.now()}`
+    await payload.create({ collection: 'users', data: { email: `ord-${Date.now()}@example.com`, password: 'test-password-123', roles: ['customer'], enableAPIKey: true, apiKey: key } as never, overrideAccess: true })
+    const prod = (await payload.find({ collection: 'products', where: { slug: { equals: 'smart-temperature-sensor' } }, limit: 1, depth: 0, overrideAccess: true })).docs[0]
+    const post = (items: unknown) => call(POST, ['orders'], key, { method: 'POST', body: JSON.stringify({ items }) })
+    expect((await post([])).status).toBe(400)
+    expect((await post([{ product: 999999, quantity: 1 }])).status).toBe(404)
+    expect((await post([{ product: prod.id, quantity: 100000 }])).status).toBe(400)
+
+    const seen: { url: string; body: any }[] = []
+    const real = globalThis.fetch
+    globalThis.fetch = (async (url: any, init: any) => {
+      if (String(url).includes('/api/payments/mollie/initiate')) {
+        seen.push({ url: String(url), body: JSON.parse(init.body) })
+        return Response.json({ paymentID: 'tr_test123', checkoutUrl: 'https://pay.example/tr_test123' })
+      }
+      return real(url, init)
+    }) as typeof fetch
+    try {
+      const r = await post([{ product: prod.id, quantity: 2 }])
+      const body = await r.json()
+      expect(r.status).toBe(201)
+      expect(body.checkoutUrl).toBe('https://pay.example/tr_test123')
+      expect(seen[0].body.cartID).toBe(body.cartID)
+      const cart = await payload.findByID({ collection: 'carts', id: body.cartID, depth: 0, overrideAccess: true })
+      expect((cart as any).subtotal).toBe(5800)
+    } finally {
+      globalThis.fetch = real
+    }
+  })
+})

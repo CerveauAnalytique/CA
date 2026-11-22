@@ -236,6 +236,25 @@ class ShopRepository {
     return url;
   }
 
+  /// Which payment methods the shop has switched on.
+  Future<({bool mollie, bool stripe})> methods() async {
+    final r = await api.get('/api/ca/shop');
+    return (mollie: r['mollie'] == true, stripe: r['stripe'] == true);
+  }
+
+  /// Starts a Stripe card payment and returns the card page (Stripe's own form).
+  Future<String> payWithStripe({required Cart cart, required String email, required Address shipping, required Address billing, required String lang}) async {
+    final res = await api.post('/api/payments/stripe/initiate', body: {'cartID': int.parse(cart.id), 'currency': cart.currency, 'secret': cart.secret, 'customerEmail': email, 'billingAddress': billing.toJson(), 'shippingAddress': shipping.toJson()});
+    final cs = res['clientSecret'] as String?;
+    if (cs == null || cs.isEmpty) throw AppException('Stripe did not return a payment.');
+    return '${Env.shown}/api/ca/stripe/pay?cs=${Uri.encodeQueryComponent(cs)}&email=${Uri.encodeQueryComponent(email)}&lang=$lang';
+  }
+
+  Future<({String orderId, String? accessToken})> confirmStripe({required Cart cart, required String paymentIntent, String? email}) async {
+    final res = await api.post('/api/payments/stripe/confirm-order', body: {'cartID': int.parse(cart.id), 'currency': cart.currency, 'secret': cart.secret, 'paymentIntentID': paymentIntent, if (email != null) 'customerEmail': email});
+    return (orderId: '${res['orderID']}', accessToken: res['accessToken'] as String?);
+  }
+
   Future<({String orderId, String? accessToken})> confirmMollie({required Cart cart, required String paymentId, String? email}) async {
     final res = await api.post('/api/payments/mollie/confirm-order', body: {'cartID': int.parse(cart.id), 'currency': cart.currency, 'secret': cart.secret, 'paymentID': paymentId, if (email != null) 'customerEmail': email});
     return (orderId: '${res['orderID']}', accessToken: res['accessToken'] as String?);

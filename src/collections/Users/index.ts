@@ -128,6 +128,26 @@ export const Users: CollectionConfig = {
       admin: { position: 'sidebar', readOnly: true },
     },
     {
+      name: 'cookieAnalytics',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Cookies: statistics',
+      admin: { position: 'sidebar', description: 'Cookie choice of this customer. Necessary cookies are always on.' },
+    },
+    {
+      name: 'cookieMarketing',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Cookies: marketing',
+      admin: { position: 'sidebar' },
+    },
+    {
+      name: 'cookieDecidedAt',
+      type: 'date',
+      label: 'Cookie choice made on',
+      admin: { position: 'sidebar', readOnly: true },
+    },
+    {
       name: 'language',
       type: 'select',
       label: 'Language',

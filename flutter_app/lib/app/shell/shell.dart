@@ -6,6 +6,7 @@ import 'footer.dart';
 import 'header.dart';
 import 'marketing_banner.dart';
 import 'mobile_menu.dart';
+import '../../features/cookies/cookie_banner.dart';
 
 /// Header + page + footer around every page; keeps the language in sync with the address (/nl/...).
 class Shell extends ConsumerStatefulWidget {
@@ -39,7 +40,7 @@ class _ShellState extends ConsumerState<Shell> {
     return Scaffold(
       key: _key,
       endDrawer: const MobileMenu(),
-      body: Column(children: [
+      body: Stack(children: [Column(children: [
         const MarketingBanner(),
         SiteHeader(onMenu: () => _key.currentState?.openEndDrawer()),
         Expanded(
@@ -51,7 +52,7 @@ class _ShellState extends ConsumerState<Shell> {
             ]),
           ),
         ),
-      ]),
+      ]), const Positioned(left: 0, right: 0, bottom: 0, child: CookieBanner())]),
     );
   }
 }

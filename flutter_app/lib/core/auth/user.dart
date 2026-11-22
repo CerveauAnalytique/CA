@@ -1,13 +1,13 @@
 /// The logged-in customer (fields of the Payload `users` collection that the app uses).
 class CaUser {
-  CaUser({required this.id, required this.email, this.name, this.username, this.language = 'en', this.plan = 'free', this.roles = const [], this.apiKeyEnabled = false, this.aiConsent = false});
+  CaUser({required this.id, required this.email, this.name, this.username, this.language = 'en', this.plan = 'free', this.roles = const [], this.apiKeyEnabled = false, this.aiConsent = false, this.cookiesDecided = false, this.cookieAnalytics = false, this.cookieMarketing = false});
 
   final String id;
   final String email;
   final String? name, username;
   final String language, plan;
   final List<String> roles;
-  final bool apiKeyEnabled, aiConsent;
+  final bool apiKeyEnabled, aiConsent, cookiesDecided, cookieAnalytics, cookieMarketing;
 
   bool get isAdmin => roles.contains('admin');
 
@@ -24,5 +24,8 @@ class CaUser {
         roles: ((j['roles'] ?? const []) as List).map((e) => e.toString()).toList(),
         apiKeyEnabled: j['enableAPIKey'] == true,
         aiConsent: j['aiConsent'] == true,
+        cookiesDecided: j['cookieDecidedAt'] != null,
+        cookieAnalytics: j['cookieAnalytics'] == true,
+        cookieMarketing: j['cookieMarketing'] == true,
       );
 }

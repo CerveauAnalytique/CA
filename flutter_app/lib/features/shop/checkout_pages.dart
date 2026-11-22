@@ -66,7 +66,14 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
   String? _error;
   int _formKey = 0;
 
-  Future<void> _pay() async {
+  bool _stripe = false;
+  @override
+  void initState() {
+    super.initState();
+    ref.read(shopRepoProvider).methods().then((m) { if (mounted) setState(() => _stripe = m.stripe); }).catchError((_) {});
+  }
+
+  Future<void> _pay({bool stripe = false}) async {
     final cart = ref.read(cartProvider).cart;
     if (cart == null || cart.items.isEmpty) return;
     final bill = _same ? _ship : _bill;
@@ -74,7 +81,8 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
     if (!addressComplete(_ship) || !addressComplete(bill)) return setState(() => _error = context.t('Please fill in the required address fields.'));
     setState(() { _busy = true; _error = null; });
     try {
-      final url = await ref.read(shopRepoProvider).payWithMollie(cart: cart, email: _email.text.trim(), shipping: _ship, billing: bill);
+      final repo = ref.read(shopRepoProvider);
+      final url = stripe ? await repo.payWithStripe(cart: cart, email: _email.text.trim(), shipping: _ship, billing: bill, lang: ref.read(i18nProvider).lang) : await repo.payWithMollie(cart: cart, email: _email.text.trim(), shipping: _ship, billing: bill);
       await launchUrl(Uri.parse(url), webOnlyWindowName: '_self');
     } catch (e) {
       setState(() => _error = '$e');
@@ -114,8 +122,9 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
       const SizedBox(height: 16),
       if (_error != null) Padding(padding: const EdgeInsets.only(bottom: 12), child: Text(_error!, style: const TextStyle(fontSize: 12, color: Brand.red))),
       SizedBox(width: double.infinity, child: Center(child: CaButton(context.t('Pay with iDEAL, Bancontact or card'), onPressed: _pay, busy: _busy))),
+      if (_stripe) ...[const SizedBox(height: 8), SizedBox(width: double.infinity, child: Center(child: CaButton(context.t('Pay by card (Stripe)'), outlined: true, onPressed: _busy ? null : () => _pay(stripe: true))))],
       const SizedBox(height: 8),
-      Muted(context.t('You pay on a secure page of Mollie.'), size: 11),
+      Muted(context.t('You pay on a secure page of Mollie or Stripe.'), size: 11),
     ]));
     return Container1280(
       padding: EdgeInsets.symmetric(horizontal: 24, vertical: context.isDesktop ? 48 : 32),
@@ -149,14 +158,16 @@ class _ConfirmOrderPageState extends ConsumerState<ConfirmOrderPage> {
 
   Future<void> _confirm() async {
     final q = GoRouterState.of(context).uri.queryParameters;
-    final payment = q['paymentId'];
-    if (q['provider'] != 'mollie' || payment == null) return context.goL('/');
+    final stripe = q['provider'] == 'stripe';
+    final payment = stripe ? q['paymentIntent'] : q['paymentId'];
+    if ((q['provider'] != 'mollie' && !stripe) || payment == null) return context.goL('/');
     final ctl = ref.read(cartProvider);
     if (ctl.cart == null) await ctl.load();
     final cart = ctl.cart;
     if (cart == null) return setState(() => _failed = 'We could not find your cart on this device.');
     try {
-      final r = await ref.read(shopRepoProvider).confirmMollie(cart: cart, paymentId: payment, email: q['email']);
+      final repo = ref.read(shopRepoProvider);
+      final r = stripe ? await repo.confirmStripe(cart: cart, paymentIntent: payment, email: q['email']) : await repo.confirmMollie(cart: cart, paymentId: payment, email: q['email']);
       await ctl.finished();
       if (!mounted) return;
       final qs = [if (q['email'] != null) 'email=${Uri.encodeQueryComponent(q['email']!)}', if (r.accessToken != null) 'accessToken=${r.accessToken}'].join('&');

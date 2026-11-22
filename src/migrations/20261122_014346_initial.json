@@ -254,6 +254,26 @@
           "primaryKey": false,
           "notNull": false
         },
+        "cookie_analytics": {
+          "name": "cookie_analytics",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "cookie_marketing": {
+          "name": "cookie_marketing",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "cookie_decided_at": {
+          "name": "cookie_decided_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
         "language": {
           "name": "language",
           "type": "enum_users_language",
@@ -18655,6 +18675,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "8e3273db-ec32-4dbd-9ac0-b575e74b6d85",
+  "id": "4cafdaea-9398-4fd8-b051-f1fcba4bbddc",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

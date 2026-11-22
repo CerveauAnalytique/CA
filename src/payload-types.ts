@@ -254,6 +254,12 @@ export interface User {
   aiConsent?: boolean | null;
   aiConsentAt?: string | null;
   /**
+   * Cookie choice of this customer. Necessary cookies are always on.
+   */
+  cookieAnalytics?: boolean | null;
+  cookieMarketing?: boolean | null;
+  cookieDecidedAt?: string | null;
+  /**
    * Chosen at sign-up. The site opens in this language when the customer logs in.
    */
   language?: ('en' | 'nl' | 'de' | 'fr' | 'es' | 'pl' | 'ar') | null;
@@ -1881,6 +1887,9 @@ export interface UsersSelect<T extends boolean = true> {
   suspendedReason?: T;
   aiConsent?: T;
   aiConsentAt?: T;
+  cookieAnalytics?: T;
+  cookieMarketing?: T;
+  cookieDecidedAt?: T;
   language?: T;
   roles?: T;
   orders?: T;
