@@ -129,7 +129,10 @@ export default buildConfig({
             },
           },
         }
-      : {}),
+      : {
+          // no mail server set: do not try to create a test account over the internet; mails are only logged
+          transportOptions: { jsonTransport: true },
+        }),
   }),
   endpoints: [],
   globals: [Header, Footer, Banner, AiSettings],

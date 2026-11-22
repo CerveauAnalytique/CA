@@ -105,7 +105,6 @@ class SiteHeader extends ConsumerWidget implements PreferredSizeWidget {
               const SizedBox(width: 8),
               Text(user.displayName, style: TextStyle(fontSize: 13, color: c.muted)),
             ]))),
-            TextButton.icon(onPressed: () async { await ref.read(authProvider).logout(); if (context.mounted) context.goL('/'); }, icon: const Icon(Icons.logout, size: 14), label: Text(context.t('Log out'), style: const TextStyle(fontSize: 12)), style: TextButton.styleFrom(foregroundColor: c.muted)),
           ] else
             Lnk(to: '/login', child: Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Text(context.t('Log in'), style: TextStyle(fontSize: 13, color: c.muted)))),
           const SizedBox(width: 8),

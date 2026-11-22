@@ -34,7 +34,6 @@ class MobileMenu extends ConsumerWidget {
                 ? Wrap(spacing: 8, runSpacing: 8, children: [
                     chip('Dashboard', '/dashboard'),
                     chip('Account', '/dashboard/settings'),
-                    GestureDetector(onTap: () async { close(); await ref.read(authProvider).logout(); }, child: Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6), child: Text(context.t('Log out'), style: const TextStyle(fontSize: 13, color: Brand.red)))),
                   ])
                 : chip('Log in', '/login'),
           ),
