@@ -44,3 +44,5 @@ public/media
 
 test-results/
 platform/vendor/
+__pycache__/
+*.pyc
