@@ -20,6 +20,34 @@ if [ -z "${DRY_RUN:-}" ] && ! docker info >/dev/null 2>&1; then echo "Docker is 
 
 rand() { head -c 48 /dev/urandom | base64 | tr -dc 'A-Za-z0-9' | head -c "$1"; }
 
+if [ ! -f .env.docker.example ]; then
+  echo "(.env.docker.example is missing: using a built-in template)"
+  cat > .env.docker.example <<'TPL'
+DB_PASSWORD=change-me
+PAYLOAD_SECRET=change-me
+PUBLIC_URL=http://localhost
+WEB_PORT=80
+CA7_CRON_SECRET=change-me
+SECURITY_RETENTION_DAYS=180
+SMTP_HOST=
+SMTP_PORT=587
+SMTP_USER=
+SMTP_PASS=
+SMTP_FROM_ADDRESS=
+MOLLIE_API_KEY=
+NEXT_PUBLIC_MOLLIE_ENABLED=true
+STRIPE_SECRET_KEY=
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
+STRIPE_WEBHOOKS_SIGNING_SECRET=
+CA7_BASE=qwen2.5:3b
+CA7_MODEL=ca7
+CA7_CHAT_HOSTS=ca7.io,ca7.nl,ca7.be
+CA7_CLOUD_HOST=cloud.ca7.io
+CA7_API=
+CA7_DEMO_SHOP=
+TPL
+fi
+
 if [ ! -f .env ]; then
   echo "Creating .env with fresh random secrets..."
   sed -e "s|^DB_PASSWORD=.*|DB_PASSWORD=$(rand 24)|" \
