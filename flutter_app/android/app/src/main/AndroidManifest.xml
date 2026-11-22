@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- the app talks to the CA7 backend: a release build needs this -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="ca7_app"
+        android:label="CA7"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

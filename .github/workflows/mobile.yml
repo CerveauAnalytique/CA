@@ -1,0 +1,40 @@
+# Builds the Flutter app for Android (APK + app bundle) and iOS (no code signing). Run it from the Actions tab ("Run workflow")
+# or push a tag like v1.0.0. Set the repository variable CA7_API to your backend address (default https://cloud.ca7.io).
+name: Mobile builds
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: flutter_app } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: '17' }
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, cache: true }
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter build apk --release --dart-define=CA7_API=${{ vars.CA7_API || 'https://cloud.ca7.io' }}
+      - run: flutter build appbundle --release --dart-define=CA7_API=${{ vars.CA7_API || 'https://cloud.ca7.io' }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ca7-android
+          path: |
+            flutter_app/build/app/outputs/flutter-apk/app-release.apk
+            flutter_app/build/app/outputs/bundle/release/app-release.aab
+  ios:
+    runs-on: macos-latest
+    defaults: { run: { working-directory: flutter_app } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable, cache: true }
+      - run: flutter pub get
+      - run: flutter build ios --release --no-codesign --dart-define=CA7_API=${{ vars.CA7_API || 'https://cloud.ca7.io' }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ca7-ios-unsigned
+          path: flutter_app/build/ios/iphoneos/Runner.app
