@@ -3,6 +3,7 @@
 Done and tested: packs + limits, Data Connect/Intelligence/Automation/Camera, platform tools + SSO, Flutter app, shop, support center, security monitoring, AI + compliance, API gateway `/api/ca/v1`, Docker files, videos.
 
 ## Must be done on your server (could not be done in the build environment)
+Step by step with commands: `docs/SERVER_CHECKLIST.md`.
 1. `docker compose up -d --build` once and read the logs: the images were never built here (no Docker).
 2. Set real keys in `.env`: Mollie, Stripe (if used), SMTP, `PUBLIC_URL`, domains `cloud.ca7.io`, `ca7.io`, `ca7.nl`, `ca7.be` with HTTPS and DNS.
 3. AI model: `docker compose --profile ai up -d` (builds the Qwen "ca7" model; needs internet and 4 GB+ RAM). Until then the assistant answers from the catalog.
