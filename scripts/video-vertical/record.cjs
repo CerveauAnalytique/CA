@@ -12,8 +12,8 @@ const { durations } = JSON.parse(fs.readFileSync(path.join(voiceDir, 'durations.
 fs.mkdirSync(outDir, { recursive: true })
 const b64 = (f) => fs.readFileSync(path.join(__dirname, 'assets', f)).toString('base64')
 
-const EMAIL = `investor${Date.now() % 100000}@example.com`
-const PASS = 'Invest0r-pass-1'
+const EMAIL = `inv${Date.now() % 100000}@demo.io`
+const PASS = 'Demo-pass-1'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
 async function api(p, pathname, opts = {}, token) {
@@ -21,7 +21,7 @@ async function api(p, pathname, opts = {}, token) {
   return res.json().catch(() => ({}))
 }
 
-const END_CARD = () => `<!doctype html><meta charset="utf-8"><body style="margin:0;width:540px;height:960px;overflow:hidden;background:#0b2447;font-family:system-ui,sans-serif;color:#fff;position:relative">
+const END_CARD = () => `<!doctype html><meta charset="utf-8"><style>html{transform:scale(2);transform-origin:0 0;width:540px!important;height:960px!important;overflow:hidden!important}</style><body style="margin:0;width:540px;height:960px;overflow:hidden;background:#0b2447;font-family:system-ui,sans-serif;color:#fff;position:relative">
 <img src="data:image/svg+xml;base64,${b64('login-city.svg')}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55">
 <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,36,71,.2),rgba(11,36,71,.85))"></div>
 <div style="position:absolute;left:0;right:0;top:250px;text-align:center"><img src="data:image/svg+xml;base64,${b64('ca7-wordmark-white.svg')}" style="width:190px">
@@ -54,8 +54,8 @@ const END_CARD = () => `<!doctype html><meta charset="utf-8"><body style="margin
     async () => {
       await p.nav('/en/create-account', 2500); pending.voice()
       await p.tap(270, 320); await p.type(EMAIL, 28)
-      await p.tap(270, 400); await p.type(PASS, 28)
-      await p.tap(270, 480); await p.type(PASS, 28)
+      await p.tap(270, 400); await p.keyboard.insertText(PASS)
+      await p.tap(270, 480); await p.keyboard.insertText(PASS)
       await p.waitForTimeout(500); await p.tap(270, 624, 3500)
     },
     // 4 dashboard
