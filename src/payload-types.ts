@@ -78,6 +78,7 @@ export interface Config {
     media: Media;
     posts: Post;
     'ai-models': AiModel;
+    'api-listings': ApiListing;
     datasets: Dataset;
     'data-sources': DataSource;
     'data-records': DataRecord;
@@ -128,6 +129,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     'ai-models': AiModelsSelect<false> | AiModelsSelect<true>;
+    'api-listings': ApiListingsSelect<false> | ApiListingsSelect<true>;
     datasets: DatasetsSelect<false> | DatasetsSelect<true>;
     'data-sources': DataSourcesSelect<false> | DataSourcesSelect<true>;
     'data-records': DataRecordsSelect<false> | DataRecordsSelect<true>;
@@ -1193,6 +1195,35 @@ export interface AiModel {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "api-listings".
+ */
+export interface ApiListing {
+  id: number;
+  owner: number | User;
+  status?: ('pending' | 'published' | 'rejected') | null;
+  /**
+   * Shown to the owner when rejected.
+   */
+  reviewNote?: string | null;
+  publisher?: string | null;
+  name: string;
+  slug?: string | null;
+  summary: string;
+  category: 'data' | 'ai' | 'iot' | 'finance' | 'commerce' | 'communication' | 'other';
+  baseUrl: string;
+  docsUrl?: string | null;
+  auth?: ('none' | 'apiKey' | 'bearer' | 'oauth2') | null;
+  pricing?: ('free' | 'freemium' | 'paid') | null;
+  /**
+   * OpenAPI / Swagger file (JSON or YAML).
+   */
+  openapi?: string | null;
+  endpointCount?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "datasets".
  */
 export interface Dataset {
@@ -1730,6 +1761,10 @@ export interface PayloadLockedDocument {
         value: number | AiModel;
       } | null)
     | ({
+        relationTo: 'api-listings';
+        value: number | ApiListing;
+      } | null)
+    | ({
         relationTo: 'datasets';
         value: number | Dataset;
       } | null)
@@ -2164,6 +2199,28 @@ export interface AiModelsSelect<T extends boolean = true> {
   installCommand?: T;
   downloadUrl?: T;
   modelCard?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "api-listings_select".
+ */
+export interface ApiListingsSelect<T extends boolean = true> {
+  owner?: T;
+  status?: T;
+  reviewNote?: T;
+  publisher?: T;
+  name?: T;
+  slug?: T;
+  summary?: T;
+  category?: T;
+  baseUrl?: T;
+  docsUrl?: T;
+  auth?: T;
+  pricing?: T;
+  openapi?: T;
+  endpointCount?: T;
   updatedAt?: T;
   createdAt?: T;
 }

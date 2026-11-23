@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/i18n/i18n.dart';
 import '../../core/providers.dart';
+import '../../core/widgets/day_night_switch.dart';
 import '../../core/widgets/lnk.dart';
 import '../theme/colors.dart';
 
@@ -40,7 +41,7 @@ class MobileMenu extends ConsumerWidget {
           const SizedBox(height: 16),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(context.t('Appearance'), style: TextStyle(color: c.muted, fontSize: 14)),
-            Switch(value: dark, onChanged: (v) => ref.read(themeModeProvider.notifier).state = v ? ThemeMode.dark : ThemeMode.light),
+            DayNightSwitch(dark: dark, label: context.t('Appearance'), onChanged: (v) => ref.read(themeModeProvider.notifier).state = v ? ThemeMode.dark : ThemeMode.light),
           ]),
         ]),
       ),

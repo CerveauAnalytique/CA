@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -5,44 +6,69 @@ import '../../core/i18n/i18n.dart';
 import '../../core/providers.dart';
 import '../../app/theme/colors.dart';
 import '../../core/widgets/atoms.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../app/theme/theme.dart';
-import '../../core/widgets/dot_icon.dart';
 import '../../core/widgets/lnk.dart';
 import '../../core/widgets/responsive.dart';
+import '../home/dot_camera.dart';
 
-/// Night-city picture behind the form (light text on the dark picture), like the website's login pages.
-Widget _frame(BuildContext context, String title, String intro, Widget form) {
-  const white30 = BorderSide(color: Color(0x4DFFFFFF));
+/// Login look: pale cyan sky fading into deep indigo and black, a dot grid like the camera art and the dotted
+/// camera itself at the top. Big uppercase white title, text and form at the bottom.
+/// [top] is the share of the screen kept free above the content (the camera sits there).
+Widget _frame(BuildContext context, String title, String intro, Widget form, {double top = .3, VoidCallback? onBack, String? backTo}) {
   final base = Ca7Theme.dark();
-  final dark = base.copyWith(inputDecorationTheme: base.inputDecorationTheme.copyWith(fillColor: const Color(0x1AFFFFFF), hintStyle: const TextStyle(color: Color(0x80FFFFFF)), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: white30), enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: white30)));
-  final c = dark.extension<CaColors>()!;
-  final minH = (MediaQuery.sizeOf(context).height - Ca7Theme.headerHeight).clamp(560.0, double.infinity);
+  OutlineInputBorder line(Color col) => OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide(color: col));
+  final dark = base.copyWith(
+    inputDecorationTheme: base.inputDecorationTheme.copyWith(
+      filled: true,
+      fillColor: const Color(0x14FFFFFF),
+      hintStyle: const TextStyle(color: Color(0x80FFFFFF)),
+      border: line(const Color(0x33FFFFFF)),
+      enabledBorder: line(const Color(0x33FFFFFF)),
+      focusedBorder: line(const Color(0xCCFFFFFF)),
+    ),
+  );
+  final minH = (MediaQuery.sizeOf(context).height - Ca7Theme.headerHeight).clamp(600.0, double.infinity);
+  final fs = context.isDesktop ? 44.0 : 34.0;
+  final back = onBack != null || backTo != null
+      ? Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: backTo != null
+                ? Lnk(to: backTo, child: const _BackIcon())
+                : InkWell(onTap: onBack, customBorder: const CircleBorder(), child: const _BackIcon()),
+          ),
+        )
+      : const SizedBox.shrink();
   return Container(
     width: double.infinity,
     constraints: BoxConstraints(minHeight: minH),
-    color: const Color(0xFF17406A),
     child: Stack(children: [
-      Positioned.fill(child: SvgPicture.asset('assets/brand/login-city.svg', fit: BoxFit.cover, alignment: Alignment.bottomCenter)),
-      Positioned.fill(child: Container(color: const Color(0x8C0B2540))),
-      Positioned.fill(child: DecoratedBox(decoration: BoxDecoration(gradient: RadialGradient(center: const Alignment(0, -.2), radius: .7, colors: [const Color(0xBF08182C), Colors.transparent])))),
+      Positioned.fill(child: _AuthBackground(split: minH * top - 90)),
+      Positioned(
+        top: minH * .04,
+        left: 0,
+        right: 0,
+        height: minH * math.max(top, .3),
+        child: IgnorePointer(child: Center(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 24), child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 560), child: const Opacity(opacity: .9, child: DotCamera()))))),
+      ),
       Theme(
         data: dark,
         child: Container1280(
-          padding: EdgeInsets.symmetric(horizontal: 24, vertical: context.isDesktop ? 64 : 32),
+          padding: EdgeInsets.fromLTRB(24, 0, 24, context.isDesktop ? 64 : 40),
           child: Align(
             alignment: Alignment.topCenter,
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 440),
               child: DefaultTextStyle.merge(
-                style: TextStyle(color: c.fg),
+                style: const TextStyle(color: Colors.white),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                  const Center(child: BrandLogo(white: true, height: 34)),
-                  const SizedBox(height: 24),
-                  Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w300, letterSpacing: -.5)),
-                  const SizedBox(height: 8),
-                  Text(intro, textAlign: TextAlign.center, style: TextStyle(fontSize: 14, height: 1.5, color: c.muted)),
-                  const SizedBox(height: 28),
+                  SizedBox(height: minH * top),
+                  back,
+                  Text(title.toUpperCase(), style: TextStyle(fontSize: fs, fontWeight: FontWeight.w600, height: 1.05, letterSpacing: -fs * .02, color: Colors.white)),
+                  const SizedBox(height: 14),
+                  Text(intro, style: const TextStyle(fontSize: 16, height: 1.5, color: Color(0xD9FFFFFF))),
+                  const SizedBox(height: 32),
                   form,
                 ]),
               ),
@@ -52,6 +78,85 @@ Widget _frame(BuildContext context, String title, String intro, Widget form) {
       ),
     ]),
   );
+}
+
+class _BackIcon extends StatelessWidget {
+  const _BackIcon();
+  @override
+  Widget build(BuildContext context) => Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: const Color(0x1FFFFFFF), border: Border.all(color: const Color(0x33FFFFFF))),
+        child: Tooltip(message: context.t('Back'), child: const Icon(Icons.arrow_back, size: 18, color: Colors.white)),
+      );
+}
+
+/// Full-width white pill button (the main action of the login screens).
+class _Pill extends StatelessWidget {
+  const _Pill(this.label, {this.onPressed, this.busy = false});
+  final String label;
+  final VoidCallback? onPressed;
+  final bool busy;
+  @override
+  Widget build(BuildContext context) => SizedBox(
+        height: 56,
+        child: FilledButton(
+          onPressed: busy ? null : onPressed,
+          style: FilledButton.styleFrom(
+            backgroundColor: Colors.white,
+            foregroundColor: Neutral.c900,
+            disabledBackgroundColor: const Color(0xB3FFFFFF),
+            disabledForegroundColor: Neutral.c700,
+            shape: const StadiumBorder(),
+            textStyle: const TextStyle(fontFamily: 'Geist', fontSize: 16, fontWeight: FontWeight.w500),
+          ),
+          child: Text(label),
+        ),
+      );
+}
+
+/// Gradient sky + grid of small dots that gets stronger towards the bottom. [split] is where (in pixels from the
+/// top) the deep indigo starts, so the white text below it is always on a dark part.
+class _AuthBackground extends StatelessWidget {
+  const _AuthBackground({required this.split});
+  final double split;
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(builder: (_, box) {
+        final h = box.maxHeight;
+        double f(double px) => (px / h).clamp(0.0, 1.0);
+        return DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: const [Color(0xFFE4FAFB), Color(0xFFC9E6F2), Color(0xFF8FA8E0), Color(0xFF3B3FA8), Color(0xFF12164A), Color(0xFF05060F)],
+              stops: [0, f(split * .45), f(split * .8), f(split + 40), f(split + 220), 1],
+            ),
+          ),
+          child: CustomPaint(painter: _DotGrid(split * .6), size: Size.infinite),
+        );
+      });
+}
+
+class _DotGrid extends CustomPainter {
+  const _DotGrid(this.from);
+  final double from;
+  @override
+  void paint(Canvas canvas, Size size) {
+    const gap = 14.0;
+    final p = Paint();
+    for (var y = gap / 2; y < size.height; y += gap) {
+      if (y < from) continue;
+      final a = ((y - from) / 320).clamp(0.0, 1.0);
+      p.color = Color.lerp(Brand.dot, const Color(0xFF9DB4FF), a)!.withValues(alpha: .08 + .14 * a);
+      for (var x = gap / 2; x < size.width; x += gap) {
+        canvas.drawCircle(Offset(x, y), 1.1, p);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _DotGrid old) => old.from != from;
 }
 
 String? _target(BuildContext context) => GoRouterState.of(context).uri.queryParameters['redirect'];
@@ -67,6 +172,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _email = TextEditingController(), _pw = TextEditingController();
   String? _error;
   bool _busy = false, _show = false;
+  /// First the welcome screen (create an account / log in); `?form=1` opens the e-mail and password step directly.
+  late bool _welcome = GoRouterState.of(context).uri.queryParameters['form'] == null;
 
   Future<void> _submit() async {
     if (!_form.currentState!.validate()) return;
@@ -89,12 +196,34 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final qp = GoRouterState.of(context).uri.query;
+    final params = Map.of(GoRouterState.of(context).uri.queryParameters)..remove('form');
+    final qp = Uri(queryParameters: params.isEmpty ? null : params).query;
     final extra = qp.isEmpty ? '' : '?$qp';
+    if (_welcome) {
+      return _frame(
+        context,
+        context.t('The AI brain for your business'),
+        context.t('Connect your data, ask questions and automate. Secure, simple and built for the way your teams work.'),
+        Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          _Pill(context.t('Create an account'), onPressed: () => context.goL('/create-account$extra')),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 52,
+            child: TextButton(
+              onPressed: () => setState(() => _welcome = false),
+              style: TextButton.styleFrom(foregroundColor: Colors.white, shape: const StadiumBorder(), textStyle: const TextStyle(fontFamily: 'Geist', fontSize: 16, fontWeight: FontWeight.w500)),
+              child: Text(context.t('I already have an account')),
+            ),
+          ),
+        ]),
+        top: .5,
+      );
+    }
     return _frame(
       context,
       context.t('Log in'),
       context.t('Log in to manage your account and review your order history.'),
+      onBack: () => setState(() { _welcome = true; _error = null; }),
       Form(
         key: _form,
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -102,8 +231,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           CaField(controller: _email, label: context.t('Email'), keyboard: TextInputType.emailAddress, autofill: const [AutofillHints.email], validator: (v) => (v ?? '').trim().isEmpty ? context.t('Email is required.') : null),
           const SizedBox(height: 20),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text(context.t('Password'), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: context.ca.muted)),
-            Lnk(to: '/forgot-password$extra', child: Text(context.t('Forgot your password?'), style: TextStyle(fontSize: 12, color: context.ca.muted, decoration: TextDecoration.underline))),
+            Text(context.t('Password'), style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: const Color(0xB3FFFFFF))),
+            Lnk(to: '/forgot-password$extra', child: Text(context.t('Forgot your password?'), style: TextStyle(fontSize: 12, color: const Color(0xB3FFFFFF), decoration: TextDecoration.underline))),
           ]),
           const SizedBox(height: 6),
           TextFormField(
@@ -113,10 +242,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             onFieldSubmitted: (_) => _submit(),
             validator: (v) => (v ?? '').isEmpty ? context.t('Please provide a password.') : null,
             style: const TextStyle(fontSize: 14),
-            decoration: InputDecoration(suffixIcon: TextButton(onPressed: () => setState(() => _show = !_show), child: Text(_show ? context.t('Hide') : context.t('Show'), style: TextStyle(fontSize: 12, color: context.ca.muted)))),
+            decoration: InputDecoration(suffixIcon: TextButton(onPressed: () => setState(() => _show = !_show), child: Text(_show ? context.t('Hide') : context.t('Show'), style: TextStyle(fontSize: 12, color: const Color(0xB3FFFFFF))))),
           ),
           const SizedBox(height: 24),
-          CaButton(_busy ? context.t('Processing') : context.t('Continue'), onPressed: _submit, busy: _busy, expand: true),
+          _Pill(_busy ? context.t('Processing') : context.t('Continue'), onPressed: _submit, busy: _busy),
           const SizedBox(height: 24),
           Center(child: Lnk(to: '/create-account$extra', child: Text(context.t('Create an account'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, decoration: TextDecoration.underline)))),
         ]),
@@ -175,6 +304,7 @@ class _CreateAccountPageState extends ConsumerState<CreateAccountPage> {
       context,
       context.t('Create account'),
       context.t('Create an account to save your orders and your language.'),
+      backTo: '/login${qp.isEmpty ? '' : '?$qp'}',
       Form(
         key: _form,
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -194,9 +324,9 @@ class _CreateAccountPageState extends ConsumerState<CreateAccountPage> {
             decoration: const InputDecoration(),
           ),
           const SizedBox(height: 24),
-          CaButton(_busy ? context.t('Processing') : context.t('Create account'), onPressed: _submit, busy: _busy, expand: true),
+          _Pill(_busy ? context.t('Processing') : context.t('Create account'), onPressed: _submit, busy: _busy),
           const SizedBox(height: 24),
-          Wrap(alignment: WrapAlignment.center, children: [Text('${context.t('Already have an account?')} ', style: const TextStyle(fontSize: 14)), Lnk(to: '/login${qp.isEmpty ? '' : '?$qp'}', child: Text(context.t('Log in'), style: const TextStyle(fontSize: 14, decoration: TextDecoration.underline)))]),
+          Wrap(alignment: WrapAlignment.center, children: [Text('${context.t('Already have an account?')} ', style: const TextStyle(fontSize: 14)), Lnk(to: '/login?form=1${qp.isEmpty ? '' : '&$qp'}', child: Text(context.t('Log in'), style: const TextStyle(fontSize: 14, decoration: TextDecoration.underline)))]),
         ]),
       ),
     );
@@ -232,13 +362,14 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
         context,
         context.t('Forgot password'),
         context.t('Enter your email address. You will receive an email with a link to reset your password.'),
+        backTo: '/login?form=1',
         _sent
             ? _Message(context.t('Check your email for a link that will allow you to securely reset your password.'), ok: true)
             : Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                 if (_error != null) _Message(_error!),
                 CaField(controller: _email, label: context.t('Email'), keyboard: TextInputType.emailAddress, onSubmitted: (_) => _submit()),
                 const SizedBox(height: 24),
-                Center(child: CaButton(_busy ? context.t('Processing') : context.t('Forgot password'), onPressed: _submit, busy: _busy)),
+                _Pill(_busy ? context.t('Processing') : context.t('Forgot password'), onPressed: _submit, busy: _busy),
               ]),
       );
 }
@@ -279,7 +410,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
         _done
             ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                 _Message(context.t('Your password is changed. You can log in now.'), ok: true),
-                Lnk(to: '/login', child: Center(child: CaButton(context.t('Log in'), link: true))),
+                _Pill(context.t('Log in'), onPressed: () => context.goL('/login?form=1')),
               ])
             : Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                 if (_error != null) _Message(_error!),
@@ -287,7 +418,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                 const SizedBox(height: 20),
                 CaField(controller: _pw2, label: context.t('Confirm password'), obscure: true, onSubmitted: (_) => _submit()),
                 const SizedBox(height: 24),
-                CaButton(_busy ? context.t('Processing') : context.t('Reset password'), onPressed: _submit, busy: _busy, expand: true),
+                _Pill(_busy ? context.t('Processing') : context.t('Reset password'), onPressed: _submit, busy: _busy),
               ]),
       );
 }

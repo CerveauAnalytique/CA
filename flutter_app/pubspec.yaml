@@ -71,6 +71,7 @@ flutter:
     - assets/payments/
     - assets/i18n/
     - assets/data/
+    - assets/research/
   fonts:
     - family: Geist
       fonts:

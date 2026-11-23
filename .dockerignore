@@ -13,3 +13,6 @@ public/media
 !.env.docker.example
 *.log
 tsconfig.tsbuildinfo
+**/.claude
+**/.DS_Store
+design

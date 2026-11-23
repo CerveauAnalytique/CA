@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../core/i18n/i18n.dart';
+import '../../core/widgets/day_night_switch.dart';
 import '../../core/widgets/lnk.dart';
 import '../../core/widgets/responsive.dart';
 import '../theme/colors.dart';
@@ -15,7 +16,7 @@ const _columns = <String, List<(String, String)>>{
   'Company': [('About Us', '/about'), ('Careers', '/careers'), ('Privacy Policy', '/privacy'), ('Terms of Service', '/terms')],
 };
 const _legal = [('Privacy Policy', '/privacy'), ('Terms of Service', '/terms'), ('Security', '/security'), ('Cookie Policy', '/cookies')];
-const _payments = [('ideal', 'iDEAL'), ('bancontact', 'Bancontact'), ('visa', 'Visa'), ('mastercard', 'Mastercard'), ('amex', 'American Express'), ('applepay', 'Apple Pay'), ('paypal', 'PayPal'), ('sepa', 'SEPA')];
+const _payments = [('m-idealwero', 'iDEAL | Wero'), ('m-bancontact', 'Bancontact'), ('m-visa', 'Visa'), ('m-mastercard', 'Mastercard'), ('m-maestro', 'Maestro'), ('m-amex', 'American Express'), ('m-applepay', 'Apple Pay'), ('m-googlepay', 'Google Pay'), ('m-paypal', 'PayPal'), ('m-klarna', 'Klarna'), ('m-directdebit', 'SEPA Direct Debit'), ('m-banktransfer', 'Bank transfer'), ('m-blik', 'BLIK'), ('m-twint', 'TWINT'), ('m-payconiq', 'Payconiq'), ('m-belfius', 'Belfius'), ('m-kbc', 'KBC'), ('m-in3', 'in3')];
 
 /// Footer of the website: languages, link columns, payment methods, legal.
 class SiteFooter extends ConsumerWidget {
@@ -69,13 +70,13 @@ class SiteFooter extends ConsumerWidget {
               Wrap(spacing: 16, runSpacing: 4, children: [for (final l in _legal) Lnk(to: l.$2, child: Text(context.t(l.$1), style: link))]),
               const SizedBox(height: 12),
               Row(children: [
-                Expanded(child: Text(context.t('Cerveau Analytique © 2026'), style: TextStyle(fontSize: 12, color: c.muted))),
+                Expanded(child: Text('Phylena Inc. © ${DateTime.now().year}', style: TextStyle(fontSize: 12, color: c.muted))),
                 Tooltip(
                   message: context.t('Appearance'),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(18),
-                    onTap: () => ref.read(themeModeProvider.notifier).state = Theme.of(context).brightness == Brightness.dark ? ThemeMode.light : ThemeMode.dark,
-                    child: SizedBox(width: 36, height: 36, child: Icon(Theme.of(context).brightness == Brightness.dark ? Icons.light_mode_outlined : Icons.dark_mode_outlined, size: 18, color: c.muted)),
+                  child: DayNightSwitch(
+                    width: 56,
+                    dark: Theme.of(context).brightness == Brightness.dark,
+                    onChanged: (v) => ref.read(themeModeProvider.notifier).state = v ? ThemeMode.dark : ThemeMode.light,
                   ),
                 ),
               ]),

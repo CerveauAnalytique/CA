@@ -1,0 +1,120 @@
+# Builds the backend and website images on GitHub (much faster than a laptop) and updates the server.
+# Runs on every push to the phylena branch; only the part whose files changed is built. "Run workflow" in the Actions tab builds both.
+#
+# Repository secrets (Settings → Secrets and variables → Actions):
+#   DEPLOY_HOST   the server, e.g. ec2-user@ec2-98-84-116-186.compute-1.amazonaws.com
+#   DEPLOY_KEY    the private SSH key for that server (the whole .pem file)
+# Optional repository variables: CA7_API, CA7_CHAT_HOSTS, CA7_CLOUD_HOST (build settings of the website).
+# The server keeps its own ~/ca7/.env (secrets, database); this workflow never sees it.
+name: Deploy
+on:
+  push:
+    branches: [phylena]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  BACKEND_IMAGE: ghcr.io/${{ github.repository }}-backend
+  WEB_IMAGE: ghcr.io/${{ github.repository }}-web
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ github.event_name == 'workflow_dispatch' || steps.f.outputs.backend == 'true' }}
+      web: ${{ github.event_name == 'workflow_dispatch' || steps.f.outputs.web == 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: f
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            backend:
+              - 'src/**'
+              - 'public/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+              - 'pnpm-workspace.yaml'
+              - 'next.config.ts'
+              - 'tsconfig.json'
+              - 'redirects.ts'
+              - 'Dockerfile'
+            web:
+              - 'flutter_app/**'
+
+  backend:
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with: { registry: ghcr.io, username: '${{ github.actor }}', password: '${{ secrets.GITHUB_TOKEN }}' }
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.BACKEND_IMAGE }}:latest
+            ${{ env.BACKEND_IMAGE }}:${{ github.sha }}
+          cache-from: type=gha,scope=backend
+          cache-to: type=gha,scope=backend,mode=max
+
+  web:
+    needs: changes
+    if: needs.changes.outputs.web == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with: { registry: ghcr.io, username: '${{ github.actor }}', password: '${{ secrets.GITHUB_TOKEN }}' }
+      - uses: docker/build-push-action@v6
+        with:
+          context: flutter_app
+          push: true
+          build-args: |
+            CA7_API=${{ vars.CA7_API }}
+            CA7_CHAT_HOSTS=${{ vars.CA7_CHAT_HOSTS || 'ca7.io,ca7.nl,ca7.be' }}
+            CA7_CLOUD_HOST=${{ vars.CA7_CLOUD_HOST || 'cloud.ca7.io' }}
+          tags: |
+            ${{ env.WEB_IMAGE }}:latest
+            ${{ env.WEB_IMAGE }}:${{ github.sha }}
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,scope=web,mode=max
+
+  deploy:
+    needs: [changes, backend, web]
+    # run when at least one image was built and none failed
+    if: always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') && (needs.backend.result == 'success' || needs.web.result == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update the server
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_USER: ${{ github.actor }}
+          PULL: ${{ needs.backend.result == 'success' && 'backend ' || '' }}${{ needs.web.result == 'success' && 'web' || '' }}
+        run: |
+          install -m 600 /dev/null key && printf '%s\n' "$DEPLOY_KEY" > key
+          SSH="ssh -i key -o StrictHostKeyChecking=accept-new -o ServerAliveInterval=30"
+          scp -i key -o StrictHostKeyChecking=accept-new -q docker-compose.yml "$DEPLOY_HOST:ca7/docker-compose.yml"
+          # the server uses the images from GitHub, not the website-files folder of ./deploy.sh
+          $SSH "$DEPLOY_HOST" "rm -f ca7/docker-compose.override.yml; cd ca7 && \
+            grep -q '^CA7_BACKEND_IMAGE=' .env || echo 'CA7_BACKEND_IMAGE=${{ env.BACKEND_IMAGE }}:latest' >> .env; \
+            grep -q '^CA7_WEB_IMAGE=' .env || echo 'CA7_WEB_IMAGE=${{ env.WEB_IMAGE }}:latest' >> .env"
+          echo "$GHCR_TOKEN" | $SSH "$DEPLOY_HOST" "docker login ghcr.io -u '$GHCR_USER' --password-stdin >/dev/null"
+          $SSH "$DEPLOY_HOST" "cd ca7 && docker compose pull $PULL && docker compose up -d --no-build && \
+            for i in \$(seq 1 60); do s=\$(docker inspect -f '{{.State.Health.Status}}' ca7-backend-1); [ \"\$s\" = healthy ] && break; sleep 5; done; \
+            docker compose ps --format '{{.Service}}: {{.Status}}'; docker logout ghcr.io >/dev/null; docker image prune -f >/dev/null"
+          rm -f key

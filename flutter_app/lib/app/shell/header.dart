@@ -72,7 +72,7 @@ class SiteHeader extends ConsumerWidget implements PreferredSizeWidget {
           const _ExploreMenu(),
           nav('Pricing', '/pricing'),
           nav('Research', '/research'),
-          nav('API', '/api', exact: true),
+          nav('API', '/api'),
           nav('Docs', '/docs'),
           const SizedBox(width: 20),
           GestureDetector(

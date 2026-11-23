@@ -48,7 +48,8 @@ body {
   b { font-weight: 700; }
   span { font-weight: 300; color: var(--theme-elevation-500); margin-left: -3px; }
 }
-.ca-brand__icon { height: 30px; width: 30px; color: var(--theme-text); flex-shrink: 0; }
+.ca-brand__icon { height: 30px; width: 30px; color: #1A56FF; flex-shrink: 0; }
+.ca-brand-link { text-decoration: none; }
 .ca-brand__icon--nav { height: 26px; width: 26px; }
 .ca-brand--login { font-size: 28px; margin-bottom: 8px; .ca-brand__icon { height: 40px; width: 40px; } }
 
@@ -114,3 +115,26 @@ body {
 /* Softer, rounder UI to match website */
 .btn--style-primary { border-radius: 999px; }
 .template-default .nav, .nav { border-right: 1px solid var(--theme-elevation-150); }
+
+/* Brand kit on the dashboard */
+.ca-brandkit {
+  margin: 0 0 32px;
+  h3 { margin: 0 0 4px; }
+  p { margin: 0 0 16px; color: var(--theme-elevation-500); }
+}
+.ca-brandkit__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+.ca-brandkit__item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--theme-elevation-100);
+  border-radius: 12px;
+  background: var(--theme-elevation-0);
+  color: var(--theme-text);
+  text-decoration: none;
+  font-size: 13px;
+  img, video { width: 100%; height: 110px; object-fit: contain; border-radius: 8px; }
+  &:hover { border-color: #1A56FF; }
+}
+.ca-brandkit__item--dark img { background: #0b1020; }

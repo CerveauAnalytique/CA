@@ -12,6 +12,9 @@ import '../features/auth/auth_pages.dart';
 import '../features/catalog/catalog.dart';
 import '../features/chat/chat_page.dart';
 import '../features/content/cms.dart';
+import '../features/content/research_page.dart';
+import '../features/api/api_page.dart';
+import '../features/api/api_hub.dart';
 import '../features/shop/checkout_pages.dart';
 import '../features/support/support_pages.dart';
 import '../features/shop/shop_pages.dart';
@@ -65,7 +68,7 @@ GoRouter createRouter(WidgetRef ref) {
       if ((rest == '/login' || rest == '/create-account') && auth.user != null) return '/$lang/dashboard';
       return null;
     },
-    errorBuilder: (context, state) => Shell(lang: state.uri.pathSegments.isNotEmpty && isLang(state.uri.pathSegments.first) ? state.uri.pathSegments.first : 'en', child: NotFoundPage(path: state.uri.path)),
+    errorBuilder: (context, state) => Shell(lang: state.uri.pathSegments.isNotEmpty && isLang(state.uri.pathSegments.first) ? state.uri.pathSegments.first : 'en', location: state.uri.toString(), child: NotFoundPage(path: state.uri.path)),
     routes: [
       ShellRoute(
         builder: (context, state, child) => Shell(lang: state.uri.pathSegments.isNotEmpty && isLang(state.uri.pathSegments.first) ? state.uri.pathSegments.first : 'en', location: state.uri.toString(), child: child),
@@ -87,6 +90,12 @@ GoRouter createRouter(WidgetRef ref) {
               r('support', (_) => const SupportPage()),
               r('support/request', (_) => const SupportRequestPage()),
               r('support/articles/:slug', (s) => SupportArticlePage(slug: s.pathParameters['slug']!)),
+              r('research', (_) => const ResearchPage()),
+              r('api', (_) => const ApiPage()),
+              r('api/hub', (_) => const ApiHubPage()),
+              r('api/hub/new', (_) => const PublishApiPage()),
+              r('api/hub/:slug', (s) => ApiListingPage(slug: s.pathParameters['slug']!)),
+              r('api/hub/:slug/edit', (s) => PublishApiPage(slug: s.pathParameters['slug']!)),
               r('blog', (_) => const BlogPage()),
               r('blog/:slug', (s) => BlogPostPage(slug: s.pathParameters['slug']!)),
               r('assistant', (_) => const AssistantPage()),

@@ -22,6 +22,8 @@ services:
       retries: 20
 
   backend:
+    # CA7_BACKEND_IMAGE: the image GitHub Actions built (ghcr.io/...); empty = build here
+    image: ${CA7_BACKEND_IMAGE:-ca7-backend}
     build: .
     restart: unless-stopped
     depends_on:
@@ -29,7 +31,8 @@ services:
         condition: service_healthy
     env_file: .env
     environment:
-      DATABASE_URL: postgres://ca7:${DB_PASSWORD}@db:5432/ca7
+      # an outside database (e.g. Neon) when DATABASE_URL is set in .env, else the db container below
+      DATABASE_URL: ${DATABASE_URL:-postgres://ca7:${DB_PASSWORD}@db:5432/ca7}
       NODE_ENV: production
       # the site and the API share one address (nginx forwards /api), so the public address is also the app address
       NEXT_PUBLIC_SERVER_URL: ${PUBLIC_URL:-http://localhost}
@@ -43,6 +46,7 @@ services:
       - '3000'
 
   web:
+    image: ${CA7_WEB_IMAGE:-ca7-web}
     build:
       context: ./flutter_app
       args:
@@ -56,6 +60,25 @@ services:
       BACKEND_URL: http://backend:3000
     ports:
       - '${WEB_PORT:-80}:80'
+
+  # HTTPS for a domain (profile "https"): set DOMAIN, COMPOSE_PROFILES=https and WEB_PORT=127.0.0.1:8081 in .env.
+  # Then only https://DOMAIN shows the site; the bare IP address gets no answer.
+  proxy:
+    profiles: ['https']
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    depends_on:
+      - web
+    environment:
+      DOMAIN: ${DOMAIN:-}
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
 
   # health check and source sync every 5 minutes, clean-up of old security events every day
   scheduler:
@@ -117,6 +140,8 @@ services:
       - timescale:/var/lib/postgresql/data
 
 volumes:
+  caddy-data:
+  caddy-config:
   db-data:
   media:
   logs:

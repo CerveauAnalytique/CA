@@ -1,0 +1,14 @@
+# HTTPS in front of CA7 (docker compose profile "https"). Caddy gets and renews the certificate itself.
+# Only the domain in DOMAIN gets the site; the bare IP address and any other name get nothing.
+{$DOMAIN} {
+	encode zstd gzip
+	header Strict-Transport-Security "max-age=31536000"
+	reverse_proxy web:80 {
+		header_up X-Forwarded-Proto https
+	}
+}
+
+# every other address on http (the IP, unknown names): close the connection without an answer
+http:// {
+	abort
+}

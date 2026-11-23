@@ -32,7 +32,7 @@ class _Ca7AppState extends ConsumerState<Ca7App> {
     final i18n = ref.watch(i18nProvider);
     final mode = ref.watch(themeModeProvider);
     return MaterialApp.router(
-      title: 'Briansen',
+      title: 'Phylena',
       debugShowCheckedModeBanner: false,
       scrollBehavior: const MaterialScrollBehavior().copyWith(dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse, PointerDeviceKind.trackpad, PointerDeviceKind.stylus}),
       theme: Ca7Theme.light(),

@@ -6,6 +6,7 @@ import 'footer.dart';
 import 'header.dart';
 import 'marketing_banner.dart';
 import 'mobile_menu.dart';
+import 'page_title.dart';
 import '../../features/cookies/cookie_banner.dart';
 
 /// Header + page + footer around every page; keeps the language in sync with the address (/nl/...).
@@ -37,7 +38,13 @@ class _ShellState extends ConsumerState<Shell> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final loggedIn = ref.watch(authProvider).user != null;
+    final path = Uri.parse(widget.location).path.replaceFirst(RegExp(r'^/[a-z]{2}(?=/|$)'), '');
+    // browser tab: "Phylena | Pricing", or "Phylena | Connecting data" when logged in
+    return Title(
+      title: pageTitle(context, path, loggedIn: loggedIn),
+      color: const Color(0xFF1A56FF),
+      child: Scaffold(
       key: _key,
       endDrawer: const MobileMenu(),
       body: Stack(children: [Column(children: [
@@ -53,6 +60,7 @@ class _ShellState extends ConsumerState<Shell> {
           ),
         ),
       ]), const Positioned(left: 0, right: 0, bottom: 0, child: CookieBanner())]),
+      ),
     );
   }
 }

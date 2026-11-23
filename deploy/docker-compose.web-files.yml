@@ -1,0 +1,6 @@
+# Used by ./deploy.sh (copied as docker-compose.override.yml): nginx serves the website files from a folder,
+# so a website update only copies the changed files (no new image, no restart).
+services:
+  web:
+    volumes:
+      - ${WEB_FILES_DIR:-./web}:/usr/share/nginx/html:ro

@@ -47,3 +47,5 @@ platform/vendor/
 __pycache__/
 *.pyc
 storage/logs/
+.deploy/
+.deploy.env

@@ -33,8 +33,19 @@ server {
   location ^~ /media/ {
     proxy_pass ${BACKEND_URL};
   }
+  # the Phylena brand kit (public/brand in the backend), also used by the admin panel
+  location ^~ /brand/ {
+    proxy_pass ${BACKEND_URL};
+  }
 
-  # the app: files are cached, every other address opens index.html (the app does its own routing)
+  # the app's code keeps the same file names after every update: the browser must check them each time,
+  # or visitors keep seeing the old site (they get a fresh copy only when the file changed)
+  location ~* ^/(main\.dart\.(js|mjs|wasm)|flutter_bootstrap\.js|flutter\.js|flutter_service_worker\.js|version\.json|manifest\.json|assets/AssetManifest\.[a-z.]+|assets/FontManifest\.json|assets/assets/i18n/.*\.json)$ {
+    add_header Cache-Control "no-cache";
+    add_header X-Content-Type-Options nosniff always;
+    try_files $uri =404;
+  }
+  # the app: other files (images, fonts) are cached, every other address opens index.html (the app does its own routing)
   location ~* \.(js|wasm|css|svg|png|jpg|woff2?|ttf|otf|json)$ {
     expires 7d;
     add_header Cache-Control "public";

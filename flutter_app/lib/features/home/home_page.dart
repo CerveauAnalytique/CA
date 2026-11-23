@@ -16,7 +16,106 @@ const _words = ['business data', 'your databases', 'your IoT', 'your sensors', '
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
   @override
-  Widget build(BuildContext context) => Column(children: const [_Hero(), _LogoStrip(), _FeatureCards(), _Updates(), _Problems()]);
+  Widget build(BuildContext context) => Column(children: const [_Hero(), _LogoStrip(), _Solutions(), _FeatureCards(), _Updates(), _Problems()]);
+}
+
+/// "Delivering tech solutions": a large dark card plus three tinted link cards (blog, workflow, experts).
+class _Solutions extends StatelessWidget {
+  const _Solutions();
+  @override
+  Widget build(BuildContext context) {
+    final c = context.ca;
+    final dark = Theme.of(context).brightness == Brightness.dark;
+    final desktop = context.isDesktop;
+    final fs = (context.width * .036).clamp(30.0, 46.0);
+    Color tint(int light, Color darkBase) => dark ? darkBase.withValues(alpha: .14) : Color(light);
+
+    Widget small(String lead, String title, String to, Color bg) => Lnk(
+          to: to,
+          child: Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16)),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text(context.t(lead), style: TextStyle(fontSize: 12.5, height: 1.5, color: c.muted)),
+              const SizedBox(height: 32),
+              Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                Expanded(child: Text(context.t(title), style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 1.15, letterSpacing: -.4, color: c.fg))),
+                Icon(Directionality.of(context) == TextDirection.rtl ? Icons.north_west : Icons.north_east, size: 18, color: c.fg),
+              ]),
+            ]),
+          ),
+        );
+
+    final big = Container(
+      clipBehavior: Clip.antiAlias,
+      constraints: const BoxConstraints(minHeight: 380),
+      decoration: BoxDecoration(color: Neutral.c900, borderRadius: BorderRadius.circular(16)),
+      child: Stack(children: [
+        PositionedDirectional(end: -40, bottom: -40, child: Opacity(opacity: .9, child: DotIcon('models', size: desktop ? 300 : 220))),
+        Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(context.t('Ready for the future').toUpperCase(), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 1.2, color: Color(0xFFB5F05A))),
+            const SizedBox(height: 12),
+            ConstrainedBox(constraints: const BoxConstraints(maxWidth: 340), child: Text(context.t('Use AI to get more out of your company data'), style: TextStyle(fontSize: desktop ? 30 : 26, fontWeight: FontWeight.w600, height: 1.2, letterSpacing: -.5, color: Colors.white))),
+            SizedBox(height: desktop ? 150 : 110),
+            Lnk(
+              to: '/models',
+              child: Container(
+                height: 44,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(color: const Color(0xFFB5F05A), borderRadius: BorderRadius.circular(8)),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  Text(context.t('See what CA7 can do'), style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Neutral.c900)),
+                  const SizedBox(width: 10),
+                  Icon(Directionality.of(context) == TextDirection.rtl ? Icons.north_west : Icons.north_east, size: 16, color: Neutral.c900),
+                ]),
+              ),
+            ),
+          ]),
+        ),
+      ]),
+    );
+
+    final blog = small('We share our journey and what we learn', 'Read our blog', '/blog', tint(0xFFE3F9C5, const Color(0xFFB5F05A)));
+    final workflow = small('See how CA7 works, from data source to answer', 'See our workflow', '/docs', tint(0xFFFDEDE8, const Color(0xFFF4A58A)));
+    final experts = small('Questions about your data or your setup? Talk to a person on our team.', 'Meet our experts', '/support', tint(0xFFEEF0FC, const Color(0xFF8C9BF2)));
+
+    final heading = Text(context.t('Delivering tech solutions'), style: TextStyle(fontSize: fs, fontWeight: FontWeight.w600, height: 1.12, letterSpacing: -fs * .025, color: c.fg));
+    final intro = Text(context.t('We build one AI platform for your company data, so every team works with answers instead of raw data.'), style: TextStyle(fontSize: 14, height: 1.6, color: c.muted));
+
+    return Container(
+      width: double.infinity,
+      color: c.bg,
+      padding: EdgeInsets.symmetric(vertical: desktop ? 96 : 64),
+      child: Container1280(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          desktop
+              ? Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Expanded(child: Padding(padding: const EdgeInsetsDirectional.only(start: 24), child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 420), child: heading))),
+                  SizedBox(width: 380, child: Padding(padding: const EdgeInsets.only(top: 12), child: intro)),
+                ])
+              : Column(crossAxisAlignment: CrossAxisAlignment.start, children: [heading, const SizedBox(height: 16), intro]),
+          SizedBox(height: desktop ? 64 : 32),
+          desktop
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: SizedBox(
+                    height: 430,
+                    child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                      Expanded(flex: 9, child: big),
+                      const SizedBox(width: 24),
+                      Expanded(flex: 5, child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [Expanded(child: blog), const SizedBox(height: 24), Expanded(child: workflow)])),
+                      const SizedBox(width: 24),
+                      Expanded(flex: 5, child: experts),
+                    ]),
+                  ),
+                )
+              : Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [big, const SizedBox(height: 16), blog, const SizedBox(height: 16), workflow, const SizedBox(height: 16), experts]),
+        ]),
+      ),
+    );
+  }
 }
 
 /// Typing effect of the headline (80 ms per letter, 35 ms deleting, 1.8 s pause).

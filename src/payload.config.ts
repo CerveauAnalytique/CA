@@ -26,6 +26,7 @@ import { Banner } from '@/globals/Banner'
 import { Header } from '@/globals/Header'
 import { plugins } from './plugins'
 import { AiModels } from './collections/AiModels'
+import { ApiListings } from './collections/ApiListings'
 import { Datasets } from './collections/Datasets'
 import { Automations, DataRecords, DataSources } from './collections/DataSources'
 import { migrations } from './migrations'
@@ -48,7 +49,7 @@ export default buildConfig({
       beforeLogin: ['@/components/BeforeLogin#BeforeLogin'],
       // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
       // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
-      beforeDashboard: ['@/components/BeforeDashboard#BeforeDashboard'],
+      beforeDashboard: ['@/components/AdminBrand#BrandKit', '@/components/BeforeDashboard#BeforeDashboard'],
       header: ['@/components/AdminBrand#AdminHeader'],
       afterNav: ['@/components/AdminBrand#AdminFooter'],
       graphics: {
@@ -57,10 +58,20 @@ export default buildConfig({
       },
     },
     user: Users.slug,
+    // browser tab of the admin: "Collections | Phylena" with the Phylena favicon
+    meta: {
+      titleSuffix: ' | Phylena',
+      icons: [
+        { rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' },
+        { rel: 'icon', type: 'image/svg+xml', url: '/brand/phylena/icons/favicon.svg' },
+        { rel: 'apple-touch-icon', url: '/brand/phylena/icons/apple-touch-icon.png' },
+      ],
+      openGraph: { siteName: 'Phylena', images: [{ url: '/brand/phylena/og-image.png' }] },
+    },
   },
   // origins of other front ends that call this API with a token, e.g. the Flutter web app (comma separated)
   cors: process.env.CA7_APP_ORIGINS ? process.env.CA7_APP_ORIGINS.split(',').map((o) => o.trim()) : undefined,
-  collections: [Users, Pages, Categories, Media, Posts, AiModels, Datasets, DataSources, DataRecords, Automations, SitePages, SecurityEvents, SecurityAlerts, SecurityBlocks, SecurityRules, SupportTopics, SupportArticles, SupportRequests, AiDecisions, AiPolicyRules, AiSponsored],
+  collections: [Users, Pages, Categories, Media, Posts, AiModels, ApiListings, Datasets, DataSources, DataRecords, Automations, SitePages, SecurityEvents, SecurityAlerts, SecurityBlocks, SecurityRules, SupportTopics, SupportArticles, SupportRequests, AiDecisions, AiPolicyRules, AiSponsored],
   onInit: async (payload) => {
     await seedCatalogIfEmpty(payload)
     await seedSitePagesIfEmpty(payload)

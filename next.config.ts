@@ -10,6 +10,8 @@ import { redirects } from './redirects'
 const NEXT_PUBLIC_SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
 
 const nextConfig: NextConfig = {
+  // Docker builds a small self-contained server (only the files it needs); `pnpm dev` and `pnpm build` stay normal
+  output: process.env.NEXT_OUTPUT === 'standalone' ? 'standalone' : undefined,
   // Temporarily required on Windows until Next.js fixes Turbopack Sass resolution.
   // See: https://github.com/vercel/next.js/issues/86431
   sassOptions: {

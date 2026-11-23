@@ -66,6 +66,7 @@ What exists in this repository today, and what does not:
 |---|---|
 | Website, pricing, languages (7), payments (Stripe, Mollie), accounts | Built |
 | API keys, data export (`/api/ca/export`), downloadable sync tool | Built |
+| API Hub | **Built (first version):** customers publish their own API (name, base URL, docs, optional OpenAPI/Swagger file; endpoints are counted). Collection `api-listings`; an admin sets a listing to published before it is public, every change by the owner sends it back to review. Pages `/api`, `/api/hub`, `/api/hub/new`, `/api/hub/:slug`. CA7 never calls these APIs. **Not built:** trying an API from the site, ratings, usage statistics |
 | AI Models and Datasets catalog (admin-managed) | Built (a catalog; no model training or hosting yet) |
 | CA7 Chat | UI and streaming route (`/api/ca/chat` to an Ollama `ca7` model). Pro and up: gets statistics of the customer's own sources as context (`src/app/(app)/api/ca/chat/route.ts`). Not a full retrieval system: it sees summaries, not raw rows |
 | Data Connect | **Built (first version):** REST API (with private-address protection), CSV upload, push API for IoT, MQTT bridges and scripts (`/api/ca/ingest`). **Not built:** SQL databases and direct MQTT. Settings: `/dashboard/connect` |

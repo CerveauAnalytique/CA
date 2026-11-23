@@ -41,6 +41,7 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
-    staticDir: path.resolve(dirname, '../../public/media'),
+    // MEDIA_DIR: set in Docker, where the server code is bundled and this file's folder is not the project
+    staticDir: process.env.MEDIA_DIR || path.resolve(dirname, '../../public/media'),
   },
 }
