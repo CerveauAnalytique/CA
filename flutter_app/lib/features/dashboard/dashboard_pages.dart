@@ -120,6 +120,12 @@ class OverviewPage extends ConsumerWidget {
 
 // ---- Profile -----------------------------------------------------------------------------------------------
 
+/// Models that can be used in the Phylena chat: those with a chat model ID.
+final _chatModelsProvider = FutureProvider.autoDispose<List<(String, String)>>((ref) async {
+  final res = await ref.watch(apiClientProvider).get('/api/ai-models', query: {'limit': 100, 'depth': 0, 'sort': 'name', 'where[chatModel][exists]': true});
+  return [for (final d in (res['docs'] ?? const []) as List) ('${d['id']}', '${d['name']}')];
+});
+
 class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
   @override
@@ -130,6 +136,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   late final TextEditingController _name, _username, _email, _pw, _pw2;
   late String _lang;
   late bool _consent = ref.read(authProvider).user!.aiConsent;
+  // Phylena chat (phylena.com) preferences, stored on the same user
+  late String _chatTheme = ref.read(authProvider).user!.chatTheme;
+  late String? _chatModel = ref.read(authProvider).user!.chatDefaultModelId;
+  late bool _chatReasoning = ref.read(authProvider).user!.chatReasoning;
   bool _busy = false;
   String? _msg;
   bool _ok = false;
@@ -149,7 +159,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   Future<void> _save() async {
     if (_pw.text.isNotEmpty && _pw.text != _pw2.text) return setState(() { _msg = 'The passwords do not match.'; _ok = false; });
     setState(() { _busy = true; _msg = null; });
-    final data = <String, dynamic>{'name': _name.text, 'email': _email.text, 'language': _lang, 'username': _username.text.trim().isEmpty ? null : _username.text.trim().toLowerCase(), if (_pw.text.isNotEmpty) 'password': _pw.text};
+    final data = <String, dynamic>{'name': _name.text, 'email': _email.text, 'language': _lang, 'username': _username.text.trim().isEmpty ? null : _username.text.trim().toLowerCase(), if (_pw.text.isNotEmpty) 'password': _pw.text,
+      'chat': {'theme': _chatTheme, 'defaultModel': _chatModel == null ? null : int.tryParse(_chatModel!) ?? _chatModel, 'reasoning': _chatReasoning}};
     try {
       await ref.read(dashRepoProvider).updateProfile(ref.read(authProvider).user!.id, data);
       await ref.read(authProvider).refresh();
@@ -176,6 +187,30 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           const SizedBox(height: 6),
           DropdownButtonFormField<String>(initialValue: _lang, items: [for (final l in languages) DropdownMenuItem(value: l.code, child: Text('${l.flag} ${l.name}'))], onChanged: (v) => setState(() => _lang = v ?? _lang), decoration: const InputDecoration()),
           const SizedBox(height: 16),
+          const Divider(height: 40),
+          const Text('Phylena chat', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 4),
+          const Muted('Used by the chat on phylena.com. You can also change these in the chat.', size: 12),
+          const SizedBox(height: 12),
+          const Text('Default model', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Neutral.c500)),
+          const SizedBox(height: 6),
+          ref.watch(_chatModelsProvider).when(
+                data: (models) => DropdownButtonFormField<String?>(
+                  initialValue: models.any((m) => m.$1 == _chatModel) ? _chatModel : null,
+                  items: [const DropdownMenuItem<String?>(value: null, child: Text('First available model')), for (final (id, name) in models) DropdownMenuItem<String?>(value: id, child: Text(name))],
+                  onChanged: (v) => setState(() => _chatModel = v),
+                  decoration: const InputDecoration(),
+                ),
+                loading: () => const LinearProgressIndicator(),
+                error: (e, _) => Muted('Could not load the models: $e', size: 12),
+              ),
+          const SizedBox(height: 16),
+          const Text('Theme', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Neutral.c500)),
+          const SizedBox(height: 6),
+          DropdownButtonFormField<String>(initialValue: _chatTheme, items: const [DropdownMenuItem(value: 'system', child: Text('System')), DropdownMenuItem(value: 'light', child: Text('Light')), DropdownMenuItem(value: 'dark', child: Text('Dark'))], onChanged: (v) => setState(() => _chatTheme = v ?? _chatTheme), decoration: const InputDecoration()),
+          const SizedBox(height: 8),
+          SwitchListTile(contentPadding: EdgeInsets.zero, value: _chatReasoning, onChanged: (v) => setState(() => _chatReasoning = v), title: const Text('Reasoning on by default', style: TextStyle(fontSize: 14)), subtitle: const Muted('The model thinks before it answers. Slower.', size: 12)),
+          const Divider(height: 40),
           CaField(controller: _pw, label: 'New password (optional)', obscure: true),
           const SizedBox(height: 16),
           CaField(controller: _pw2, label: 'Repeat password', obscure: true),

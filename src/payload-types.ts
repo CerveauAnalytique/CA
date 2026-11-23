@@ -265,6 +265,14 @@ export interface User {
    * Chosen at sign-up. The site opens in this language when the customer logs in.
    */
   language?: ('en' | 'nl' | 'de' | 'fr' | 'es' | 'pl' | 'ar') | null;
+  chat?: {
+    theme?: ('system' | 'light' | 'dark') | null;
+    /**
+     * The model the chat starts with. Empty: the first model that can chat.
+     */
+    defaultModel?: (number | null) | AiModel;
+    reasoning?: boolean | null;
+  };
   roles?: ('admin' | 'customer')[] | null;
   orders?: {
     docs?: (number | Order)[];
@@ -302,6 +310,69 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ai-models".
+ */
+export interface AiModel {
+  id: number;
+  name: string;
+  /**
+   * Generated from the name when empty.
+   */
+  slug?: string | null;
+  publisher?: string | null;
+  published?: boolean | null;
+  summary: string;
+  task?:
+    | (
+        | 'text-generation'
+        | 'data-analysis'
+        | 'classification'
+        | 'regression'
+        | 'vision'
+        | 'anomaly-detection'
+        | 'forecasting'
+        | 'other'
+      )
+    | null;
+  framework?: ('ollama' | 'pytorch' | 'tensorflow' | 'sklearn' | 'xgboost' | 'onnx' | 'other') | null;
+  /**
+   * For example qwen2.5:7b
+   */
+  baseModel?: string | null;
+  /**
+   * The model the Phylena chat (phylena.com) runs for this entry, for example ca7 or qwen2.5:7b. Leave empty if it cannot be used in the chat.
+   */
+  chatModel?: string | null;
+  version?: string | null;
+  stage?: ('development' | 'staging' | 'production' | 'archived') | null;
+  license?: string | null;
+  sizeBytes?: number | null;
+  downloads?: number | null;
+  tags?: string[] | null;
+  metrics?:
+    | {
+        name: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Shown as a code block on the model page.
+   */
+  installCommand?: string | null;
+  /**
+   * Link to the weights or the source.
+   */
+  downloadUrl?: string | null;
+  /**
+   * Markdown model card.
+   */
+  modelCard?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1136,65 +1207,6 @@ export interface Post {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ai-models".
- */
-export interface AiModel {
-  id: number;
-  name: string;
-  /**
-   * Generated from the name when empty.
-   */
-  slug?: string | null;
-  publisher?: string | null;
-  published?: boolean | null;
-  summary: string;
-  task?:
-    | (
-        | 'text-generation'
-        | 'data-analysis'
-        | 'classification'
-        | 'regression'
-        | 'vision'
-        | 'anomaly-detection'
-        | 'forecasting'
-        | 'other'
-      )
-    | null;
-  framework?: ('ollama' | 'pytorch' | 'tensorflow' | 'sklearn' | 'xgboost' | 'onnx' | 'other') | null;
-  /**
-   * For example qwen2.5:7b
-   */
-  baseModel?: string | null;
-  version?: string | null;
-  stage?: ('development' | 'staging' | 'production' | 'archived') | null;
-  license?: string | null;
-  sizeBytes?: number | null;
-  downloads?: number | null;
-  tags?: string[] | null;
-  metrics?:
-    | {
-        name: string;
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Shown as a code block on the model page.
-   */
-  installCommand?: string | null;
-  /**
-   * Link to the weights or the source.
-   */
-  downloadUrl?: string | null;
-  /**
-   * Markdown model card.
-   */
-  modelCard?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "api-listings".
  */
 export interface ApiListing {
@@ -1926,6 +1938,13 @@ export interface UsersSelect<T extends boolean = true> {
   cookieMarketing?: T;
   cookieDecidedAt?: T;
   language?: T;
+  chat?:
+    | T
+    | {
+        theme?: T;
+        defaultModel?: T;
+        reasoning?: T;
+      };
   roles?: T;
   orders?: T;
   cart?: T;
@@ -2183,6 +2202,7 @@ export interface AiModelsSelect<T extends boolean = true> {
   task?: T;
   framework?: T;
   baseModel?: T;
+  chatModel?: T;
   version?: T;
   stage?: T;
   license?: T;

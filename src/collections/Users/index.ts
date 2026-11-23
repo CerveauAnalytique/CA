@@ -164,6 +164,37 @@ export const Users: CollectionConfig = {
       admin: { description: 'Chosen at sign-up. The site opens in this language when the customer logs in.' },
     },
     {
+      // Preferences for the Phylena chat (phylena.com). The customer can change them in the
+      // dashboard profile or in the chat itself; both write the same fields.
+      name: 'chat',
+      type: 'group',
+      label: 'Phylena chat',
+      fields: [
+        {
+          name: 'theme',
+          type: 'select',
+          defaultValue: 'system',
+          options: [
+            { label: 'System', value: 'system' },
+            { label: 'Light', value: 'light' },
+            { label: 'Dark', value: 'dark' },
+          ],
+        },
+        {
+          name: 'defaultModel',
+          type: 'relationship',
+          relationTo: 'ai-models',
+          admin: { description: 'The model the chat starts with. Empty: the first model that can chat.' },
+        },
+        {
+          name: 'reasoning',
+          type: 'checkbox',
+          label: 'Reasoning on by default',
+          defaultValue: false,
+        },
+      ],
+    },
+    {
       name: 'roles',
       type: 'select',
       access: {

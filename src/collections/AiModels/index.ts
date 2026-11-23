@@ -63,6 +63,16 @@ export const AiModels: CollectionConfig = {
       defaultValue: 'other',
     },
     { name: 'baseModel', type: 'text', admin: { description: 'For example qwen2.5:7b' } },
+    {
+      name: 'chatModel',
+      type: 'text',
+      label: 'Chat model ID',
+      admin: {
+        position: 'sidebar',
+        description:
+          'The model the Phylena chat (phylena.com) runs for this entry, for example ca7 or qwen2.5:7b. Leave empty if it cannot be used in the chat.',
+      },
+    },
     { name: 'version', type: 'text', defaultValue: 'v1.0' },
     {
       name: 'stage',

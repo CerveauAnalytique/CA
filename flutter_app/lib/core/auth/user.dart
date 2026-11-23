@@ -1,6 +1,6 @@
 /// The logged-in customer (fields of the Payload `users` collection that the app uses).
 class CaUser {
-  CaUser({required this.id, required this.email, this.name, this.username, this.language = 'en', this.plan = 'free', this.roles = const [], this.apiKeyEnabled = false, this.aiConsent = false, this.cookiesDecided = false, this.cookieAnalytics = false, this.cookieMarketing = false});
+  CaUser({required this.id, required this.email, this.name, this.username, this.language = 'en', this.plan = 'free', this.roles = const [], this.apiKeyEnabled = false, this.aiConsent = false, this.cookiesDecided = false, this.cookieAnalytics = false, this.cookieMarketing = false, this.chatTheme = 'system', this.chatDefaultModelId, this.chatReasoning = false});
 
   final String id;
   final String email;
@@ -8,6 +8,11 @@ class CaUser {
   final String language, plan;
   final List<String> roles;
   final bool apiKeyEnabled, aiConsent, cookiesDecided, cookieAnalytics, cookieMarketing;
+
+  /// Phylena chat preferences (users.chat), shared with phylena.com.
+  final String chatTheme;
+  final String? chatDefaultModelId;
+  final bool chatReasoning;
 
   bool get isAdmin => roles.contains('admin');
 
@@ -27,5 +32,8 @@ class CaUser {
         cookiesDecided: j['cookieDecidedAt'] != null,
         cookieAnalytics: j['cookieAnalytics'] == true,
         cookieMarketing: j['cookieMarketing'] == true,
+        chatTheme: ((j['chat'] as Map?)?['theme'] ?? 'system') as String,
+        chatDefaultModelId: switch ((j['chat'] as Map?)?['defaultModel']) { null => null, Map m => '${m['id']}', final v => '$v' },
+        chatReasoning: (j['chat'] as Map?)?['reasoning'] == true,
       );
 }
