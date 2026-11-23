@@ -18,3 +18,12 @@ class Ca7Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Semantics(label: 'CA7', child: SvgPicture.asset(white ? 'assets/brand/ca7-wordmark-white.svg' : 'assets/brand/ca7-wordmark.svg', height: height));
 }
+
+/// Briansen wordmark in blue dots (same dot style as the old CA7 wordmark).
+class BrandLogo extends StatelessWidget {
+  const BrandLogo({super.key, this.height = 28, this.white = false});
+  final double height;
+  final bool white;
+  @override
+  Widget build(BuildContext context) => Semantics(label: 'Briansen', child: SvgPicture.asset(white ? 'assets/brand/briansen-wordmark-white.svg' : 'assets/brand/briansen-wordmark.svg', height: height));
+}

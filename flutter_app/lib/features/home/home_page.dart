@@ -343,7 +343,7 @@ class _FeatureCards extends StatelessWidget {
     ];
     Widget card(int i, (String, String, String) it) => Container(
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 48),
-          decoration: BoxDecoration(border: Border(right: context.isDesktop && i < 2 ? const BorderSide(color: Neutral.c200) : BorderSide.none, bottom: !context.isDesktop && i < 2 ? const BorderSide(color: Neutral.c200) : BorderSide.none)),
+          decoration: BoxDecoration(border: Border(right: i < 2 ? const BorderSide(color: Neutral.c200) : BorderSide.none)),
           child: Column(children: [
             DotIcon(it.$1, size: 112),
             const SizedBox(height: 32),
@@ -366,7 +366,15 @@ class _FeatureCards extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Container(
                 decoration: BoxDecoration(border: Border.all(color: Neutral.c200)),
-                child: context.isDesktop ? Row(children: [for (var i = 0; i < 3; i++) Expanded(child: card(i, cards[i]))]) : Column(children: [for (var i = 0; i < 3; i++) card(i, cards[i])]),
+                child: context.isDesktop ? Row(children: [for (var i = 0; i < 3; i++) Expanded(child: card(i, cards[i]))]) : SizedBox(
+                        height: 420,
+                        // phone: swipe sideways through the cards
+                        child: PageView(
+                          padEnds: false,
+                          controller: PageController(viewportFraction: .82),
+                          children: [for (var i = 0; i < 3; i++) card(i, cards[i])],
+                        ),
+                      ),
               ),
             ),
           ),

@@ -7,6 +7,7 @@ import '../../app/theme/colors.dart';
 import '../../core/widgets/atoms.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../app/theme/theme.dart';
+import '../../core/widgets/dot_icon.dart';
 import '../../core/widgets/lnk.dart';
 import '../../core/widgets/responsive.dart';
 
@@ -36,7 +37,7 @@ Widget _frame(BuildContext context, String title, String intro, Widget form) {
               child: DefaultTextStyle.merge(
                 style: TextStyle(color: c.fg),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                  const Center(child: Text('Briansen', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700, letterSpacing: -0.3))),
+                  const Center(child: BrandLogo(white: true, height: 34)),
                   const SizedBox(height: 24),
                   Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w300, letterSpacing: -.5)),
                   const SizedBox(height: 8),

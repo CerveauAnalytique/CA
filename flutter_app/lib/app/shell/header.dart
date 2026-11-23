@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/i18n/i18n.dart';
 import '../../core/providers.dart';
+import '../../core/widgets/dot_icon.dart';
 import '../../core/widgets/lnk.dart';
 import '../../core/widgets/responsive.dart';
 import '../theme/colors.dart';
@@ -66,7 +67,7 @@ class SiteHeader extends ConsumerWidget implements PreferredSizeWidget {
       padding: EdgeInsets.symmetric(horizontal: pad),
       decoration: BoxDecoration(color: c.header, border: Border(bottom: BorderSide(color: c.border))),
       child: Row(children: [
-        Lnk(to: '/', child: Padding(padding: EdgeInsetsDirectional.only(end: mobile ? 8 : 32), child: Text('Briansen', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, letterSpacing: -0.3, color: c.fg)))),
+        Lnk(to: '/', child: Padding(padding: EdgeInsetsDirectional.only(end: mobile ? 8 : 32), child: const BrandLogo())),
         if (!mobile) ...[
           const _ExploreMenu(),
           nav('Pricing', '/pricing'),
@@ -98,6 +99,8 @@ class SiteHeader extends ConsumerWidget implements PreferredSizeWidget {
           iconBtn(Icons.storefront_outlined, context.t('Marketplace & Enterprise Models'), () => context.goL('/marketplace')),
           iconBtn(Icons.support_outlined, context.t('Help center'), () => context.goL('/support')),
           const SizedBox(width: 4),
+          const _CartButton(),
+          const SizedBox(width: 4),
           if (user != null) ...[
             Lnk(to: '/dashboard/settings', child: Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: Row(children: [
               CircleAvatar(radius: 10, backgroundColor: Neutral.c800, child: const Icon(Icons.person, size: 12, color: Neutral.c300)),
@@ -108,14 +111,10 @@ class SiteHeader extends ConsumerWidget implements PreferredSizeWidget {
             Lnk(to: '/login', child: Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Text(context.t('Log in'), style: TextStyle(fontSize: 13, color: c.muted)))),
           const SizedBox(width: 8),
         ],
-        const _CartButton(),
         startBtn,
-        if (!mobile) ...[
-          const SizedBox(width: 8),
-          iconBtn(Theme.of(context).brightness == Brightness.dark ? Icons.light_mode_outlined : Icons.dark_mode_outlined, context.t('Appearance'), () => ref.read(themeModeProvider.notifier).state = Theme.of(context).brightness == Brightness.dark ? ThemeMode.light : ThemeMode.dark),
-        ],
         if (mobile) ...[
           const SizedBox(width: 8),
+          const _CartButton(),
           iconBtn(Icons.search, context.t('Search docs, research, products…'), () => openSearch(context)),
           iconBtn(Icons.menu, context.t('Open menu'), onMenu),
         ],

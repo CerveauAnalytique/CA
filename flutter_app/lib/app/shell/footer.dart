@@ -68,7 +68,17 @@ class SiteFooter extends ConsumerWidget {
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Wrap(spacing: 16, runSpacing: 4, children: [for (final l in _legal) Lnk(to: l.$2, child: Text(context.t(l.$1), style: link))]),
               const SizedBox(height: 12),
-              Text(context.t('Cerveau Analytique © 2026'), style: TextStyle(fontSize: 12, color: c.muted)),
+              Row(children: [
+                Expanded(child: Text(context.t('Cerveau Analytique © 2026'), style: TextStyle(fontSize: 12, color: c.muted))),
+                Tooltip(
+                  message: context.t('Appearance'),
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(18),
+                    onTap: () => ref.read(themeModeProvider.notifier).state = Theme.of(context).brightness == Brightness.dark ? ThemeMode.light : ThemeMode.dark,
+                    child: SizedBox(width: 36, height: 36, child: Icon(Theme.of(context).brightness == Brightness.dark ? Icons.light_mode_outlined : Icons.dark_mode_outlined, size: 18, color: c.muted)),
+                  ),
+                ),
+              ]),
             ]),
           ),
         ]),
