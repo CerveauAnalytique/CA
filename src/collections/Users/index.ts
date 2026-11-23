@@ -56,6 +56,45 @@ export const Users: CollectionConfig = {
       ],
     },
     {
+      // Preferences shared by platform.phylena.com and the Phylena chat
+      // (phylena.com). Users can change their own; see `access.update`.
+      name: 'settings',
+      type: 'group',
+      fields: [
+        {
+          name: 'theme',
+          type: 'select',
+          defaultValue: 'system',
+          options: [
+            { label: 'System', value: 'system' },
+            { label: 'Light', value: 'light' },
+            { label: 'Dark', value: 'dark' },
+          ],
+        },
+        {
+          name: 'defaultModel',
+          type: 'relationship',
+          relationTo: 'models',
+        },
+        {
+          name: 'reasoning',
+          type: 'checkbox',
+          label: 'Reasoning on by default',
+          defaultValue: false,
+        },
+        {
+          name: 'language',
+          type: 'select',
+          defaultValue: 'en',
+          options: [
+            { label: 'English', value: 'en' },
+            { label: 'Nederlands', value: 'nl' },
+            { label: 'Français', value: 'fr' },
+          ],
+        },
+      ],
+    },
+    {
       name: 'orders',
       type: 'join',
       collection: 'orders',

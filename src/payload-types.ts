@@ -77,6 +77,8 @@ export interface Config {
     categories: Category;
     media: Media;
     posts: Post;
+    models: Model;
+    datasets: Dataset;
     forms: Form;
     'form-submissions': FormSubmission;
     addresses: Address;
@@ -111,6 +113,8 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    models: ModelsSelect<false> | ModelsSelect<true>;
+    datasets: DatasetsSelect<false> | DatasetsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     addresses: AddressesSelect<false> | AddressesSelect<true>;
@@ -190,6 +194,12 @@ export interface User {
   id: number;
   name?: string | null;
   roles?: ('admin' | 'customer')[] | null;
+  settings?: {
+    theme?: ('system' | 'light' | 'dark') | null;
+    defaultModel?: (number | null) | Model;
+    reasoning?: boolean | null;
+    language?: ('en' | 'nl' | 'fr') | null;
+  };
   orders?: {
     docs?: (number | Order)[];
     hasNextPage?: boolean;
@@ -223,6 +233,38 @@ export interface User {
     | null;
   password?: string | null;
   collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "models".
+ */
+export interface Model {
+  id: number;
+  /**
+   * Shown to users, e.g. "Qwen3 1.7B".
+   */
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  /**
+   * Exact model ID the Phylena gateway runs, e.g. "qwen3:1.7b" (local Ollama) or "remote/gpt-4o-mini" (an OpenAI-compatible provider).
+   */
+  gatewayModel: string;
+  provider: 'ollama' | 'remote';
+  category: 'chat' | 'reasoning' | 'code' | 'vision' | 'embeddings';
+  description?: string | null;
+  contextLength?: number | null;
+  supportsReasoning?: boolean | null;
+  /**
+   * Used when a user has not picked a model.
+   */
+  isDefault?: boolean | null;
+  status: 'published' | 'draft';
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1054,6 +1096,40 @@ export interface Post {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "datasets".
+ */
+export interface Dataset {
+  id: number;
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  description?: string | null;
+  category: 'general' | 'carbon' | 'finance' | 'health' | 'text' | 'vision';
+  format: 'csv' | 'json' | 'jsonl' | 'parquet' | 'text' | 'other';
+  rows?: number | null;
+  /**
+   * e.g. "12 MB"
+   */
+  size?: string | null;
+  /**
+   * e.g. "CC BY 4.0"
+   */
+  license?: string | null;
+  /**
+   * Upload the dataset file, or use a download URL below.
+   */
+  file?: (number | null) | Media;
+  downloadUrl?: string | null;
+  tags?: string[] | null;
+  status: 'published' | 'draft';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
@@ -1112,6 +1188,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'posts';
         value: number | Post;
+      } | null)
+    | ({
+        relationTo: 'models';
+        value: number | Model;
+      } | null)
+    | ({
+        relationTo: 'datasets';
+        value: number | Dataset;
       } | null)
     | ({
         relationTo: 'forms';
@@ -1202,6 +1286,14 @@ export interface PayloadMigration {
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
   roles?: T;
+  settings?:
+    | T
+    | {
+        theme?: T;
+        defaultModel?: T;
+        reasoning?: T;
+        language?: T;
+      };
   orders?: T;
   cart?: T;
   addresses?: T;
@@ -1439,6 +1531,46 @@ export interface PostsSelect<T extends boolean = true> {
   excerpt?: T;
   content?: T;
   publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "models_select".
+ */
+export interface ModelsSelect<T extends boolean = true> {
+  name?: T;
+  generateSlug?: T;
+  slug?: T;
+  gatewayModel?: T;
+  provider?: T;
+  category?: T;
+  description?: T;
+  contextLength?: T;
+  supportsReasoning?: T;
+  isDefault?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "datasets_select".
+ */
+export interface DatasetsSelect<T extends boolean = true> {
+  name?: T;
+  generateSlug?: T;
+  slug?: T;
+  description?: T;
+  category?: T;
+  format?: T;
+  rows?: T;
+  size?: T;
+  license?: T;
+  file?: T;
+  downloadUrl?: T;
+  tags?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }

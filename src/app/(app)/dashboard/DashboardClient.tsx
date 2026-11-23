@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { CarbonCalculator } from '@/components/CarbonCalculator'
+import { SettingsForm } from './SettingsForm'
 
 type Props = {
   user: { email: string; name?: string }
@@ -239,17 +240,7 @@ export function DashboardClient({ user }: Props) {
           <div className="dash-content">
             <div className="dash-section">
               <h2 className="dash-section-title">Account</h2>
-              <div className="dash-settings-form">
-                <div className="dash-settings-row">
-                  <label className="dash-settings-label">Email</label>
-                  <input className="dash-settings-input" defaultValue={user.email} readOnly />
-                </div>
-                <div className="dash-settings-row">
-                  <label className="dash-settings-label">Display Name</label>
-                  <input className="dash-settings-input" defaultValue={displayName} />
-                </div>
-                <button className="btn-primary">Save changes</button>
-              </div>
+              <SettingsForm email={user.email} />
             </div>
             <div className="dash-section">
               <h2 className="dash-section-title">Notifications</h2>
