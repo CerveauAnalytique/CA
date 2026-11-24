@@ -14,9 +14,27 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
    UPDATE "ai_models" SET "chat_model" = 'ca7' WHERE "name" = 'CA7' AND "framework" = 'ollama' AND "chat_model" IS NULL;
   UPDATE "ai_models" SET "chat_model" = 'qwen2.5:7b' WHERE "name" = 'Qwen2.5 7B' AND "framework" = 'ollama' AND "chat_model" IS NULL;`)
+
+  // Cerebrum, Phylena's own model (Phylena.chat repo, cerebrum/), on catalogs that already exist.
+  // A new, empty catalog gets them from the seed instead (src/utilities/seedCatalog.ts).
+  await db.execute(sql`
+   INSERT INTO "ai_models" ("name", "slug", "publisher", "published", "summary", "task", "framework", "base_model", "chat_model", "version", "stage", "license", "install_command")
+  SELECT 'Cerebrum', 'cerebrum', 'Phylena', true,
+    'Phylena''s own model for data and models: gpt-oss with personal memory (mem0) and knowledge from your data (cognee).',
+    'data-analysis', 'ollama', 'gpt-oss:20b', 'cerebrum/cerebrum', 'v1.0', 'production', 'Apache-2.0',
+    'cd cerebrum && docker compose up -d --build'
+  WHERE EXISTS (SELECT 1 FROM "ai_models") AND NOT EXISTS (SELECT 1 FROM "ai_models" WHERE "slug" = 'cerebrum');
+  INSERT INTO "ai_models" ("name", "slug", "publisher", "published", "summary", "task", "framework", "base_model", "chat_model", "version", "stage", "license", "install_command")
+  SELECT 'Cerebrum Agent', 'cerebrum-agent', 'Phylena', true,
+    'Cerebrum as an agent that keeps and edits its own memory about you (after Letta) and searches your data with tools.',
+    'text-generation', 'ollama', 'gpt-oss:20b', 'cerebrum/cerebrum-agent', 'v1.0', 'production', 'Apache-2.0',
+    'cd cerebrum && docker compose up -d --build'
+  WHERE EXISTS (SELECT 1 FROM "ai_models") AND NOT EXISTS (SELECT 1 FROM "ai_models" WHERE "slug" = 'cerebrum-agent');`)
 }
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+  await db.execute(sql`
+   DELETE FROM "ai_models" WHERE "slug" IN ('cerebrum', 'cerebrum-agent');`)
   await db.execute(sql`
    ALTER TABLE "users" DROP CONSTRAINT "users_chat_default_model_id_ai_models_id_fk";
   

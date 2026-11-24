@@ -44,6 +44,48 @@ export async function seedCatalogIfEmpty(payload: Payload) {
           downloadUrl: 'https://ollama.com/library/qwen2.5',
         } as never,
       })
+      // Cerebrum, Phylena's own model (Phylena.chat repo, cerebrum/): the gateway runs it
+      // through CEREBRUM_URL as cerebrum/cerebrum and cerebrum/cerebrum-agent.
+      await payload.create({
+        collection: 'ai-models',
+        overrideAccess: true,
+        data: {
+          name: 'Cerebrum',
+          slug: 'cerebrum',
+          publisher: 'Phylena',
+          summary:
+            "Phylena's own model for data and models: gpt-oss with personal memory (mem0) and knowledge from your data (cognee).",
+          task: 'data-analysis',
+          framework: 'ollama',
+          baseModel: 'gpt-oss:20b',
+          chatModel: 'cerebrum/cerebrum',
+          version: 'v1.0',
+          stage: 'production',
+          license: 'Apache-2.0',
+          tags: ['phylena', 'memory', 'knowledge-graph', 'gpt-oss'],
+          installCommand: 'cd cerebrum && docker compose up -d --build',
+        } as never,
+      })
+      await payload.create({
+        collection: 'ai-models',
+        overrideAccess: true,
+        data: {
+          name: 'Cerebrum Agent',
+          slug: 'cerebrum-agent',
+          publisher: 'Phylena',
+          summary:
+            'Cerebrum as an agent that keeps and edits its own memory about you (after Letta) and searches your data with tools.',
+          task: 'text-generation',
+          framework: 'ollama',
+          baseModel: 'gpt-oss:20b',
+          chatModel: 'cerebrum/cerebrum-agent',
+          version: 'v1.0',
+          stage: 'production',
+          license: 'Apache-2.0',
+          tags: ['phylena', 'agent', 'memory', 'gpt-oss'],
+          installCommand: 'cd cerebrum && docker compose up -d --build',
+        } as never,
+      })
     }
 
     const datasets = await payload.count({ collection: 'datasets', overrideAccess: true })
